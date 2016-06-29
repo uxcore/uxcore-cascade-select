@@ -31,8 +31,8 @@ env:
   matrix:
   - TEST_TYPE=test
   - TEST_TYPE=coverage
-  - TEST_TYPE=saucelabs
+  # - TEST_TYPE=saucelabs
 
-matrix:
-  allow_failures:
-  - env: "TEST_TYPE=saucelabs"
+# matrix:
+  # allow_failures:
+  # - env: "TEST_TYPE=saucelabs"
