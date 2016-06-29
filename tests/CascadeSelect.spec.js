@@ -5,5 +5,7 @@ import TestUtils, { Simulate } from 'react-addons-test-utils';
 import CascadeSelect from '../src';
 
 describe('CascadeSelect', () => {
-
+    it('should be true', () => {
+        expect(true).to.eql(true)
+    })
 });
