@@ -5,4 +5,144 @@
  * Copyright 2015-2016, Uxcore Team, Alinw.
  * All rights reserved.
  */
+@_prefix-cls: uxcore-cascader;
+@_text-color: #333;
+@_gray-text: #999;
+@_border: #dbdbdb;
+@_border-light: #e8e8e8;
+@_hover-color: #f7f7f7;
 
+.effect() {
+  animation-duration: .3s;
+  animation-fill-mode: both;
+  transform-origin: 0 0;
+}
+
+.transition() {
+    transition: all .3s;
+}
+
+.@{_prefix-cls} {
+    &-wrapper {
+        min-height: 36px;
+        width: 100%;
+        position: relative;
+        color: @_text-color;
+        border: 1px solid @_border;
+        .transition();
+        &:hover {
+            border-color: darken(@_border, 10%);
+        }
+    }
+    &-trigger {
+        cursor: pointer;
+    }
+    &-text {
+        line-height: 36px;
+        padding: 0 10px;
+    }
+    &-placeholder {
+        color: @_gray-text;
+    }
+    &-arrow {
+        color: @_gray-text;
+        position: absolute;
+        right: 2px;
+        top: 10px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        .transition();
+    }
+    &-arrow-reverse {
+        transform: rotate(180deg);
+    }
+    &-submenu {
+        margin: 0 -10px;
+        &-border {
+            margin: 0 5px;
+            border-top: 1px solid @_border-light;
+        }
+    }
+    &-submenu-wrap {
+        height: 120px;
+        overflow: hidden;
+        & > ul {
+            line-height: 30px;
+            width: 33.3%;
+            height: 100%;
+            overflow: auto;
+            float: left;
+            border-right: 1px solid @_border-light;
+            &:last-child {
+                border-right: none;
+            }
+        }
+        li {
+            padding: 0 20px 0 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            .transition();
+            &:hover,
+            &.active {
+                background-color: @_hover-color;
+            }
+            &:active{
+                background-color: darken(@_hover-color, 3%);
+            }
+        }
+    }
+}
+
+@keyframes SlideUpIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+}
+@keyframes SlideUpOut {
+  0% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(0.8);
+  }
+}
+
+@keyframes SlideDownIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0% 100%;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 0% 100%;
+    transform: scaleY(1);
+  }
+}
+@keyframes SlideDownOut {
+  0% {
+    opacity: 1;
+    transform-origin: 0% 100%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 0% 100%;
+    transform: scaleY(0.8);
+  }
+}
