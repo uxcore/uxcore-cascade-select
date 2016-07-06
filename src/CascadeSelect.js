@@ -10,14 +10,12 @@ const React = require('react');
 const classnames = require('classnames');
 const Dropdown = require('uxcore-dropdown');
 const _ = require('underscore');
-const prefixCls = function (name) {
-  return `uxcore-cascader-${name}`;
-};
 import CascadeSubmenu from './CascadeSubmenu';
+import SuperComponent from './SuperComponent';
 
 let cascaderId = 1000;
 
-class CascadeSelect extends React.Component {
+class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
     const { defaultValue, options } = props;
@@ -96,7 +94,7 @@ class CascadeSelect extends React.Component {
     }
   }
 
-  render() {
+  renderContent() {
     const {
       placeholder,
       className,
@@ -104,13 +102,75 @@ class CascadeSelect extends React.Component {
       disabled,
       clearable,
       expandTrigger,
-      cascadeSize
+      cascadeSize,
+      prefixCls
     } = this.props;
     const { value, selectedOptions, showSubMenu, displayValue } = this.state;
+    return (
+      <div
+        id={++cascaderId}
+        ref="wrapper"
+        className={classnames({
+          [this.prefixCls('wrapper')]: true,
+          [className]: true,
+          [this.prefixCls('disabled')]: disabled,
+          [this.prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
+          // [this.prefixCls('hoverable')]: expandTrigger === 'hover'
+        })}
+      >
+        <div className={this.prefixCls('text')}>
+          <div className={this.prefixCls('trigger')}
+          >
+          {
+            placeholder && !displayValue.length ?
+            <div className={this.prefixCls('placeholder')}>
+              {placeholder}
+            </div> :
+            null
+          }
+          {
+            displayValue.length ?
+            this.props.beforeRender(displayValue, selectedOptions) :
+            null
+          }
+          </div>
+        </div>
+        <div
+          className={classnames({
+            [this.prefixCls('arrow')]: true,
+            [this.prefixCls('arrow-reverse')]: showSubMenu,
+          })}
+        >
+          <i className="kuma-icon kuma-icon-triangle-down"></i>
+        </div>
+        {
+          <div
+            className={this.prefixCls('close-wrap')}
+          >
+            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
+          </div>
+        }
+      </div>
+    )
+  }
+
+  render() {
+    const {
+      options,
+      disabled,
+      prefixCls,
+      expandTrigger,
+      cascadeSize
+    } = this.props;
+    const { value } = this.state;
+    if (disabled) {
+      return this.renderContent();
+    }
     let submenu = <div />;
     if (options.length && !disabled) {
       submenu = (
         <CascadeSubmenu
+          prefixCls={prefixCls}
           onItemClick={this.onSubmenuItemClick.bind(this)}
           options={options}
           defaultValue={value}
@@ -125,50 +185,7 @@ class CascadeSelect extends React.Component {
         trigger={['click']}
         onVisibleChange={this.onDropDownVisibleChange.bind(this)}
       >
-        <div
-          id={++cascaderId}
-          ref="wrapper"
-          className={classnames({
-            [prefixCls('wrapper')]: true,
-            [className]: true,
-            [prefixCls('disabled')]: disabled,
-            [prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
-            // [prefixCls('hoverable')]: expandTrigger === 'hover'
-          })}
-        >
-          <div className={prefixCls('text')}>
-            <div className={prefixCls('trigger')}
-            >
-            {
-              placeholder && !displayValue.length ?
-              <div className={prefixCls('placeholder')}>
-                {placeholder}
-              </div> :
-              null
-            }
-            {
-              displayValue.length ?
-              this.props.beforeRender(displayValue, selectedOptions) :
-              null
-            }
-            </div>
-          </div>
-          <div
-            className={classnames({
-              [prefixCls('arrow')]: true,
-              [prefixCls('arrow-reverse')]: showSubMenu,
-            })}
-          >
-            <i className="kuma-icon kuma-icon-triangle-down"></i>
-          </div>
-          {
-            <div
-              className={prefixCls('close-wrap')}
-            >
-              <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
-            </div>
-          }
-        </div>
+        {this.renderContent()}
       </Dropdown>
     );
   }
@@ -176,6 +193,7 @@ class CascadeSelect extends React.Component {
 }
 
 CascadeSelect.defaultProps = {
+  prefixCls: 'kuma-cascader',
   className: '',
   placeholder: '请选择',
   options: [],
@@ -191,6 +209,7 @@ CascadeSelect.defaultProps = {
 
 // http://facebook.github.io/react/docs/reusable-components.html
 CascadeSelect.propTypes = {
+  prefixCls: React.PropTypes.string,
   className: React.PropTypes.string,
   options: React.PropTypes.array,
   defaultValue: React.PropTypes.array,

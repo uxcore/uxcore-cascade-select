@@ -78,6 +78,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 ## Props
 | Name | Type | Required | Default | Comments |
 |---|---|---|---|---|
+| prefixCls | string | false | 'kuma-cascader' | 默认的类名前缀 |
 | className | string | false | '' | 自定义类名 |
 | options | object | false | null | 选项数据源，格式可见下方Demo |
 | defaultValue | array | false | null | 默认值 |

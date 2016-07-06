@@ -9,11 +9,9 @@
 const React = require('react');
 const classnames = require('classnames');
 const _ = require('underscore');
-const prefixCls = function (name) {
-  return `uxcore-cascader-${name}`;
-};
+import SuperComponent from './SuperComponent';
 
-class CascadeSubmenu extends React.Component {
+class CascadeSubmenu extends SuperComponent {
   onItemClick(item, groupIndex) {
     if (this.props.onItemClick) {
       this.props.onItemClick(item.value, groupIndex, item);
@@ -59,7 +57,7 @@ class CascadeSubmenu extends React.Component {
     if (defaultValue.length === 0) {
       return (
         <ul className={classnames({
-            hoverable : expandTrigger === 'hover'
+            [this.prefixCls('hoverable')] : expandTrigger === 'hover'
           })}
         >
           {this.renderUlList(options, null, 0)}
@@ -81,7 +79,7 @@ class CascadeSubmenu extends React.Component {
           <ul
             key={key}
             className={classnames({
-              [prefixCls('hoverable')] : expandTrigger === 'hover' && index < cascadeSize - 1
+              [this.prefixCls('hoverable')] : expandTrigger === 'hover' && index < cascadeSize - 1
             })}
           >
             {this.renderUlList(renderArr, key, index)}
@@ -94,9 +92,9 @@ class CascadeSubmenu extends React.Component {
 
   render() {
     return (
-      <div className={prefixCls('submenu')}>
-        { /* <div className={prefixCls('submenu-border')}></div> */ }
-        <div className={prefixCls('submenu-wrap')}>
+      <div className={this.prefixCls('submenu')}>
+        { /* <div className={this.prefixCls('submenu-border')}></div> */ }
+        <div className={this.prefixCls('submenu-wrap')}>
           {this.renderSubmenus()}
         </div>
       </div>
@@ -105,9 +103,17 @@ class CascadeSubmenu extends React.Component {
 }
 
 CascadeSubmenu.propTypes = {
+  prefixCls: React.PropTypes.string,
   onItemClick: React.PropTypes.func,
   defaultValue: React.PropTypes.array,
   options: React.PropTypes.array,
+};
+
+CascadeSubmenu.defaultProps = {
+  prefixCls: 'kuma-cascader',
+  onItemClick: function(){},
+  defaultValue: [],
+  options: []
 };
 
 export default CascadeSubmenu;

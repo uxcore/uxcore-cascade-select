@@ -5,7 +5,8 @@
  * Copyright 2015-2016, Uxcore Team, Alinw.
  * All rights reserved.
  */
-@_prefix-cls: uxcore-cascader;
+@_prefix-cls: kuma-cascader;
+@_prefix-cls-dropdown: kuma-dropdown-menu;
 @_text-color: #333;
 @_gray-text: #999;
 @_border: #dbdbdb;
@@ -93,6 +94,10 @@
     &-arrow-reverse {
         transform: rotate(180deg);
     }
+
+}
+
+.@{_prefix-cls-dropdown} {
     &-submenu {
         margin: 0;
         background-color: @_background;
@@ -135,7 +140,7 @@
     }
 }
 
-ul.@{_prefix-cls}-hoverable {
+ul.@{_prefix-cls-dropdown}-hoverable {
     li {
         position: relative;
         &:after {

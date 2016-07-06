@@ -90,13 +90,6 @@ class Demo extends React.Component {
           options={options}
           onChange={(value, selected) => console.log(value, selected)}
         />
-        <h2>被禁用的</h2>
-        <CascadeSelect
-          defaultValue={['alibaba', 'platform', 'fe']}
-          options={options}
-          disabled
-          onChange={(value, selected) => console.log(value, selected)}
-        />
         <h2>可清空的</h2>
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
