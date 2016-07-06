@@ -5,89 +5,26 @@
 * Copyright 2015-2016, Uxcore Team, Alinw.
 * All rights reserved.
 */
+
 const React = require('react');
 const classnames = require('classnames');
 const _ = require('underscore');
 const prefixCls = function (name) {
   return `uxcore-cascader-${name}`;
 };
+import CascadeSubmenu from './CascadeSubmenu';
 
-class CascadeSubmenu extends React.Component {
-  _renderUlList(data, key, groupIndex) {
-    return (
-      data.map(item =>
-        <li
-          key={item.value}
-          onClick={() => { this.props.onItemClick(item.value, groupIndex, item) }}
-          title={item.label}
-          className={ classnames({'active' : item.value === key})}>
-          {item.label}
-        </li>
-      )
-    );
-  }
-
-  _renderSubmenus() {
-    let {defaultValue, options} = this.props;
-    if (defaultValue.length === 0) {
-      return (
-        <ul>
-          { this._renderUlList(options, null, 0) }
-        </ul>
-      );
-    } else {
-      let renderArr = null;
-      let prevSelected = null;
-      return defaultValue.map( (key, index) => {
-        if (index === 0) {
-          renderArr = options;
-        } else {
-          renderArr = prevSelected.children;
-        }
-        prevSelected = _.find(renderArr, item => item.value === key);
-        if (renderArr) {
-          return (
-            <ul key={key}>
-              { this._renderUlList(renderArr, key, index) }
-            </ul>
-          )
-        }
-        return null;
-      });
-    }
-  }
-
-  render() {
-    return (
-      <div className={ prefixCls('submenu') }>
-        <div className={ prefixCls('submenu-border') }></div>
-        <div className={ prefixCls('submenu-wrap') }>
-          {this._renderSubmenus()}
-        </div>
-      </div>
-    )
-  }
-}
+let cascaderId = 1000;
 
 class CascadeSelect extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = {
-      displayValue : '',
-      value : this.props.defaultValue || [],
-      selectedOptions : [],
-      showSubMenu : false
-    }
-  }
-
-  componentDidMount() {
-    let {defaultValue, options} = this.props;
-    let {selectedOptions} = this.state;
+    const { defaultValue, options } = props;
+    const selectedOptions = [];
     if (defaultValue.length) {
       let renderArr = null;
       let prevSelected = null;
-      defaultValue.forEach( (key, index) => {
+      defaultValue.forEach((key, index) => {
         if (index === 0) {
           renderArr = options;
         } else {
@@ -99,54 +36,145 @@ class CascadeSelect extends React.Component {
         }
       });
     }
-    this.setState({selectedOptions});
+    this.state = {
+      displayValue: this.props.defaultValue || [],
+      value: this.props.defaultValue || [],
+      selectedOptions,
+      showSubMenu: false,
+    };
+    this.hideFunc = this.hideSubmenu.bind(this);
   }
 
-  _onSubmenuItemClick(key, index, selectedOption) {
-    let {value,selectedOptions} = this.state;
-    let {onChange} = this.props;
+  componentDidMount() {
+    $('body').on('click', this.hideFunc);
+  }
+
+  componentWillUnmount() {
+    $('body').off('click', this.hideFunc);
+  }
+
+  hideSubmenu(e) {
+    let $wrapper = $(e.target).parents('.uxcore-cascader-wrapper');
+    let wrapper = this.refs.wrapper;
+    if ($wrapper.attr('id') !== wrapper.id) {
+      this.setState({showSubMenu: false});
+    }
+  }
+
+  onSubmenuItemClick(key, index, selectedOption) {
+    const { value, selectedOptions } = this.state;
+    const { onChange, changeOnSelect, cascadeSize } = this.props;
+    let showSubMenu = true;
     value.splice(index, 10, key, '');
     selectedOptions.splice(index, 10, selectedOption);
-    if (onChange) {
-      onChange(_.filter(value, item => item !== ''), selectedOptions)
+    if (selectedOptions.length >= cascadeSize) {
+      showSubMenu = false;
     }
-    this.setState({value, selectedOptions});
+    if (onChange) {
+      onChange(_.filter(value, item => item !== ''), selectedOptions);
+    }
+    if (changeOnSelect) {
+      this.setState({
+        displayValue: value,
+        value,
+        selectedOptions,
+        showSubMenu
+      });
+    } else if (!showSubMenu) {
+      this.setState({
+        displayValue: value,
+        value,
+        selectedOptions,
+        showSubMenu
+      });
+    } else {
+      this.setState({
+        value,
+        selectedOptions
+      });
+    }
+  }
+
+  clearContent() {
+    this.setState({
+      displayValue: [],
+      value : [],
+      selectedOptions : []
+    });
   }
 
   render() {
-    let {placeholder, className, options} = this.props;
-    let {value,selectedOptions,showSubMenu} = this.state;
+    const {
+      placeholder,
+      className,
+      options,
+      disabled,
+      clearable,
+      expandTrigger,
+      cascadeSize
+    } = this.props;
+    const { value, selectedOptions, showSubMenu, displayValue } = this.state;
     return (
-      <div className={classnames(prefixCls('wrapper'), className)}>
+      <div
+        id={++cascaderId}
+        ref="wrapper"
+        className={classnames({
+          [prefixCls('wrapper')]: true,
+          [className]: true,
+          [prefixCls('disabled')]: disabled,
+          [prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
+          [prefixCls('hoverable')]: expandTrigger === 'hover'
+        })}
+      >
         <div className={prefixCls('text')}>
-          <div onClick={() => this.setState({showSubMenu : !showSubMenu})}
-            className={prefixCls('trigger')}>
-            {
-              placeholder && !value.length ?
-              <div className={prefixCls('placeholder')}>{placeholder}</div> :
-              null
-            }
-            {
-              selectedOptions.length ?
-              this.props.beforeRender(value,selectedOptions) :
-              null
-            }
+          <div
+            onClick={() => {
+              if (!disabled) {
+                this.setState({ showSubMenu: !showSubMenu })
+              }
+            }}
+            className={prefixCls('trigger')}
+          >
+          {
+            placeholder && !displayValue.length ?
+            <div className={prefixCls('placeholder')}>
+              {placeholder}
+            </div> :
+            null
+          }
+          {
+            displayValue.length ?
+            this.props.beforeRender(displayValue, selectedOptions) :
+            null
+          }
           </div>
           {
-            options.length && showSubMenu ?
+            options.length && showSubMenu && !disabled ?
             <CascadeSubmenu
-              onItemClick={this._onSubmenuItemClick.bind(this)}
+              onItemClick={this.onSubmenuItemClick.bind(this)}
               options={options}
-              defaultValue={value} /> :
+              defaultValue={value}
+              expandTrigger={expandTrigger}
+              cascadeSize={cascadeSize}
+            /> :
             null
           }
         </div>
-        <div className={classnames({
-            [prefixCls('arrow')] : true,
-            [prefixCls('arrow-reverse')] : showSubMenu
-          })}>
+        <div
+          className={classnames({
+            [prefixCls('arrow')]: true,
+            [prefixCls('arrow-reverse')]: showSubMenu,
+          })}
+        >
           <i className="kuma-icon kuma-icon-triangle-down"></i>
         </div>
+        {
+          <div
+            className={prefixCls('close-wrap')}
+          >
+            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
+          </div>
+        }
       </div>
     );
   }
@@ -154,30 +182,31 @@ class CascadeSelect extends React.Component {
 }
 
 CascadeSelect.defaultProps = {
-  className : '',
-  placeholder : '请选择',
-  options : [],
-  defaultValue : [],
-  onChange : function(value, selectedOptions){},
-  disabled : false,    // TODO
-  clearable : false,   // TODO
-  changeOnSelect : false, // TODO
-  expandTrigger : 'click', // TODO
-  beforeRender : function(value, selectedOptions){ return selectedOptions.map(o => o.label).join(' / ') }
+  className: '',
+  placeholder: '请选择',
+  options: [],
+  defaultValue: [],
+  onChange: (value, selectedOptions) => {},
+  disabled: false,
+  clearable: false,
+  changeOnSelect: false,
+  expandTrigger: 'click',
+  cascadeSize: 3,
+  beforeRender: (value, selectedOptions) => selectedOptions.map(o => o.label).join(' / '),
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
 CascadeSelect.propTypes = {
-  className : React.PropTypes.string,
-  options : React.PropTypes.array,
-  defaultValue : React.PropTypes.array,
-  placeholder : React.PropTypes.string,
-  onChange : React.PropTypes.func,
-  disabled : React.PropTypes.bool,
-  clearable : React.PropTypes.bool,
-  changeOnSelect : React.PropTypes.bool,
-  expandTrigger : React.PropTypes.string,
-  beforeRender : React.PropTypes.func
+  className: React.PropTypes.string,
+  options: React.PropTypes.array,
+  defaultValue: React.PropTypes.array,
+  placeholder: React.PropTypes.string,
+  onChange: React.PropTypes.func,
+  disabled: React.PropTypes.bool,
+  clearable: React.PropTypes.bool,
+  changeOnSelect: React.PropTypes.bool,
+  expandTrigger: React.PropTypes.string,
+  beforeRender: React.PropTypes.func,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

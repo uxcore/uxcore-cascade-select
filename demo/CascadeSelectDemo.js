@@ -19,8 +19,8 @@ const options = [{
       value: 'fe',
       label: '前端开发',
     }],
-  }]
-},{
+  }],
+}, {
   value: 'beijing',
   label: '日本',
   children: [{
@@ -30,8 +30,8 @@ const options = [{
       value: 'zhonggc',
       label: '中观村大街',
     }],
-  }]
-},{
+  }],
+}, {
   value: 'tianjin',
   label: '天津',
   children: [{
@@ -40,15 +40,15 @@ const options = [{
     children: [{
       value: 'nanjinglu',
       label: '南京路',
-    }]
-  },{
+    }],
+  }, {
     value: 'hexi',
     label: '河西区',
     children: [{
       value: 'dagu',
       label: '大沽路',
-    }]
-  }]
+    }],
+  }],
 }, {
   value: 'zhejiang',
   label: '浙江',
@@ -59,7 +59,7 @@ const options = [{
       value: 'xihu',
       label: '西湖',
     }],
-  }]
+  }],
 }, {
   value: 'jiangsu',
   label: '江苏',
@@ -70,7 +70,7 @@ const options = [{
       value: 'zhonghuamen',
       label: '中华门',
     }],
-  }]
+  }],
 }];
 
 class Demo extends React.Component {
@@ -84,10 +84,50 @@ class Demo extends React.Component {
   render() {
     return (
       <div className="demo-wrap">
+        <h2>默认的</h2>
         <CascadeSelect
-          defaultValue={['alibaba','platform','fe']}
+          defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
-          onChange={(value, selected) => console.log(value, selected)}/>
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <h2>被禁用的</h2>
+        <CascadeSelect
+          defaultValue={['alibaba', 'platform', 'fe']}
+          options={options}
+          disabled
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <h2>可清空的</h2>
+        <CascadeSelect
+          defaultValue={['alibaba', 'platform', 'fe']}
+          options={options}
+          clearable
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <h2>禁用的</h2>
+        <CascadeSelect
+          defaultValue={['alibaba', 'platform', 'fe']}
+          options={options}
+          clearable
+          disabled
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <h2>实时改变的</h2>
+        <CascadeSelect
+          defaultValue={['alibaba', 'platform', 'fe']}
+          options={options}
+          clearable
+          changeOnSelect
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <h2>鼠标悬浮的</h2>
+        <CascadeSelect
+          defaultValue={['alibaba', 'platform', 'fe']}
+          options={options}
+          clearable
+          expandTrigger="hover"
+          onChange={(value, selected) => console.log(value, selected)}
+        />
       </div>
     );
   }
