@@ -59,7 +59,7 @@ class CascadeSubmenu extends React.Component {
     if (defaultValue.length === 0) {
       return (
         <ul className={classnames({
-            hoverable : expandTrigger
+            hoverable : expandTrigger === 'hover'
           })}
         >
           {this.renderUlList(options, null, 0)}
@@ -81,7 +81,7 @@ class CascadeSubmenu extends React.Component {
           <ul
             key={key}
             className={classnames({
-              hoverable : expandTrigger && index < cascadeSize - 1
+              [prefixCls('hoverable')] : expandTrigger === 'hover' && index < cascadeSize - 1
             })}
           >
             {this.renderUlList(renderArr, key, index)}
@@ -95,7 +95,7 @@ class CascadeSubmenu extends React.Component {
   render() {
     return (
       <div className={prefixCls('submenu')}>
-        <div className={prefixCls('submenu-border')}></div>
+        { /* <div className={prefixCls('submenu-border')}></div> */ }
         <div className={prefixCls('submenu-wrap')}>
           {this.renderSubmenus()}
         </div>

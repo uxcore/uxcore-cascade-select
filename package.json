@@ -46,7 +46,8 @@
     "classnames": "^2.1.2",
     "object-assign": "^4.0.0",
     "rc-cascader": "^0.9.9",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "uxcore-dropdown": "^0.3.0"
   },
   "contributors": [],
   "license": "MIT"

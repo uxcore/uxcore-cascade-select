@@ -11,6 +11,7 @@
 @_border: #dbdbdb;
 @_border-light: #e8e8e8;
 @_hover-color: #f7f7f7;
+@_background: #fff;
 @_disabled-color: #ccc;
 @_disabled-bg: #f7f7f7;
 @_disabled-border: #dbdbdb;
@@ -93,9 +94,12 @@
         transform: rotate(180deg);
     }
     &-submenu {
-        margin: 0 -10px;
+        margin: 0;
+        background-color: @_background;
+        border: 1px solid @_border;
+        margin-top: -8px;
         &-border {
-            margin: 0 5px;
+            margin: 0;
             border-top: 1px solid @_border-light;
         }
     }
@@ -129,23 +133,22 @@
             }
         }
     }
-    &-hoverable {
-        ul.hoverable {
-            li {
-                position: relative;
-                &:after {
-                    font-family: kuma!important;
-                    font-size: 16px;
-                    font-style: normal;
-                    -webkit-font-smoothing: antialiased;
-                    -webkit-text-stroke-width: .2px;
-                    content: "\e643";
-                    position: absolute;
-                    right: 2px;
-                    top: 2px;
-                    color: #666;
-                }
-            }
+}
+
+ul.@{_prefix-cls}-hoverable {
+    li {
+        position: relative;
+        &:after {
+            font-family: kuma!important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-stroke-width: .2px;
+            content: "\e643";
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            color: #666;
         }
     }
 }

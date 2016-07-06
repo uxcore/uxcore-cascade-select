@@ -8,6 +8,7 @@
 
 const React = require('react');
 const classnames = require('classnames');
+const Dropdown = require('uxcore-dropdown');
 const _ = require('underscore');
 const prefixCls = function (name) {
   return `uxcore-cascader-${name}`;
@@ -40,35 +41,18 @@ class CascadeSelect extends React.Component {
       displayValue: this.props.defaultValue || [],
       value: this.props.defaultValue || [],
       selectedOptions,
-      showSubMenu: false,
     };
-    this.hideFunc = this.hideSubmenu.bind(this);
-  }
-
-  componentDidMount() {
-    $('body').on('click', this.hideFunc);
-  }
-
-  componentWillUnmount() {
-    $('body').off('click', this.hideFunc);
-  }
-
-  hideSubmenu(e) {
-    let $wrapper = $(e.target).parents('.uxcore-cascader-wrapper');
-    let wrapper = this.refs.wrapper;
-    if ($wrapper.attr('id') !== wrapper.id) {
-      this.setState({showSubMenu: false});
-    }
   }
 
   onSubmenuItemClick(key, index, selectedOption) {
     const { value, selectedOptions } = this.state;
     const { onChange, changeOnSelect, cascadeSize } = this.props;
-    let showSubMenu = true;
+    let hideSubmenu = false;
     value.splice(index, 10, key, '');
     selectedOptions.splice(index, 10, selectedOption);
     if (selectedOptions.length >= cascadeSize) {
-      showSubMenu = false;
+      hideSubmenu = true;
+      this.refs.wrapper.click();
     }
     if (onChange) {
       onChange(_.filter(value, item => item !== ''), selectedOptions);
@@ -78,14 +62,12 @@ class CascadeSelect extends React.Component {
         displayValue: value,
         value,
         selectedOptions,
-        showSubMenu
       });
-    } else if (!showSubMenu) {
+    } else if (hideSubmenu){
       this.setState({
         displayValue: value,
         value,
         selectedOptions,
-        showSubMenu
       });
     } else {
       this.setState({
@@ -96,11 +78,22 @@ class CascadeSelect extends React.Component {
   }
 
   clearContent() {
+    const {onChange} = this.props;
     this.setState({
       displayValue: [],
       value : [],
       selectedOptions : []
     });
+    if (onChange) {
+      onChange([], []);
+    }
+  }
+
+  onDropDownVisibleChange(visible) {
+    const {disabled} = this.props;
+    if (!disabled) {
+      this.setState({showSubMenu:visible})
+    }
   }
 
   render() {
@@ -114,68 +107,69 @@ class CascadeSelect extends React.Component {
       cascadeSize
     } = this.props;
     const { value, selectedOptions, showSubMenu, displayValue } = this.state;
+    let submenu = <div />;
+    if (options.length && !disabled) {
+      submenu = (
+        <CascadeSubmenu
+          onItemClick={this.onSubmenuItemClick.bind(this)}
+          options={options}
+          defaultValue={value}
+          expandTrigger={expandTrigger}
+          cascadeSize={cascadeSize}
+        />
+      );
+    }
     return (
-      <div
-        id={++cascaderId}
-        ref="wrapper"
-        className={classnames({
-          [prefixCls('wrapper')]: true,
-          [className]: true,
-          [prefixCls('disabled')]: disabled,
-          [prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
-          [prefixCls('hoverable')]: expandTrigger === 'hover'
-        })}
+      <Dropdown
+        overlay={submenu}
+        trigger={['click']}
+        onVisibleChange={this.onDropDownVisibleChange.bind(this)}
       >
-        <div className={prefixCls('text')}>
-          <div
-            onClick={() => {
-              if (!disabled) {
-                this.setState({ showSubMenu: !showSubMenu })
-              }
-            }}
-            className={prefixCls('trigger')}
-          >
-          {
-            placeholder && !displayValue.length ?
-            <div className={prefixCls('placeholder')}>
-              {placeholder}
-            </div> :
-            null
-          }
-          {
-            displayValue.length ?
-            this.props.beforeRender(displayValue, selectedOptions) :
-            null
-          }
-          </div>
-          {
-            options.length && showSubMenu && !disabled ?
-            <CascadeSubmenu
-              onItemClick={this.onSubmenuItemClick.bind(this)}
-              options={options}
-              defaultValue={value}
-              expandTrigger={expandTrigger}
-              cascadeSize={cascadeSize}
-            /> :
-            null
-          }
-        </div>
         <div
+          id={++cascaderId}
+          ref="wrapper"
           className={classnames({
-            [prefixCls('arrow')]: true,
-            [prefixCls('arrow-reverse')]: showSubMenu,
+            [prefixCls('wrapper')]: true,
+            [className]: true,
+            [prefixCls('disabled')]: disabled,
+            [prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
+            // [prefixCls('hoverable')]: expandTrigger === 'hover'
           })}
         >
-          <i className="kuma-icon kuma-icon-triangle-down"></i>
-        </div>
-        {
-          <div
-            className={prefixCls('close-wrap')}
-          >
-            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
+          <div className={prefixCls('text')}>
+            <div className={prefixCls('trigger')}
+            >
+            {
+              placeholder && !displayValue.length ?
+              <div className={prefixCls('placeholder')}>
+                {placeholder}
+              </div> :
+              null
+            }
+            {
+              displayValue.length ?
+              this.props.beforeRender(displayValue, selectedOptions) :
+              null
+            }
+            </div>
           </div>
-        }
-      </div>
+          <div
+            className={classnames({
+              [prefixCls('arrow')]: true,
+              [prefixCls('arrow-reverse')]: showSubMenu,
+            })}
+          >
+            <i className="kuma-icon kuma-icon-triangle-down"></i>
+          </div>
+          {
+            <div
+              className={prefixCls('close-wrap')}
+            >
+              <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
+            </div>
+          }
+        </div>
+      </Dropdown>
     );
   }
 
