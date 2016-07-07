@@ -66,7 +66,7 @@ describe('CascadeSelect', () => {
 
   it('should display placeholder', () => {
     instance = render(<CascadeSelect placeholder="请选择"/>, div)
-    expect(findDOMNode(instance).querySelector('.uxcore-cascader-placeholder').innerHTML).to.equal('请选择')
+    expect(findDOMNode(instance).querySelector('.kuma-cascader-placeholder').innerHTML).to.equal('请选择')
   })
 
   it('should add the custom className', () => {
@@ -74,37 +74,37 @@ describe('CascadeSelect', () => {
     expect(findDOMNode(instance).className.indexOf('abc')>-1).to.be.ok();
   })
 
-  it('should have a sub menu', () => {
-    instance = render(<CascadeSelect options={options}/>, div)
-    expect(true).to.eql(true)
-    // expect(findDOMNode(instance).querySelector('.uxcore-cascader-submenu')).to.be.ok();
-  })
+  // it('should have a sub menu', () => {
+  //   instance = render(<CascadeSelect options={options}/>, div)
+  //   expect(true).to.eql(true)
+  //   // expect(findDOMNode(instance).querySelector('.uxcore-cascader-submenu')).to.be.ok();
+  // })
 
-  it('should have the defaultValue', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('onChange should be called successfully', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('should be disabled', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('should be clearable', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('should be changed after every selecting', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('should display the sub menu when hover', () => {
-    expect(true).to.eql(true)
-  })
-
-  it('should display text by the beforeRender function', () => {
-    expect(true).to.eql(true)
-  })
+  // it('should have the defaultValue', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('onChange should be called successfully', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('should be disabled', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('should be clearable', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('should be changed after every selecting', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('should display the sub menu when hover', () => {
+  //   expect(true).to.eql(true)
+  // })
+  //
+  // it('should display text by the beforeRender function', () => {
+  //   expect(true).to.eql(true)
+  // })
 });
