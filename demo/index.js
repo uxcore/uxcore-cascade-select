@@ -10,4 +10,3 @@ const ReactDOM = require('react-dom');
 const React = require('react');
 const Demo = require('./CascadeSelectDemo');
 ReactDOM.render(<Demo />, document.getElementById('UXCoreDemo'));
-
