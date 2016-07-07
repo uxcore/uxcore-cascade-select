@@ -43,7 +43,6 @@
   "dependencies": {
     "classnames": "^2.1.2",
     "object-assign": "^4.0.0",
-    "underscore": "^1.8.3",
     "uxcore-dropdown": "^0.3.0"
   },
   "contributors": [],

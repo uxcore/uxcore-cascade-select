@@ -78,6 +78,8 @@ class Demo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      xValue : ['jiangsu', 'nanjing', 'zhonghuamen'],
+      testValue: 1
     };
   }
 
@@ -121,6 +123,19 @@ class Demo extends React.Component {
           expandTrigger="hover"
           onChange={(value, selected) => console.log(value, selected)}
         />
+        <h2>改变value</h2>
+        <CascadeSelect
+          value={this.state.xValue}
+          options={options}
+          clearable
+          expandTrigger="hover"
+          onChange={(value, selected) => console.log(value, selected)}
+        />
+        <button
+          onClick={() => this.setState({xValue: ['alibaba', 'platform', 'fe']})}
+        >
+          Change Value
+        </button>
       </div>
     );
   }

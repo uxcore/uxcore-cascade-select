@@ -8,7 +8,6 @@
 
 const React = require('react');
 const classnames = require('classnames');
-const _ = require('underscore');
 import SuperComponent from './SuperComponent';
 
 class CascadeSubmenu extends SuperComponent {
@@ -73,8 +72,8 @@ class CascadeSubmenu extends SuperComponent {
       } else {
         renderArr = prevSelected.children;
       }
-      prevSelected = _.find(renderArr, item => item.value === key);
       if (renderArr) {
+        prevSelected = renderArr.find(item => item.value === key);
         return (
           <ul
             key={key}

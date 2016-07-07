@@ -9,7 +9,6 @@
 const React = require('react');
 const classnames = require('classnames');
 const Dropdown = require('uxcore-dropdown');
-const _ = require('underscore');
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
@@ -18,28 +17,47 @@ let cascaderId = 1000;
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
-    const { defaultValue, options } = props;
-    const selectedOptions = [];
-    if (defaultValue.length) {
+    const { defaultValue, options, value } = props;
+    const selectedOptions = this.getSelectedOptions(props);
+    this.state = {
+      displayValue: value || defaultValue,
+      value: value || defaultValue,
+      selectedOptions,
+    };
+  }
+
+  getSelectedOptions(props) {
+    let selectedOptions = [];
+    let {options, value, defaultValue} = props;
+    let theValue = value || defaultValue;
+    if (theValue.length) {
       let renderArr = null;
       let prevSelected = null;
-      defaultValue.forEach((key, index) => {
+      theValue.forEach((key, index) => {
         if (index === 0) {
           renderArr = options;
         } else {
           renderArr = prevSelected.children;
         }
-        prevSelected = _.find(renderArr, item => item.value === key);
+        prevSelected = renderArr.find(item => item.value === key);
         if (renderArr) {
           selectedOptions[index] = prevSelected;
         }
       });
     }
-    this.state = {
-      displayValue: this.props.defaultValue || [],
-      value: this.props.defaultValue || [],
-      selectedOptions,
-    };
+    return selectedOptions;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {value, options} = nextProps;
+    if (value) {
+      const selectedOptions = this.getSelectedOptions(nextProps);
+      this.setState({
+        displayValue: value,
+        value: value,
+        selectedOptions,
+      })
+    }
   }
 
   onSubmenuItemClick(key, index, selectedOption) {
@@ -53,7 +71,7 @@ class CascadeSelect extends SuperComponent {
       this.refs.wrapper.click();
     }
     if (onChange) {
-      onChange(_.filter(value, item => item !== ''), selectedOptions);
+      onChange(value.filter(item => item !== ''), selectedOptions);
     }
     if (changeOnSelect) {
       this.setState({
@@ -198,6 +216,7 @@ CascadeSelect.defaultProps = {
   placeholder: '请选择',
   options: [],
   defaultValue: [],
+  value: null,
   onChange: (value, selectedOptions) => {},
   disabled: false,
   clearable: false,
@@ -213,6 +232,7 @@ CascadeSelect.propTypes = {
   className: React.PropTypes.string,
   options: React.PropTypes.array,
   defaultValue: React.PropTypes.array,
+  value: React.PropTypes.array,
   placeholder: React.PropTypes.string,
   onChange: React.PropTypes.func,
   disabled: React.PropTypes.bool,
