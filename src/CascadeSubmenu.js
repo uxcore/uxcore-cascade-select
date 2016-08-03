@@ -8,7 +8,7 @@
 
 const React = require('react');
 const classnames = require('classnames');
-import SuperComponent from './SuperComponent';
+const SuperComponent = require('./SuperComponent');
 
 class CascadeSubmenu extends SuperComponent {
   onItemClick(item, groupIndex) {
@@ -28,65 +28,58 @@ class CascadeSubmenu extends SuperComponent {
 
   renderUlList(data, key, groupIndex) {
     const { expandTrigger } = this.props;
-    return (
-      data.map(item => {
-        let otherProps = {};
-        if (expandTrigger === 'click') {
-          otherProps.onClick = this.onItemClick.bind(this, item, groupIndex);
-        } else if (expandTrigger === 'hover') {
-          otherProps.onMouseOver = this.onItemHover.bind(this, item, groupIndex);
-        }
-        return (
-          <li
-            key={item.value}
-            title={item.label}
-            className={classnames({ active: item.value === key })}
-            {...otherProps}
-          >
-            {item.label}
-          </li>
-        );
-      })
-    );
+    return data.map(item => {
+      let otherProps = {};
+      if (expandTrigger === 'click') {
+        otherProps.onClick = this.onItemClick.bind(this, item, groupIndex);
+      } else if (expandTrigger === 'hover') {
+        otherProps.onMouseOver = this.onItemHover.bind(this, item, groupIndex);
+      }
+      return (
+        <li
+          key={item.value}
+          title={item.label}
+          className={classnames({ active: item.value === key })}
+          {...otherProps}
+        >
+          {item.label}
+        </li>
+      );
+    });
   }
 
   renderSubmenus() {
-    const { defaultValue, options, expandTrigger, cascadeSize } = this.props;
+    const { value, options, expandTrigger, cascadeSize } = this.props;
+    const submenu = []
+    submenu.push(
+      <ul 
+        className={classnames({
+          [this.prefixCls('hoverable')] : expandTrigger === 'hover'
+        })}
+        key="firstMenu"
+      >
+        {this.renderUlList(options, value[0], 0)}
+      </ul>
+    );
 
-    if (defaultValue.length === 0) {
-      return (
-        <ul className={classnames({
-            [this.prefixCls('hoverable')] : expandTrigger === 'hover'
-          })}
-        >
-          {this.renderUlList(options, null, 0)}
-        </ul>
-      );
-    }
-
-    let renderArr = null;
     let prevSelected = null;
-    return defaultValue.map((key, index) => {
-      if (index === 0) {
-        renderArr = options;
-      } else {
-        renderArr = prevSelected.children;
-      }
+    value.forEach((key, index) => {
+      const renderArr = (prevSelected || options).find(item => item.value === key).children;
+      prevSelected = renderArr;
       if (renderArr) {
-        prevSelected = renderArr.find(item => item.value === key);
-        return (
+        submenu.push(
           <ul
             key={key}
             className={classnames({
               [this.prefixCls('hoverable')] : expandTrigger === 'hover' && index < cascadeSize - 1
             })}
           >
-            {this.renderUlList(renderArr, key, index)}
+            {this.renderUlList(renderArr, value[index + 1], index + 1)}
           </ul>
         );
       }
-      return null;
     });
+    return submenu;
   }
 
   render() {
@@ -104,14 +97,14 @@ class CascadeSubmenu extends SuperComponent {
 CascadeSubmenu.propTypes = {
   prefixCls: React.PropTypes.string,
   onItemClick: React.PropTypes.func,
-  defaultValue: React.PropTypes.array,
+  value: React.PropTypes.array,
   options: React.PropTypes.array,
 };
 
 CascadeSubmenu.defaultProps = {
   prefixCls: 'kuma-cascader',
   onItemClick: function(){},
-  defaultValue: [],
+  value: [],
   options: []
 };
 

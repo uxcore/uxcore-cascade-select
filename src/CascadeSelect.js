@@ -56,39 +56,41 @@ class CascadeSelect extends SuperComponent {
         displayValue: value,
         value: value,
         selectedOptions,
-      })
+      });
     }
   }
 
   onSubmenuItemClick(key, index, selectedOption) {
-    const { value, selectedOptions } = this.state;
+    const { value, selectedOptions} = this.state;
     const { onChange, changeOnSelect, cascadeSize } = this.props;
     let hideSubmenu = false;
-    value.splice(index, 10, key, '');
-    selectedOptions.splice(index, 10, selectedOption);
-    if (selectedOptions.length >= cascadeSize) {
+    let newValue = value.slice(0, index);
+    newValue.push(key);
+    let newSelectedOptions = selectedOptions.slice(0, index);
+    newSelectedOptions.push(selectedOption);
+    if (newSelectedOptions.length >= cascadeSize) {
       hideSubmenu = true;
       this.refs.wrapper.click();
     }
     if (onChange) {
-      onChange(value.filter(item => item !== ''), selectedOptions);
+      onChange(newValue, newSelectedOptions);
     }
     if (changeOnSelect) {
       this.setState({
-        displayValue: value,
-        value,
-        selectedOptions,
+        displayValue: newValue,
+        value: newValue,
+        selectedOptions: newSelectedOptions,
       });
     } else if (hideSubmenu){
       this.setState({
-        displayValue: value,
-        value,
-        selectedOptions,
+        displayValue: newValue,
+        value: newValue,
+        selectedOptions: newSelectedOptions,
       });
     } else {
       this.setState({
-        value,
-        selectedOptions
+        value: newValue,
+        selectedOptions: newSelectedOptions,
       });
     }
   }
@@ -191,7 +193,7 @@ class CascadeSelect extends SuperComponent {
           prefixCls={prefixCls}
           onItemClick={this.onSubmenuItemClick.bind(this)}
           options={options}
-          defaultValue={value}
+          value={value}
           expandTrigger={expandTrigger}
           cascadeSize={cascadeSize}
         />

@@ -79,8 +79,15 @@ class Demo extends React.Component {
     super(props);
     this.state = {
       xValue : ['jiangsu', 'nanjing', 'zhonghuamen'],
-      testValue: 1
+      testValue: 1,
+      value: ['alibaba'],
     };
+  }
+
+  handleChange(value) {
+    this.setState({
+      value,
+    })
   }
 
   render() {
@@ -88,9 +95,9 @@ class Demo extends React.Component {
       <div className="demo-wrap">
         <h2>默认的</h2>
         <CascadeSelect
-          defaultValue={['alibaba', 'platform', 'fe']}
+          value={this.state.value}
           options={options}
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={this.handleChange.bind(this)}
         />
         <h2>可清空的</h2>
         <CascadeSelect

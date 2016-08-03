@@ -1,5 +1,9 @@
 # history
 
+## 0.1.5
+
+* `FIXED` fix value/onChange logic
+
 ## 0.1.4
 
 * `CHANGED` remove dependency rc-trigger (trigger bug has been fixed)
