@@ -1,6 +1,6 @@
 {
  "name": "uxcore-cascade-select",
- "version": "0.1.3",
+ "version": "0.1.4",
  "description": "uxcore-cascade-select component for uxcore.",
  "repository": "https://github.com/uxcore/uxcore-cascade-select.git",
  "author": "changming",
@@ -44,7 +44,6 @@
  "dependencies": {
   "classnames": "^2.1.2",
   "object-assign": "^4.0.0",
-  "rc-trigger": "~1.6.3",
   "uxcore-dropdown": "^0.3.0"
  },
  "contributors": [],
