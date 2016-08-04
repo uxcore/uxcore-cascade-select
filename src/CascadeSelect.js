@@ -20,16 +20,16 @@ class CascadeSelect extends SuperComponent {
     const { defaultValue, options, value } = props;
     const selectedOptions = this.getSelectedOptions(props);
     this.state = {
-      displayValue: value || defaultValue,
-      value: value || defaultValue,
-      selectedOptions,
+      displayValue: value || defaultValue || [],
+      value: value || defaultValue || [],
+      selectedOptions
     };
   }
 
   getSelectedOptions(props) {
     let selectedOptions = [];
     let {options, value, defaultValue} = props;
-    let theValue = value || defaultValue;
+    let theValue = value || defaultValue || [];
     if (theValue.length) {
       let renderArr = null;
       let prevSelected = null;
@@ -39,8 +39,8 @@ class CascadeSelect extends SuperComponent {
         } else {
           renderArr = prevSelected.children;
         }
-        prevSelected = renderArr.find(item => item.value === key);
         if (renderArr) {
+          prevSelected = renderArr.find(item => item.value === key);
           selectedOptions[index] = prevSelected;
         }
       });
@@ -49,13 +49,14 @@ class CascadeSelect extends SuperComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {value, options} = nextProps;
-    if (value) {
+    const { defaultValue } = nextProps;
+    if (defaultValue != this.props.defaultValue) {
       const selectedOptions = this.getSelectedOptions(nextProps);
+      const value = defaultValue && defaultValue.length ? defaultValue.concat(['']) : [];
       this.setState({
         displayValue: value,
-        value: value,
-        selectedOptions,
+        value,
+        selectedOptions
       })
     }
   }
@@ -116,7 +117,6 @@ class CascadeSelect extends SuperComponent {
     const {
       placeholder,
       className,
-      options,
       disabled,
       clearable,
       expandTrigger,
@@ -156,7 +156,7 @@ class CascadeSelect extends SuperComponent {
         <div
           className={classnames({
             [this.prefixCls('arrow')]: true,
-            [this.prefixCls('arrow-reverse')]: showSubMenu,
+            [this.prefixCls('arrow-reverse')]: showSubMenu
           })}
         >
           <i className="kuma-icon kuma-icon-triangle-down"></i>
@@ -185,7 +185,7 @@ class CascadeSelect extends SuperComponent {
       return this.renderContent();
     }
     let submenu = <div />;
-    if (options.length && !disabled) {
+    if (options && options.length && !disabled) {
       submenu = (
         <CascadeSubmenu
           prefixCls={prefixCls}

@@ -19,6 +19,13 @@ const options = [{
       value: 'fe',
       label: '前端开发',
     }],
+  }, {
+    value: '2',
+    label: '咸鱼',
+    children: [{
+      value: 'fe',
+      label: '前端开发',
+    }],
   }],
 }, {
   value: 'beijing',
@@ -78,9 +85,20 @@ class Demo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      xValue : ['jiangsu', 'nanjing', 'zhonghuamen'],
+      xValue : ['jiangsu', 'nanjing', 'zhonghuamen', 'xxx'],
+      xValue2 : null,
+      xOptions2 : null,
       testValue: 1
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        xValue2: ['alibaba', '2'],
+        xOptions2: options
+      })
+    }, 2000);
   }
 
   render() {
@@ -88,8 +106,8 @@ class Demo extends React.Component {
       <div className="demo-wrap">
         <h2>默认的</h2>
         <CascadeSelect
-          defaultValue={['alibaba', 'platform', 'fe']}
-          options={options}
+          defaultValue={this.state.xValue2}
+          options={this.state.xOptions2}
           onChange={(value, selected) => console.log(value, selected)}
         />
         <h2>可清空的</h2>
