@@ -3,5 +3,8 @@
     "installedESLint": true,
     "plugins": [
         "react"
-    ]
+    ],
+    "rules": {
+        "import/no-extraneous-dependencies": "off"
+    }
 }

@@ -1,5 +1,9 @@
 # history
 
+## 0.1.6
+
+* `FIXED` input height bug
+
 ## 0.1.5
 
 * `FIXED` fix value/onChange logic

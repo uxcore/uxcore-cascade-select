@@ -6,30 +6,33 @@
 * All rights reserved.
 */
 
-const React = require('react');
-const classnames = require('classnames');
-const Dropdown = require('uxcore-dropdown');
+
+import React from 'react';
+import classnames from 'classnames';
+import Dropdown from 'uxcore-dropdown';
+
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
-
-let cascaderId = 1000;
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
-    const { defaultValue, options, value } = props;
+    const { defaultValue, value } = props;
     const selectedOptions = this.getSelectedOptions(props);
     this.state = {
       displayValue: value || defaultValue,
       value: value || defaultValue,
       selectedOptions,
     };
+    this.clearContent = this.clearContent.bind(this);
+    this.onSubmenuItemClick = this.onSubmenuItemClick.bind(this);
+    this.onDropDownVisibleChange = this.onDropDownVisibleChange.bind(this);
   }
 
   getSelectedOptions(props) {
-    let selectedOptions = [];
-    let {options, value, defaultValue} = props;
-    let theValue = value || defaultValue;
+    const selectedOptions = [];
+    const { options, value, defaultValue } = props;
+    const theValue = value || defaultValue;
     if (theValue.length) {
       let renderArr = null;
       let prevSelected = null;
@@ -49,24 +52,24 @@ class CascadeSelect extends SuperComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {value, options} = nextProps;
+    const { value } = nextProps;
     if (value) {
       const selectedOptions = this.getSelectedOptions(nextProps);
       this.setState({
         displayValue: value,
-        value: value,
+        value,
         selectedOptions,
       });
     }
   }
 
   onSubmenuItemClick(key, index, selectedOption) {
-    const { value, selectedOptions} = this.state;
+    const { value, selectedOptions } = this.state;
     const { onChange, changeOnSelect, cascadeSize } = this.props;
     let hideSubmenu = false;
-    let newValue = value.slice(0, index);
+    const newValue = value.slice(0, index);
     newValue.push(key);
-    let newSelectedOptions = selectedOptions.slice(0, index);
+    const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
     if (newSelectedOptions.length >= cascadeSize) {
       hideSubmenu = true;
@@ -81,7 +84,7 @@ class CascadeSelect extends SuperComponent {
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
-    } else if (hideSubmenu){
+    } else if (hideSubmenu) {
       this.setState({
         displayValue: newValue,
         value: newValue,
@@ -96,11 +99,11 @@ class CascadeSelect extends SuperComponent {
   }
 
   clearContent() {
-    const {onChange} = this.props;
+    const { onChange } = this.props;
     this.setState({
       displayValue: [],
-      value : [],
-      selectedOptions : []
+      value: [],
+      selectedOptions: [],
     });
     if (onChange) {
       onChange([], []);
@@ -108,9 +111,9 @@ class CascadeSelect extends SuperComponent {
   }
 
   onDropDownVisibleChange(visible) {
-    const {disabled} = this.props;
+    const { disabled } = this.props;
     if (!disabled) {
-      this.setState({showSubMenu:visible})
+      this.setState({ showSubMenu: visible });
     }
   }
 
@@ -118,17 +121,12 @@ class CascadeSelect extends SuperComponent {
     const {
       placeholder,
       className,
-      options,
       disabled,
       clearable,
-      expandTrigger,
-      cascadeSize,
-      prefixCls
     } = this.props;
-    const { value, selectedOptions, showSubMenu, displayValue } = this.state;
+    const { selectedOptions, showSubMenu, displayValue } = this.state;
     return (
       <div
-        id={++cascaderId}
         ref="wrapper"
         className={classnames({
           [this.prefixCls('wrapper')]: true,
@@ -139,20 +137,21 @@ class CascadeSelect extends SuperComponent {
         })}
       >
         <div className={this.prefixCls('text')}>
-          <div className={this.prefixCls('trigger')}
+          <div
+            className={this.prefixCls('trigger')}
           >
-          {
-            placeholder && !displayValue.length ?
-            <div className={this.prefixCls('placeholder')}>
-              {placeholder}
-            </div> :
-            null
-          }
-          {
-            displayValue.length ?
-            this.props.beforeRender(displayValue, selectedOptions) :
-            null
-          }
+            {
+              placeholder && !displayValue.length ?
+                <div className={this.prefixCls('placeholder')}>
+                  {placeholder}
+                </div> :
+                null
+            }
+            {
+              displayValue.length ?
+                this.props.beforeRender(displayValue, selectedOptions) :
+                null
+            }
           </div>
         </div>
         <div
@@ -161,17 +160,17 @@ class CascadeSelect extends SuperComponent {
             [this.prefixCls('arrow-reverse')]: showSubMenu,
           })}
         >
-          <i className="kuma-icon kuma-icon-triangle-down"></i>
+          <i className="kuma-icon kuma-icon-triangle-down" />
         </div>
         {
           <div
             className={this.prefixCls('close-wrap')}
           >
-            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error"></i>
+            <i onClick={this.clearContent} className="kuma-icon kuma-icon-error" />
           </div>
         }
       </div>
-    )
+    );
   }
 
   render() {
@@ -180,7 +179,7 @@ class CascadeSelect extends SuperComponent {
       disabled,
       prefixCls,
       expandTrigger,
-      cascadeSize
+      cascadeSize,
     } = this.props;
     const { value } = this.state;
     if (disabled) {
@@ -191,7 +190,7 @@ class CascadeSelect extends SuperComponent {
       submenu = (
         <CascadeSubmenu
           prefixCls={prefixCls}
-          onItemClick={this.onSubmenuItemClick.bind(this)}
+          onItemClick={this.onSubmenuItemClick}
           options={options}
           value={value}
           expandTrigger={expandTrigger}
@@ -203,7 +202,7 @@ class CascadeSelect extends SuperComponent {
       <Dropdown
         overlay={submenu}
         trigger={['click']}
-        onVisibleChange={this.onDropDownVisibleChange.bind(this)}
+        onVisibleChange={this.onDropDownVisibleChange}
       >
         {this.renderContent()}
       </Dropdown>
@@ -219,7 +218,7 @@ CascadeSelect.defaultProps = {
   options: [],
   defaultValue: [],
   value: null,
-  onChange: (value, selectedOptions) => {},
+  onChange: () => { },
   disabled: false,
   clearable: false,
   changeOnSelect: false,
