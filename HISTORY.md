@@ -1,5 +1,9 @@
 # history
 
+## 0.1.7
+
+* `CHANGED` beforeRender default value optimazition
+
 ## 0.1.6
 
 * `FIXED` input height bug
