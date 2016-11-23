@@ -224,7 +224,7 @@ CascadeSelect.defaultProps = {
   changeOnSelect: false,
   expandTrigger: 'click',
   cascadeSize: 3,
-  beforeRender: (value, selectedOptions) => selectedOptions.map(o => o.label).join(' / '),
+  beforeRender: (value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / '),
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
