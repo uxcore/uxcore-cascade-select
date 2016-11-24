@@ -14,7 +14,7 @@ import Dropdown from 'uxcore-dropdown';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find } from './util';
+import { find, getTreeLevel } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
@@ -26,6 +26,7 @@ class CascadeSelect extends SuperComponent {
       value: value || defaultValue,
       selectedOptions,
     };
+    this.getOptionLevel();
     this.clearContent = this.clearContent.bind(this);
     this.onSubmenuItemClick = this.onSubmenuItemClick.bind(this);
     this.onDropDownVisibleChange = this.onDropDownVisibleChange.bind(this);
@@ -63,6 +64,11 @@ class CascadeSelect extends SuperComponent {
         selectedOptions,
       });
     }
+    this.getOptionLevel();
+  }
+
+  getOptionLevel() {
+    this.optionLevel = getTreeLevel(this.props.options, 1);
   }
 
   onSubmenuItemClick(key, index, selectedOption) {
@@ -73,7 +79,7 @@ class CascadeSelect extends SuperComponent {
     newValue.push(key);
     const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
-    if (newSelectedOptions.length >= cascadeSize) {
+    if (newSelectedOptions.length >= Math.max(cascadeSize, this.optionLevel)) {
       hideSubmenu = true;
       this.refs.wrapper.click();
     }

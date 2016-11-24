@@ -24,3 +24,18 @@ exports.find = (() => {
     return undefined;
   };
 })();
+
+const getLevel = (ary, level) => {
+  const levels = ary.filter(o => Array.isArray(o.children))
+    .map(o => getLevel(o.children, level));
+  let max;
+  if (levels.length > 0) {
+    max = Math.max.apply(null, levels);
+  } else {
+    max = 0;
+  }
+  return max + level;
+};
+
+exports.getTreeLevel = data => getLevel(data, 1);
+

@@ -1,5 +1,9 @@
 # history
 
+## 0.1.9
+
+* `CHANGED` subMenu won't be hide before selected options's length is larger than cascadeSize when cascadeSize is not equal to options level.
+
 ## 0.1.8
 
 * `FIXED` add support for browsers that does not implement array.prototype.find. 
