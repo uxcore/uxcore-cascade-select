@@ -1,5 +1,9 @@
 # history
 
+## 0.1.8
+
+* `FIXED` add support for browsers that does not implement array.prototype.find. 
+
 ## 0.1.7
 
 * `CHANGED` beforeRender default value optimazition
