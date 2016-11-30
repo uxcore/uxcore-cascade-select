@@ -89,7 +89,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | clearable | boolean | false | `false` | 是否支持清除 |
 | changeOnSelect | boolean | false | `false` | 是否将每次选择立刻显示在控件中 |
 | expandTrigger | string | false | `'click'` | 次级菜单展开方式，支持 `click` 和 `hover` |
-| beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o.label).join(' / ')` | 处理要显示的内容 |
+| beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / ')` | 处理要显示的内容 |
 | cascadeSize | number | false | `3` | 级联的层级数 |
 
 ## Demos

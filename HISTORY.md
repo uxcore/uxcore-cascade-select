@@ -1,5 +1,9 @@
 # history
 
+## 0.1.8
+
+* `CHANGED` collapse the menu if the selected item has no children [#7](https://github.com/uxcore/uxcore-cascade-select/issues/7)
+
 ## 0.1.7
 
 * `CHANGED` beforeRender default value optimazition

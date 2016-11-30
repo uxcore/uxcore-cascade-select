@@ -29,6 +29,13 @@ class CascadeSelect extends SuperComponent {
     this.onDropDownVisibleChange = this.onDropDownVisibleChange.bind(this);
   }
 
+  saveRef(refName) {
+    const me = this;
+    return (c) => {
+      me[refName] = c;
+    };
+  }
+
   getSelectedOptions(props) {
     const selectedOptions = [];
     const { options, value, defaultValue } = props;
@@ -63,17 +70,17 @@ class CascadeSelect extends SuperComponent {
     }
   }
 
-  onSubmenuItemClick(key, index, selectedOption) {
+  onSubmenuItemClick(key, index, selectedOption, hasChildren) {
     const { value, selectedOptions } = this.state;
-    const { onChange, changeOnSelect, cascadeSize } = this.props;
+    const { onChange, changeOnSelect } = this.props;
     let hideSubmenu = false;
     const newValue = value.slice(0, index);
     newValue.push(key);
     const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
-    if (newSelectedOptions.length >= cascadeSize) {
+    if (!hasChildren) {
       hideSubmenu = true;
-      this.refs.wrapper.click();
+      this.wrapper.click();
     }
     if (onChange) {
       onChange(newValue, newSelectedOptions);
@@ -127,7 +134,7 @@ class CascadeSelect extends SuperComponent {
     const { selectedOptions, showSubMenu, displayValue } = this.state;
     return (
       <div
-        ref="wrapper"
+        ref={this.saveRef('wrapper')}
         className={classnames({
           [this.prefixCls('wrapper')]: true,
           [className]: true,
