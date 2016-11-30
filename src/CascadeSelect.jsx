@@ -14,6 +14,8 @@ import Dropdown from 'uxcore-dropdown';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
+import { find } from './util';
+
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
@@ -49,7 +51,7 @@ class CascadeSelect extends SuperComponent {
         } else {
           renderArr = prevSelected.children;
         }
-        prevSelected = renderArr.find(item => item.value === key);
+        prevSelected = find(renderArr, item => item.value === key);
         if (renderArr) {
           selectedOptions[index] = prevSelected;
         }

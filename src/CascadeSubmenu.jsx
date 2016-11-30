@@ -6,6 +6,8 @@
 * All rights reserved.
 */
 
+import { find } from './util';
+
 const React = require('react');
 const classnames = require('classnames');
 const SuperComponent = require('./SuperComponent');
@@ -71,7 +73,7 @@ class CascadeSubmenu extends SuperComponent {
 
     let prevSelected = null;
     value.forEach((key, index) => {
-      const renderArr = (prevSelected || options).find(item => item.value === key).children;
+      const renderArr = find(prevSelected || options, item => item.value === key).children;
       prevSelected = renderArr;
       if (renderArr) {
         submenu.push(
