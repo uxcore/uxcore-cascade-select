@@ -52,7 +52,7 @@ class CascadeSelect extends SuperComponent {
           renderArr = prevSelected && prevSelected.children;
         }
         prevSelected = find(renderArr, item => item.value === theValue[i]);
-        if (renderArr) {
+        if (renderArr && prevSelected) {
           selectedOptions[i] = prevSelected;
         } else {
           selectedOptions = [];
