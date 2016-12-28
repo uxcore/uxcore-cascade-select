@@ -1,6 +1,6 @@
 # history
 
-## 0.1.10
+## 0.1.11
 
 * `FIXED` fix [#9](https://github.com/uxcore/uxcore-cascade-select/issues/9)
 
