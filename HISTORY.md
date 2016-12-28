@@ -2,6 +2,10 @@
 
 ## 0.1.10
 
+* `FIXED` fix [#9](https://github.com/uxcore/uxcore-cascade-select/issues/9)
+
+## 0.1.10
+
 * `CHANGED` another efficient way to fix issue #7
 
 ## 0.1.9
