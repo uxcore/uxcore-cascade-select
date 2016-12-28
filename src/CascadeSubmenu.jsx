@@ -73,7 +73,8 @@ class CascadeSubmenu extends SuperComponent {
 
     let prevSelected = null;
     value.forEach((key, index) => {
-      const renderArr = find(prevSelected || options, item => item.value === key).children;
+      const parent = find(prevSelected || options, item => item.value === key);
+      const renderArr = parent && parent.children;
       prevSelected = renderArr;
       if (renderArr) {
         submenu.push(
