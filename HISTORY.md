@@ -1,5 +1,9 @@
 # history
 
+## 0.2.0
+
+* `CHANGED` update `uxcore-dropdown` to `~0.4.0`
+
 ## 0.1.12
 
 * `FIXED` even if default value is error, options should show correctly [#11](https://github.com/uxcore/uxcore-cascade-select/issues/11)
