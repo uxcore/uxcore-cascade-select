@@ -4,8 +4,7 @@
     "react"
   ],
   "env": {
-    "browser": true,
-    "mocha": true
+    "browser": true
   },
   "rules": {
     "import/no-extraneous-dependencies": "off",
