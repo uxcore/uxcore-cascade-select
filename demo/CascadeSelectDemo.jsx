@@ -99,6 +99,7 @@ class Demo extends React.Component {
         <CascadeSelect
           value={this.state.value}
           options={options}
+          expandTrigger="hover"
           onChange={this.handleChange.bind(this)}
         />
         <h2>可清空的</h2>
