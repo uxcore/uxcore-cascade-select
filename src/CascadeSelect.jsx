@@ -39,23 +39,26 @@ class CascadeSelect extends SuperComponent {
   }
 
   getSelectedOptions(props) {
-    const selectedOptions = [];
+    let selectedOptions = [];
     const { options, value, defaultValue } = props;
     const theValue = value || defaultValue;
     if (theValue.length) {
       let renderArr = null;
       let prevSelected = null;
-      theValue.forEach((key, index) => {
-        if (index === 0) {
+      for (let i = 0, l = theValue.length; i < l; i++) {
+        if (i === 0) {
           renderArr = options;
         } else {
-          renderArr = prevSelected.children;
+          renderArr = prevSelected && prevSelected.children;
         }
-        prevSelected = find(renderArr, item => item.value === key);
-        if (renderArr) {
-          selectedOptions[index] = prevSelected;
+        prevSelected = find(renderArr, item => item.value === theValue[i]);
+        if (renderArr && prevSelected) {
+          selectedOptions[i] = prevSelected;
+        } else {
+          selectedOptions = [];
+          break;
         }
-      });
+      }
     }
     return selectedOptions;
   }
@@ -233,7 +236,12 @@ CascadeSelect.defaultProps = {
   changeOnSelect: false,
   expandTrigger: 'click',
   cascadeSize: 3,
-  beforeRender: (value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / '),
+  beforeRender: (value, selectedOptions) => {
+    if (selectedOptions.length) {
+      return selectedOptions.map(o => o && o.label).join(' / ');
+    }
+    return value.join('/');
+  },
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
