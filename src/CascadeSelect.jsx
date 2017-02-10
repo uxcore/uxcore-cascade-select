@@ -192,6 +192,7 @@ class CascadeSelect extends SuperComponent {
       prefixCls,
       expandTrigger,
       cascadeSize,
+      getPopupContainer,
     } = this.props;
     const { value } = this.state;
     if (disabled) {
@@ -215,6 +216,7 @@ class CascadeSelect extends SuperComponent {
         overlay={submenu}
         trigger={['click']}
         onVisibleChange={this.onDropDownVisibleChange}
+        getPopupContainer={getPopupContainer}
       >
         {this.renderContent()}
       </Dropdown>

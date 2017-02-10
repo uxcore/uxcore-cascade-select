@@ -91,6 +91,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | expandTrigger | string | false | `'click'` | 次级菜单展开方式，支持 `click` 和 `hover` |
 | beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / ')` | 处理要显示的内容 |
 | cascadeSize | number | false | `3` | 级联的层级数 |
+| getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
 
 ## Demos
 

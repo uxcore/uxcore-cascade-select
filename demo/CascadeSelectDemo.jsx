@@ -101,6 +101,12 @@ class Demo extends React.Component {
           options={options}
           expandTrigger="hover"
           onChange={this.handleChange.bind(this)}
+          getPopupContainer={() => {
+            const div = document.createElement('div');
+            div.className = 'uxcore';
+            document.body.appendChild(div);
+            return div;
+          }}
         />
         <h2>可清空的</h2>
         <CascadeSelect

@@ -1,5 +1,9 @@
 # history
 
+## 0.2.1
+
+* `NEW` add new prop `getPopupContainer`
+
 ## 0.2.0
 
 * `CHANGED` update `uxcore-dropdown` to `~0.4.0`
