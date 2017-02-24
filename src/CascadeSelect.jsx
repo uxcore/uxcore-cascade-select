@@ -12,7 +12,7 @@ import Dropdown from 'uxcore-dropdown';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find, i18n } from './util';
+import { find, i18n, getArrayLeafItemContains } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
@@ -40,7 +40,7 @@ class CascadeSelect extends SuperComponent {
     let selectedOptions = [];
     const { options, value, defaultValue } = props;
     const theValue = value || defaultValue;
-    if (theValue.length) {
+    if (theValue && theValue.length > 1) {
       let renderArr = null;
       let prevSelected = null;
       for (let i = 0, l = theValue.length; i < l; i++) {
@@ -57,6 +57,8 @@ class CascadeSelect extends SuperComponent {
           break;
         }
       }
+    } else if (theValue && theValue.length === 1) {
+      selectedOptions = getArrayLeafItemContains(options, theValue);
     }
     return selectedOptions;
   }

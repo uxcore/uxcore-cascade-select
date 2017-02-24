@@ -151,7 +151,19 @@ class Demo extends React.Component {
         <button
           onClick={() => this.setState({ xValue: ['fe'] })}
         >
-          Change Value
+          设置一个不存在的值
+        </button>
+        <CascadeSelect
+          value={this.state.xValue2}
+          options={options}
+          clearable
+          expandTrigger="hover"
+          onChange={(value, selected) => {}}
+        />
+        <button
+          onClick={() => this.setState({ xValue2: ['fe'] })}
+        >
+          设置底层叶子节点
         </button>
       </div>
     );

@@ -39,24 +39,31 @@ const i18n = (key, locale = 'zh_CN') => {
   return langs[locale][key] || '';
 };
 
-const getArrayLeafItemContainsKey = (array, key, nLevel = 0, aRet = []) => {
-  let level = nLevel;
-  const ret = aRet;
-  console.log(array);
+const getArrayLeafItemContains = (arr, key, aCache = [], aParents = []) => {
+  const cache = aCache;
+  const array = JSON.parse(JSON.stringify(arr));
   for (let i = 0, l = array.length; i < l; i++) {
+    cache[cache.length] = (array[i]);
+    if (aParents.length > 0) {
+      array[i].parents = aParents;
+    }
     if (array[i].children) {
-      getArrayLeafItemContainsKey(array[i].children, key, ++level, ret);
-    } else if (`${array[i].value}_` === `${key}_`) {
-      console.log(array);
-      ret[level] = key;
+      const parents = aParents.concat([array[i]]);
+      getArrayLeafItemContains(array[i].children, key, cache, parents);
+      delete array[i].children;
+    }
+    aParents = []; // 一组循环结束清除当前 parents 标记
+  }
+  for (let i = 0, l = cache.length; i < l; i++) {
+    if (`${cache[i].value}_` === `${key}_`) {
+      return cache[i].parents ? cache[i].parents.concat([cache[i]]) : [cache[i]];
     }
   }
-  return ret;
+  return []; // 当用户传递了一个不存在的key时会返回空数组
 };
 
 export default {
   find,
   i18n,
-  getArrayLeafItemContainsKey,
+  getArrayLeafItemContains,
 };
-
