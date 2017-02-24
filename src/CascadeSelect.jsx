@@ -5,8 +5,6 @@
 * Copyright 2015-2016, Uxcore Team, Alinw.
 * All rights reserved.
 */
-
-
 import React from 'react';
 import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
@@ -14,7 +12,7 @@ import Dropdown from 'uxcore-dropdown';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find } from './util';
+import { find, i18n } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
@@ -110,7 +108,8 @@ class CascadeSelect extends SuperComponent {
     }
   }
 
-  clearContent() {
+  clearContent(e) {
+    e.stopPropagation();
     const { onChange } = this.props;
     this.setState({
       displayValue: [],
@@ -131,12 +130,18 @@ class CascadeSelect extends SuperComponent {
 
   renderContent() {
     const {
-      placeholder,
       className,
       disabled,
       clearable,
+      locale,
     } = this.props;
     const { selectedOptions, showSubMenu, displayValue } = this.state;
+
+    let placeholder = this.props.placeholder;
+    if (!placeholder) {
+      placeholder = i18n('placeholder', locale);
+    }
+
     return (
       <div
         ref={this.saveRef('wrapper')}
@@ -228,7 +233,7 @@ class CascadeSelect extends SuperComponent {
 CascadeSelect.defaultProps = {
   prefixCls: 'kuma-cascader',
   className: '',
-  placeholder: '请选择',
+  placeholder: '',
   options: [],
   defaultValue: [],
   value: null,
@@ -244,6 +249,7 @@ CascadeSelect.defaultProps = {
     }
     return value.join('/');
   },
+  locale: 'zh_CN',
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -260,6 +266,7 @@ CascadeSelect.propTypes = {
   changeOnSelect: React.PropTypes.bool,
   expandTrigger: React.PropTypes.string,
   beforeRender: React.PropTypes.func,
+  locale: React.PropTypes.oneOf(['zh_CN', 'en_US']),
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

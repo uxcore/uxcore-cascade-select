@@ -108,12 +108,13 @@ class Demo extends React.Component {
             return div;
           }}
         />
-        <h2>可清空的</h2>
+        <h2>Clearable</h2>
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={(value, selected) => { }}
+          locale={'en_US'}
         />
         <h2>禁用的</h2>
         <CascadeSelect
@@ -121,7 +122,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           disabled
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={(value, selected) => {}}
         />
         <h2>实时改变的</h2>
         <CascadeSelect
@@ -129,7 +130,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           changeOnSelect
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={(value, selected) => {}}
         />
         <h2>鼠标悬浮的</h2>
         <CascadeSelect
@@ -137,7 +138,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           expandTrigger="hover"
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={(value, selected) => {}}
         />
         <h2>改变value</h2>
         <CascadeSelect
@@ -145,10 +146,10 @@ class Demo extends React.Component {
           options={options}
           clearable
           expandTrigger="hover"
-          onChange={(value, selected) => console.log(value, selected)}
+          onChange={(value, selected) => {}}
         />
         <button
-          onClick={() => this.setState({ xValue: ['alibaba', 'platform', 'fe'] })}
+          onClick={() => this.setState({ xValue: ['fe'] })}
         >
           Change Value
         </button>

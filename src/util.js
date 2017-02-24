@@ -25,7 +25,38 @@ const find = (() => {
   };
 })();
 
+const i18n = (key, locale = 'zh_CN') => {
+  const langs = {};
+
+  langs.zh_CN = {
+    placeholder: '请选择',
+  };
+
+  langs.en_US = {
+    placeholder: 'Please select',
+  };
+
+  return langs[locale][key] || '';
+};
+
+const getArrayLeafItemContainsKey = (array, key, nLevel = 0, aRet = []) => {
+  let level = nLevel;
+  const ret = aRet;
+  console.log(array);
+  for (let i = 0, l = array.length; i < l; i++) {
+    if (array[i].children) {
+      getArrayLeafItemContainsKey(array[i].children, key, ++level, ret);
+    } else if (`${array[i].value}_` === `${key}_`) {
+      console.log(array);
+      ret[level] = key;
+    }
+  }
+  return ret;
+};
+
 export default {
   find,
+  i18n,
+  getArrayLeafItemContainsKey,
 };
 

@@ -1,5 +1,10 @@
 # history
 
+## 0.2.2
+
+* `NEW`: Pass `[key]` as the value will be treated as the choosed leaf **key**.
+* `FIXED`: `e.stopPropagation()` when click the clear button.
+
 ## 0.2.1
 
 * `NEW` add new prop `getPopupContainer`

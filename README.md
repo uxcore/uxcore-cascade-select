@@ -92,6 +92,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / ')` | 处理要显示的内容 |
 | cascadeSize | number | false | `3` | 级联的层级数 |
 | getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
+| locale | string | false | `'zh_CN'` | `'en_US'`
 
 ## Demos
 
