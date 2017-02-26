@@ -40,9 +40,11 @@ class CascadeSubmenu extends SuperComponent {
     return data.map(item => {
       const otherProps = {};
       if (expandTrigger === 'click') {
-        otherProps.onClick = this.onItemClick.bind(this, item, groupIndex, isNotEmpty(item.children));
+        otherProps.onClick =
+          this.onItemClick.bind(this, item, groupIndex, isNotEmpty(item.children));
       } else if (expandTrigger === 'hover') {
-        otherProps.onMouseOver = this.onItemHover.bind(this, item, groupIndex, isNotEmpty(item.children));
+        otherProps.onMouseOver =
+          this.onItemHover.bind(this, item, groupIndex, isNotEmpty(item.children));
       }
       return (
         <li
@@ -95,7 +97,6 @@ class CascadeSubmenu extends SuperComponent {
   render() {
     return (
       <div className={this.prefixCls('submenu')}>
-        { /* <div className={this.prefixCls('submenu-border')}></div> */ }
         <div className={this.prefixCls('submenu-wrap')}>
           {this.renderSubmenus()}
         </div>

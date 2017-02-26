@@ -123,3 +123,11 @@ const options = [{
   }],
 }];
 ```
+
+### 使用css来定制dropdown宽度
+
+```less
+.kuma-dropdown-menu-submenu {
+    width: 400px; // 你想要的 dropdown 宽度
+}
+```

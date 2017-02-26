@@ -24,9 +24,6 @@ class CascadeSelect extends SuperComponent {
       value: value || defaultValue,
       selectedOptions,
     };
-    this.clearContent = this.clearContent.bind(this);
-    this.onSubmenuItemClick = this.onSubmenuItemClick.bind(this);
-    this.onDropDownVisibleChange = this.onDropDownVisibleChange.bind(this);
   }
 
   saveRef(refName) {
@@ -185,7 +182,7 @@ class CascadeSelect extends SuperComponent {
           <div
             className={this.prefixCls('close-wrap')}
           >
-            <i onClick={this.clearContent} className="kuma-icon kuma-icon-error" />
+            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error" />
           </div>
         }
       </div>
@@ -210,7 +207,7 @@ class CascadeSelect extends SuperComponent {
       submenu = (
         <CascadeSubmenu
           prefixCls={prefixCls}
-          onItemClick={this.onSubmenuItemClick}
+          onItemClick={this.onSubmenuItemClick.bind(this)}
           options={options}
           value={value}
           expandTrigger={expandTrigger}
@@ -222,7 +219,7 @@ class CascadeSelect extends SuperComponent {
       <Dropdown
         overlay={submenu}
         trigger={['click']}
-        onVisibleChange={this.onDropDownVisibleChange}
+        onVisibleChange={this.onDropDownVisibleChange.bind(this)}
         getPopupContainer={getPopupContainer}
       >
         {this.renderContent()}
