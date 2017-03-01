@@ -111,7 +111,6 @@ class Demo extends React.Component {
             document.body.appendChild(div);
             return div;
           }}
-          cascadeSize={4}
         />
         <h2>Clearable</h2>
         <CascadeSelect
