@@ -62,12 +62,15 @@ class CascadeSubmenu extends SuperComponent {
   renderSubmenus() {
     const { value, options, expandTrigger, cascadeSize } = this.props;
     const submenu = [];
+    const width = `${(100 / cascadeSize).toFixed()}%`;
+    const style = { width };
     submenu.push(
       <ul
         className={classnames({
           [this.prefixCls('hoverable')]: expandTrigger === 'hover',
         })}
         key="firstMenu"
+        style={style}
       >
         {this.renderUlList(options, value[0], 0)}
       </ul>
@@ -85,6 +88,7 @@ class CascadeSubmenu extends SuperComponent {
             className={classnames({
               [this.prefixCls('hoverable')]: expandTrigger === 'hover' && index < cascadeSize - 1,
             })}
+            style={style}
           >
             {this.renderUlList(renderArr, value[index + 1], index + 1)}
           </ul>

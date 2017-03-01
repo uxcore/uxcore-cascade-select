@@ -42,6 +42,10 @@ const options = [{
     children: [{
       value: 'nanjinglu',
       label: '南京路',
+      children: [{
+        value: 'newbal',
+        label: '新百伦',
+      }],
     }],
   }, {
     value: 'hexi',
@@ -107,6 +111,7 @@ class Demo extends React.Component {
             document.body.appendChild(div);
             return div;
           }}
+          cascadeSize={4}
         />
         <h2>Clearable</h2>
         <CascadeSelect
