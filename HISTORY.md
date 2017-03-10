@@ -1,8 +1,12 @@
 # history
 
+## 0.2.3
+
+* `CHANGED` update i18n.
+
 ## 0.2.2
 
-* `NEW`: Pass `[key]` as the value will be treated as the choosed leaf **key**.
+* `NEW`: Pass the only `[key]` as the value will be treated as the choosed leaf **key**.
 * `FIXED`: `e.stopPropagation()` when click the clear button.
 
 ## 0.2.1
