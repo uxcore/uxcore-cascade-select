@@ -8,11 +8,11 @@
 import React from 'react';
 import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
-
+import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find, i18n, getArrayLeafItemContains } from './util';
+import { find, getArrayLeafItemContains } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
@@ -132,13 +132,21 @@ class CascadeSelect extends SuperComponent {
       className,
       disabled,
       clearable,
-      locale,
     } = this.props;
+
+    // 兼容老版本的locale code
+    let { locale } = this.props;
+    if (locale === 'zh_CN') {
+      locale = 'zh-cn';
+    } else if (locale === 'en_US') {
+      locale = 'en-us';
+    }
+
     const { selectedOptions, showSubMenu, displayValue } = this.state;
 
     let placeholder = this.props.placeholder;
     if (!placeholder) {
-      placeholder = i18n('placeholder', locale);
+      placeholder = i18n[locale].placeholder;
     }
 
     return (
@@ -248,7 +256,7 @@ CascadeSelect.defaultProps = {
     }
     return value.join('/');
   },
-  locale: 'zh_CN',
+  locale: 'zh-cn',
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -265,7 +273,7 @@ CascadeSelect.propTypes = {
   changeOnSelect: React.PropTypes.bool,
   expandTrigger: React.PropTypes.string,
   beforeRender: React.PropTypes.func,
-  locale: React.PropTypes.oneOf(['zh_CN', 'en_US']),
+  locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
