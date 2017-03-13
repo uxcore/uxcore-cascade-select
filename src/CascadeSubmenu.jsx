@@ -62,7 +62,7 @@ class CascadeSubmenu extends SuperComponent {
   renderSubmenus() {
     const { value, options, expandTrigger, cascadeSize } = this.props;
     const submenu = [];
-    const width = `${(100 / cascadeSize).toFixed()}%`;
+    const width = `${(100 / cascadeSize).toFixed(1)}%`;
     const style = { width };
     submenu.push(
       <ul

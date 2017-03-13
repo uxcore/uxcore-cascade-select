@@ -12,13 +12,19 @@ import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find, getArrayLeafItemContains } from './util';
+import { find, getArrayLeafItemContains, deepCopy } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
-    const { defaultValue, value } = props;
+    let { value } = props;
+    const { defaultValue } = props;
     const selectedOptions = this.getSelectedOptions(props);
+
+    if (selectedOptions && selectedOptions.length) {
+      value = selectedOptions.map(item => item.value);
+    }
+
     this.state = {
       displayValue: value || defaultValue,
       value: value || defaultValue,
@@ -61,9 +67,14 @@ class CascadeSelect extends SuperComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { value } = nextProps;
-    if (value) {
+    let { value } = nextProps;
+    if (value && deepCopy(value) !== deepCopy(this.props.value)) {
       const selectedOptions = this.getSelectedOptions(nextProps);
+
+      if (selectedOptions && selectedOptions.length) {
+        value = selectedOptions.map(item => item.value);
+      }
+
       this.setState({
         displayValue: value,
         value,

@@ -10,6 +10,17 @@ const React = require('react');
 const CascadeSelect = require('../src');
 
 const options = [{
+  value: 100224,
+  label: 'IS',
+  children: [{
+    value: 100240,
+    label: '通讯服务',
+    children: [{
+      value: 2815,
+      label: '短信服务',
+    }],
+  }],
+}, {
   value: 'alibaba',
   label: '阿里巴巴',
   children: [{
@@ -85,15 +96,16 @@ class Demo extends React.Component {
     super(props);
     this.state = {
       xValue: ['jiangsu', 'nanjing', 'zhonghuamen'],
-      testValue: 1,
-      value: ['alibaba'],
+      value: [2815],
     };
   }
 
   handleChange(value) {
-    this.setState({
-      value,
-    });
+    if (value.length) {
+      this.setState({
+        value: [value[value.length - 1]],
+      });
+    }
   }
 
   render() {

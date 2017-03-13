@@ -39,31 +39,41 @@ const i18n = (key, locale = 'zh_CN') => {
   return langs[locale][key] || '';
 };
 
-const getArrayLeafItemContains = (arr, key, aCache = [], aParents = []) => {
-  const cache = aCache;
-  const array = JSON.parse(JSON.stringify(arr));
-  for (let i = 0, l = array.length; i < l; i++) {
-    cache[cache.length] = (array[i]);
-    if (aParents.length > 0) {
-      array[i].parents = aParents;
+const deepCopy = o => JSON.parse(JSON.stringify(o));
+
+const getArrayLeafItemContains = (options, keyArr, p = [], c = [], level = 1) => {
+  let parents = deepCopy(p);
+  let cache = deepCopy(c);
+  for (let i = 0, l = options.length; i < l; i++) {
+    if (level === 1) {
+      cache = [];
+      parents = [];
     }
-    if (array[i].children) {
-      const parents = aParents.concat([array[i]]);
-      getArrayLeafItemContains(array[i].children, key, cache, parents);
-      delete array[i].children;
+    if (`${keyArr[0]}_` === `${options[i].value}_`) {
+      const mySelf = deepCopy(options[i]);
+      delete mySelf.children;
+      if (parents && parents.length) {
+        cache = cache.concat(parents, [mySelf]);
+      } else {
+        cache.push(mySelf);
+      }
+      return cache;
+    } else if (options[i].children && options[i].children.length) {
+      const mySelf = deepCopy(options[i]);
+      delete mySelf.children;
+      parents[level - 1] = mySelf;
+      const ret = getArrayLeafItemContains(options[i].children, keyArr, parents, cache, level + 1);
+      if (ret && ret.length) {
+        return ret;
+      }
     }
-    aParents = []; // 一组循环结束清除当前 parents 标记
   }
-  for (let i = 0, l = cache.length; i < l; i++) {
-    if (`${cache[i].value}_` === `${key}_`) {
-      return cache[i].parents ? cache[i].parents.concat([cache[i]]) : [cache[i]];
-    }
-  }
-  return []; // 当用户传递了一个不存在的key时会返回空数组
+  return [];
 };
 
 export default {
   find,
   i18n,
   getArrayLeafItemContains,
+  deepCopy,
 };
