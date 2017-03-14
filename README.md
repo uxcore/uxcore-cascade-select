@@ -93,6 +93,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | cascadeSize | number | false | `3` | 级联的层级数 |
 | getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
 | locale | string | false | `'zh_CN'` | `'en_US'`
+| miniMode | boolean | false | true | 是否是简洁显示风格
 
 ## Demos
 

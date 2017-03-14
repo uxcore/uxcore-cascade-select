@@ -30,6 +30,16 @@ class CascadeSelect extends SuperComponent {
       value: value || defaultValue,
       selectedOptions,
     };
+
+    // 兼容老版本的locale code
+    const { locale } = props;
+    if (locale === 'zh_CN') {
+      this.locale = 'zh-cn';
+    } else if (locale === 'en_US') {
+      this.locale = 'en-us';
+    } else {
+      this.locale = locale;
+    }
   }
 
   saveRef(refName) {
@@ -92,8 +102,10 @@ class CascadeSelect extends SuperComponent {
     const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
     if (!hasChildren) {
-      hideSubmenu = true;
-      this.wrapper.click();
+      if (this.props.miniMode) {
+        hideSubmenu = true;
+        this.wrapper.click();
+      }
     }
     if (onChange) {
       onChange(newValue, newSelectedOptions);
@@ -145,19 +157,11 @@ class CascadeSelect extends SuperComponent {
       clearable,
     } = this.props;
 
-    // 兼容老版本的locale code
-    let { locale } = this.props;
-    if (locale === 'zh_CN') {
-      locale = 'zh-cn';
-    } else if (locale === 'en_US') {
-      locale = 'en-us';
-    }
-
     const { selectedOptions, showSubMenu, displayValue } = this.state;
 
     let placeholder = this.props.placeholder;
     if (!placeholder) {
-      placeholder = i18n[locale].placeholder;
+      placeholder = i18n[this.locale].placeholder;
     }
 
     return (
@@ -231,6 +235,11 @@ class CascadeSelect extends SuperComponent {
           value={value}
           expandTrigger={expandTrigger}
           cascadeSize={cascadeSize}
+          locale={this.locale}
+          miniMode={this.props.miniMode}
+          onOkButtonClick={() => {
+            this.wrapper.click();
+          }}
         />
       );
     }
@@ -268,6 +277,7 @@ CascadeSelect.defaultProps = {
     return value.join('/');
   },
   locale: 'zh-cn',
+  miniMode: true,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -285,6 +295,7 @@ CascadeSelect.propTypes = {
   expandTrigger: React.PropTypes.string,
   beforeRender: React.PropTypes.func,
   locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
+  miniMode: React.PropTypes.bool,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

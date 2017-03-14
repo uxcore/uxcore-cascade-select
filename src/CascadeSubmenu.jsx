@@ -7,6 +7,8 @@
 */
 
 import { find } from './util';
+import Button from 'uxcore-button';
+import i18n from './i18n';
 
 const React = require('react');
 const classnames = require('classnames');
@@ -46,6 +48,15 @@ class CascadeSubmenu extends SuperComponent {
         otherProps.onMouseOver =
           this.onItemHover.bind(this, item, groupIndex, isNotEmpty(item.children));
       }
+
+      if (!this.displayData) {
+        this.displayData = [];
+      }
+
+      if (item.value === key) {
+        this.displayData[groupIndex] = item.label;
+      }
+
       return (
         <li
           key={item.value}
@@ -60,9 +71,14 @@ class CascadeSubmenu extends SuperComponent {
   }
 
   renderSubmenus() {
-    const { value, options, expandTrigger, cascadeSize } = this.props;
+    const { value, options, expandTrigger, cascadeSize, miniMode } = this.props;
     const submenu = [];
-    const width = `${(100 / cascadeSize).toFixed(1)}%`;
+
+    let width = `${(100 / cascadeSize).toFixed(1)}%`;
+    if (!miniMode) {
+      width = `${(100 / (cascadeSize + 1)).toFixed(1)}%`;
+    }
+
     const style = { width };
     submenu.push(
       <ul
@@ -98,12 +114,51 @@ class CascadeSubmenu extends SuperComponent {
     return submenu;
   }
 
+  renderBottomBar() {
+    return (
+      <div className={this.prefixCls('submenu-bottom-bar')}>
+        <Button onClick={this.props.onOkButtonClick}>{i18n[this.props.locale].confirm}</Button>
+      </div>
+    );
+  }
+
+  renderAllSelection() {
+    const width = `${(100 / (this.props.cascadeSize + 1)).toFixed(1)}%`;
+    return (
+      <div style={{ width }} className={this.prefixCls('submenu-all-selection')}>
+        <div className={this.prefixCls('submenu-all-selection-title')}>
+          {i18n[this.props.locale].alreadyChoosed}
+        </div>
+        <div className={this.prefixCls('submenu-all-body')}>
+          {
+            this.displayData ?
+              this.displayData.map((label, idx) =>
+                <div style={{ marginLeft: 12 * idx }}>
+                  <i className="kuma-icon kuma-icon-triangle-right" /> {label}
+                </div>
+              ) :
+              null
+          }
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className={this.prefixCls('submenu')}>
         <div className={this.prefixCls('submenu-wrap')}>
           {this.renderSubmenus()}
+
+          {
+            this.props.miniMode ? null :
+              this.renderAllSelection()
+          }
         </div>
+        {
+          this.props.miniMode ? null :
+            this.renderBottomBar()
+        }
       </div>
     );
   }
@@ -114,13 +169,17 @@ CascadeSubmenu.propTypes = {
   onItemClick: React.PropTypes.func,
   value: React.PropTypes.array,
   options: React.PropTypes.array,
+  miniMode: React.PropTypes.bool,
+  onOkButtonClick: React.PropTypes.func,
 };
 
 CascadeSubmenu.defaultProps = {
   prefixCls: 'kuma-cascader',
-  onItemClick() {},
+  onItemClick() { },
   value: [],
   options: [],
+  miniMode: false,
+  onOkButtonClick: () => { },
 };
 
 export default CascadeSubmenu;

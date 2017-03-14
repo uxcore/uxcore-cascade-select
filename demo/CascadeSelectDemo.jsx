@@ -131,6 +131,7 @@ class Demo extends React.Component {
           clearable
           onChange={(value, selected) => { }}
           locale={'en_US'}
+          miniMode={false}
         />
         <h2>禁用的</h2>
         <CascadeSelect
