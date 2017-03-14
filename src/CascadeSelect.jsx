@@ -122,6 +122,12 @@ class CascadeSelect extends SuperComponent {
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
+    } else if (newValue.length >= this.props.cascadeSize) {
+      this.setState({
+        value: newValue,
+        displayValue: newValue,
+        selectedOptions: newSelectedOptions,
+      });
     } else {
       this.setState({
         value: newValue,

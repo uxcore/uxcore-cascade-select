@@ -49,12 +49,12 @@ class CascadeSubmenu extends SuperComponent {
           this.onItemHover.bind(this, item, groupIndex, isNotEmpty(item.children));
       }
 
-      if (!this.displayData) {
-        this.displayData = [];
-      }
-
       if (item.value === key) {
-        this.displayData[groupIndex] = item.label;
+        if (groupIndex === 0) {
+          this.displayData = [item.label];
+        } else {
+          this.displayData[groupIndex] = item.label;
+        }
       }
 
       return (
@@ -79,7 +79,7 @@ class CascadeSubmenu extends SuperComponent {
       width = `${(100 / (cascadeSize + 1)).toFixed(1)}%`;
     }
 
-    const style = { width };
+    let style = { width };
     submenu.push(
       <ul
         className={classnames({
@@ -98,6 +98,13 @@ class CascadeSubmenu extends SuperComponent {
       const renderArr = parent && parent.children;
       prevSelected = renderArr;
       if (renderArr) {
+        if (index + 1 >= cascadeSize - 1) {
+          style = {
+            width,
+            border: 'none',
+          };
+        }
+
         submenu.push(
           <ul
             key={key}
@@ -133,8 +140,8 @@ class CascadeSubmenu extends SuperComponent {
           {
             this.displayData ?
               this.displayData.map((label, idx) =>
-                <div style={{ marginLeft: 12 * idx }}>
-                  <i className="kuma-icon kuma-icon-triangle-right" /> {label}
+                <div key={idx} style={{ marginLeft: 12 * idx }}>
+                  <i className="kuma-icon kuma-icon-one" /> {label}
                 </div>
               ) :
               null

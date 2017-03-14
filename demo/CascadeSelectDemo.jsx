@@ -129,9 +129,10 @@ class Demo extends React.Component {
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          onChange={(value, selected) => { }}
+          onChange={(value, selected) => {}}
           locale={'en_US'}
           miniMode={false}
+          cascadeSize={3}
         />
         <h2>禁用的</h2>
         <CascadeSelect
