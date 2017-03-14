@@ -1,5 +1,9 @@
 # history
 
+## 0.2.7
+
+* `NEW`: new display mode, `miniMode=false` will display the rich style with button and selection.
+
 ## 0.2.3
 
 * `CHANGED` update i18n.
