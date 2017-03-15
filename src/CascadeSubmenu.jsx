@@ -183,7 +183,7 @@ CascadeSubmenu.propTypes = {
   options: React.PropTypes.array,
   miniMode: React.PropTypes.bool,
   onOkButtonClick: React.PropTypes.func,
-  dropDownWidth: 0,
+  dropDownWidth: React.PropTypes.number,
 };
 
 CascadeSubmenu.defaultProps = {
@@ -193,7 +193,7 @@ CascadeSubmenu.defaultProps = {
   options: [],
   miniMode: false,
   onOkButtonClick: () => { },
-  dropDownWidth: React.PropTypes.number,
+  dropDownWidth: 0,
 };
 
 export default CascadeSubmenu;
