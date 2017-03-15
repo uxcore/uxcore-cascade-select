@@ -100,10 +100,18 @@ class Demo extends React.Component {
     };
   }
 
+  loadFirstOptions() {
+    setTimeout(() => {
+      this.setState({
+        firstOptions: options,
+      });
+    }, 500);
+  }
+
   handleChange(value) {
     if (value.length) {
       this.setState({
-        value: [value[value.length - 1]],
+        firstValue: [value[value.length - 1]],
       });
     }
   }
@@ -112,9 +120,10 @@ class Demo extends React.Component {
     return (
       <div className="demo-wrap">
         <h2>默认的</h2>
+        <button onClick={this.loadFirstOptions.bind(this)}>点击加载options</button>
         <CascadeSelect
-          value={this.state.value}
-          options={options}
+          value={this.state.firstValue}
+          options={this.state.firstOptions}
           expandTrigger="hover"
           onChange={this.handleChange.bind(this)}
           getPopupContainer={() => {
@@ -123,6 +132,7 @@ class Demo extends React.Component {
             document.body.appendChild(div);
             return div;
           }}
+          dropDownWidth={400}
         />
         <h2>Clearable</h2>
         <CascadeSelect

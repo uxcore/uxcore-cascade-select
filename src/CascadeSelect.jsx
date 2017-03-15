@@ -231,7 +231,12 @@ class CascadeSelect extends SuperComponent {
     if (disabled) {
       return this.renderContent();
     }
-    let submenu = <div />;
+    let submenu = (
+      <div
+        className={this.prefixCls('submenu-empty')}
+        style={this.props.dropDownWidth ? { width: this.props.dropDownWidth } : null}
+      />
+    );
     if (options.length && !disabled) {
       submenu = (
         <CascadeSubmenu
@@ -246,6 +251,7 @@ class CascadeSelect extends SuperComponent {
           onOkButtonClick={() => {
             this.wrapper.click();
           }}
+          dropDownWidth={this.props.dropDownWidth}
         />
       );
     }
@@ -284,6 +290,7 @@ CascadeSelect.defaultProps = {
   },
   locale: 'zh-cn',
   miniMode: true,
+  dropDownWidth: 0,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -302,6 +309,7 @@ CascadeSelect.propTypes = {
   beforeRender: React.PropTypes.func,
   locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
   miniMode: React.PropTypes.bool,
+  dropDownWidth: React.PropTypes.number,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

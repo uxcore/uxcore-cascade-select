@@ -1,5 +1,9 @@
 # history
 
+## 0.2.8
+
+* `NEW`: new prop, `dropDownWidth`(number): define the dropdown width.
+
 ## 0.2.7
 
 * `NEW`: new display mode, `miniMode=false` will display the rich style with button and selection.

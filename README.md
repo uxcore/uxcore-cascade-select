@@ -94,6 +94,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
 | locale | string | false | `'zh_CN'` | `'en_US'`
 | miniMode | boolean | false | true | 是否是简洁显示风格
+| dropDownWidth | number | false | 0 | 默认为 0 表示直接使用 trigger 的宽度作为 dropdown 的宽度
 
 ## Demos
 
@@ -125,9 +126,10 @@ const options = [{
 }];
 ```
 
-### 使用css来定制dropdown宽度
+### 当不指定 dropdown 宽度时，还可以使用css来定制dropdown宽度
 
 ```less
+.kuma-cascader-submenu-empty,
 .kuma-dropdown-menu-submenu {
     width: 400px; // 你想要的 dropdown 宽度
 }
