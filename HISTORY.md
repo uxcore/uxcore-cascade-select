@@ -1,5 +1,9 @@
 # history
 
+## 0.2.9
+
+*  `FIXED`: `dropDownWidth` prop type check.
+
 ## 0.2.8
 
 * `NEW`: new prop, `dropDownWidth`(number): define the dropdown width.
