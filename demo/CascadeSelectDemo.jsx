@@ -157,7 +157,6 @@ class Demo extends React.Component {
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          changeOnSelect
           onChange={(value, selected) => {}}
         />
         <h2>鼠标悬浮的</h2>

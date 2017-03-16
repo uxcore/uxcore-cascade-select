@@ -1,8 +1,12 @@
 # history
 
+## 0.2.10
+
+* `FIXED`: display selection text immediately when the `changeOnSelect=true`
+
 ## 0.2.9
 
-*  `FIXED`: `dropDownWidth` prop type check.
+* `FIXED`: `dropDownWidth` prop type check.
 
 ## 0.2.8
 

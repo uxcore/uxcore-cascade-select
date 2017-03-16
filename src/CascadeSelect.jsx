@@ -130,6 +130,7 @@ class CascadeSelect extends SuperComponent {
       });
     } else {
       this.setState({
+        displayValue: [],
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
