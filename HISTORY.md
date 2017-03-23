@@ -1,5 +1,9 @@
 # history
 
+## 0.2.11
+
+* `ADD`: trigger onChange when on click `the ok button`.
+
 ## 0.2.10
 
 * `FIXED`: display selection text immediately when the `changeOnSelect=true`

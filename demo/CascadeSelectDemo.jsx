@@ -2,7 +2,7 @@
  * CascadeSelect Component Demo for uxcore
  * @author changming
  *
- * Copyright 2015-2016, Uxcore Team, Alinw.
+ * Copyright 2015-2017, Uxcore Team, Alinw.
  * All rights reserved.
  */
 
@@ -133,13 +133,18 @@ class Demo extends React.Component {
             return div;
           }}
           dropDownWidth={400}
+          onChange={(value, selected) => {
+            {/*console.log('Default', value, selected);*/}
+          }}
         />
         <h2>Clearable</h2>
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => {
+            console.log('Clearable', value, selected);
+          }}
           locale={'en_US'}
           miniMode={false}
           cascadeSize={3}

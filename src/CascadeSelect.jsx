@@ -2,7 +2,7 @@
 * CascadeSelect Component for uxcore
 * @author changming
 *
-* Copyright 2015-2016, Uxcore Team, Alinw.
+* Copyright 2015-2017, Uxcore Team, Alinw.
 * All rights reserved.
 */
 import React from 'react';
@@ -107,30 +107,43 @@ class CascadeSelect extends SuperComponent {
         this.wrapper.click();
       }
     }
+
     if (onChange) {
-      onChange(newValue, newSelectedOptions);
+      if (!this.props.miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
+        this.newValue = newValue;
+        this.newSelectedOptions = newSelectedOptions;
+      } else {
+        onChange(newValue, newSelectedOptions);
+      }
     }
+
+    let displayValue = newValue;
+    if (!this.props.miniMode) {
+      displayValue = [];
+    }
+
     if (changeOnSelect) {
       this.setState({
-        displayValue: newValue,
+        displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
     } else if (hideSubmenu) {
       this.setState({
-        displayValue: newValue,
+        displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
     } else if (newValue.length >= this.props.cascadeSize) {
       this.setState({
         value: newValue,
-        displayValue: newValue,
+        displayValue,
         selectedOptions: newSelectedOptions,
       });
     } else {
+      displayValue = [];
       this.setState({
-        displayValue: [],
+        displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
       });
@@ -251,6 +264,18 @@ class CascadeSelect extends SuperComponent {
           miniMode={this.props.miniMode}
           onOkButtonClick={() => {
             this.wrapper.click();
+            const newValue = this.newValue;
+            const newSelectedOptions = this.newSelectedOptions;
+            if (newValue && newSelectedOptions) {
+              this.setState({
+                value: newValue,
+                displayValue: newValue,
+                selectedOptions: newSelectedOptions,
+              });
+              delete this.newValue;
+              delete this.newSelectedOptions;
+              this.props.onChange(newValue, newSelectedOptions);
+            }
           }}
           dropDownWidth={this.props.dropDownWidth}
         />
