@@ -71,9 +71,24 @@ const getArrayLeafItemContains = (options, keyArr, p = [], c = [], level = 1) =>
   return [];
 };
 
+const getOptions = (options, value = [], level = 0) => {
+  if (level === 0 && options) {
+    return options;
+  }
+  if (value.length) {
+    for (let i = 0, l = options.length; i < l; i++) {
+      if (`${options[i].value}_` === `${value[0]}_`) {
+        return getOptions(options[i].children, value.slice(1), level - 1);
+      }
+    }
+  }
+  return [];
+};
+
 export default {
   find,
   i18n,
   getArrayLeafItemContains,
   deepCopy,
+  getOptions,
 };

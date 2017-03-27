@@ -8,11 +8,12 @@
 import React from 'react';
 import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
+import Select2 from 'uxcore-select2';
 import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 
-import { find, getArrayLeafItemContains, deepCopy } from './util';
+import { find, getArrayLeafItemContains, deepCopy, getOptions } from './util';
 
 class CascadeSelect extends SuperComponent {
   constructor(props) {
@@ -26,8 +27,8 @@ class CascadeSelect extends SuperComponent {
     }
 
     this.state = {
-      displayValue: value || defaultValue,
-      value: value || defaultValue,
+      displayValue: value || defaultValue || [],
+      value: value || defaultValue || [],
       selectedOptions,
     };
 
@@ -40,6 +41,9 @@ class CascadeSelect extends SuperComponent {
     } else {
       this.locale = locale;
     }
+
+    this.getSelectPlaceholder = props.getSelectPlaceholder ||
+      function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
   }
 
   saveRef(refName) {
@@ -192,7 +196,6 @@ class CascadeSelect extends SuperComponent {
           [className]: true,
           [this.prefixCls('disabled')]: disabled,
           [this.prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
-          // [this.prefixCls('hoverable')]: expandTrigger === 'hover'
         })}
       >
         <div className={this.prefixCls('text')}>
@@ -232,7 +235,71 @@ class CascadeSelect extends SuperComponent {
     );
   }
 
+  renderSelect2Options(index, options) {
+    const { value } = this.state;
+    if (options) {
+      const opt = getOptions(options, value, index);
+      return opt.map((optionItem) => (
+        <Select2.Option
+          key={optionItem.value}
+          value={`${optionItem.value}`}
+        >
+          {optionItem.label}
+        </Select2.Option>
+      ));
+    }
+    return null;
+  }
+
+  renderSelect() {
+    const { value } = this.state;
+    const { cascadeSize, options } = this.props;
+    const back = [];
+    for (let i = 0; i < cascadeSize; i++) {
+      back.push((
+        <div
+          key={i}
+          className={this.prefixCls('select-item-wrap')}
+          style={{ width: `${(100 / cascadeSize).toFixed(1)}%` }}
+        >
+          <Select2
+            showSearch={false}
+            placeholder={this.getSelectPlaceholder(i)}
+            getPopupContainer={this.props.getPopupContainer}
+            value={value[i]}
+            onChange={v => {
+              let stateValue = this.state.value;
+              let selectedOptions = this.state.selectedOptions;
+              if (i === 0) {
+                stateValue = [v];
+                selectedOptions = options.filter(item => `${item.value}_` === `${v}_`);
+              } else {
+                stateValue[i] = v;
+                const selectedParent = selectedOptions[selectedOptions.length - 1];
+                if (selectedParent.children) {
+                  selectedOptions.push(
+                    selectedParent.children.filter(item => `${item.value}_` === `${v}_`)[0]
+                  );
+                }
+              }
+              this.setState({ value: stateValue, selectedOptions }, () => {
+                this.props.onChange(stateValue, selectedOptions);
+              });
+            }}
+          >
+            {this.renderSelect2Options(i, this.props.options)}
+          </Select2>
+        </div>
+      ));
+    }
+    return <div className={this.prefixCls('select-wrap')}>{back}</div>;
+  }
+
   render() {
+    if (this.props.displayMode === 'select') {
+      return this.renderSelect();
+    }
+
     const {
       options,
       disabled,
@@ -317,6 +384,8 @@ CascadeSelect.defaultProps = {
   locale: 'zh-cn',
   miniMode: true,
   dropDownWidth: 0,
+  displayMode: 'dropdown',
+  getSelectPlaceholder: null,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -336,6 +405,8 @@ CascadeSelect.propTypes = {
   locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
   miniMode: React.PropTypes.bool,
   dropDownWidth: React.PropTypes.number,
+  displayMode: React.PropTypes.oneOf(['dropdown', 'select']),
+  getSelectPlaceholder: React.PropTypes.func,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

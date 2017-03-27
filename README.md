@@ -95,6 +95,8 @@ render(<CascadeSelect />, document.getElementById('root'))
 | locale | string | false | `'zh_CN'` | `'en_US'`
 | miniMode | boolean | false | true | 是否是简洁显示风格
 | dropDownWidth | number | false | 0 | 默认为 0 表示直接使用 trigger 的宽度作为 dropdown 的宽度
+| displayMode | string | false | `dropdown` | `select` 或者 `dropdown`
+| getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 
 ## Demos
 

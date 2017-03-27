@@ -97,6 +97,7 @@ class Demo extends React.Component {
     this.state = {
       xValue: ['jiangsu', 'nanjing', 'zhonghuamen'],
       value: [2815],
+      firstValue: ['zhonghuamen'],
     };
   }
 
@@ -109,6 +110,7 @@ class Demo extends React.Component {
   }
 
   handleChange(value) {
+    console.log('onChange', value);
     if (value.length) {
       this.setState({
         firstValue: [value[value.length - 1]],
@@ -137,6 +139,23 @@ class Demo extends React.Component {
             {/*console.log('Default', value, selected);*/}
           }}
         />
+        <h2>Select 风格</h2>
+        <CascadeSelect
+          value={this.state.firstValue}
+          options={options}
+          getPopupContainer={() => {
+            const div = document.createElement('div');
+            div.className = 'uxcore';
+            document.body.appendChild(div);
+            return div;
+          }}
+          dropDownWidth={400}
+          onChange={(value, selected) => {
+            console.log('Select 风格', value, selected);
+          }}
+          displayMode="select"
+          cascadeSize={3}
+        />
         <h2>Clearable</h2>
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
@@ -162,7 +181,7 @@ class Demo extends React.Component {
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => { }}
         />
         <h2>鼠标悬浮的</h2>
         <CascadeSelect
