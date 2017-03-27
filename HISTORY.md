@@ -1,5 +1,9 @@
 # history
 
+## 0.3.0
+
+* `New Feature`: add select display mode.
+
 ## 0.2.11
 
 * `ADD`: trigger onChange when on click `the ok button`.
