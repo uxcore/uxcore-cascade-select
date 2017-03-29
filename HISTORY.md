@@ -1,5 +1,9 @@
 # history
 
+## 0.3.1
+
+* `FIXED`: default color is transparent.
+
 ## 0.3.0
 
 * `New Feature`: add select display mode.
