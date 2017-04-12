@@ -1,5 +1,9 @@
 # history
 
+## 0.3.2
+
+* `FIXED`: arrow color.
+
 ## 0.3.1
 
 * `FIXED`: default color is transparent.
