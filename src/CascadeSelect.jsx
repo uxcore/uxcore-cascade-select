@@ -196,6 +196,7 @@ class CascadeSelect extends SuperComponent {
           [className]: true,
           [this.prefixCls('disabled')]: disabled,
           [this.prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
+          [this.prefixCls('focus')]: showSubMenu,
         })}
       >
         <div className={this.prefixCls('text')}>
