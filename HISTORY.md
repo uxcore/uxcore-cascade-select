@@ -1,5 +1,9 @@
 # history
 
+## 0.3.3
+
+* `FIXED`: hover and focus color.
+
 ## 0.3.2
 
 * `FIXED`: arrow color.
