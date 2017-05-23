@@ -2,7 +2,7 @@
  * CascadeSelect Component Demo for uxcore
  * @author changming
  *
- * Copyright 2015-2016, Uxcore Team, Alinw.
+ * Copyright 2015-2017, Uxcore Team, Alinw.
  * All rights reserved.
  */
 

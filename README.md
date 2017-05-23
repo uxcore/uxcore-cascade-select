@@ -89,8 +89,14 @@ render(<CascadeSelect />, document.getElementById('root'))
 | clearable | boolean | false | `false` | 是否支持清除 |
 | changeOnSelect | boolean | false | `false` | 是否将每次选择立刻显示在控件中 |
 | expandTrigger | string | false | `'click'` | 次级菜单展开方式，支持 `click` 和 `hover` |
-| beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o.label).join(' / ')` | 处理要显示的内容 |
+| beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / ')` | 处理要显示的内容 |
 | cascadeSize | number | false | `3` | 级联的层级数 |
+| getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
+| locale | string | false | `'zh-cn'` | `'en-us'`
+| miniMode | boolean | false | true | 是否是简洁显示风格
+| dropDownWidth | number | false | 0 | 默认为 0 表示直接使用 trigger 的宽度作为 dropdown 的宽度
+| displayMode | string | false | `dropdown` | `select` 或者 `dropdown`
+| getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 
 ## Demos
 
@@ -120,4 +126,13 @@ const options = [{
     }],
   }],
 }];
+```
+
+### 当不指定 dropdown 宽度时，还可以使用css来定制dropdown宽度
+
+```less
+.kuma-cascader-submenu-empty,
+.kuma-dropdown-menu-submenu {
+    width: 400px; // 你想要的 dropdown 宽度
+}
 ```
