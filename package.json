@@ -1,55 +1,55 @@
 {
- "name": "uxcore-cascade-select",
- "version": "0.3.3",
- "description": "uxcore-cascade-select component for uxcore.",
- "repository": "https://github.com/uxcore/uxcore-cascade-select.git",
- "author": "changming",
- "main": "build/index.js",
- "scripts": {
-  "start": "uxcore-tools run start",
-  "server": "uxcore-tools run server",
-  "lint": "uxcore-tools run lint",
-  "build": "uxcore-tools run build",
-  "test": "uxcore-tools run test",
-  "coverage": "uxcore-tools run coverage",
-  "pub": "uxcore-tools run pub",
-  "dep": "uxcore-tools run dep",
-  "tnpm-dep": "uxcore-tools run tnpm-dep",
-  "chrome": "uxcore-tools run chrome",
-  "browsers": "uxcore-tools run browsers",
-  "saucelabs": "uxcore-tools run saucelabs",
-  "update": "uxcore-tools run update"
- },
- "bugs": {
-  "url": "http://github.com/uxcore/uxcore-cascade-select/issues"
- },
- "keywords": [
-  "react",
-  "react-component",
-  "uxcore-cascade-select",
-  "CascadeSelect",
-  "component"
- ],
- "devDependencies": {
-  "console-polyfill": "^0.2.2",
-  "es5-shim": "^4.5.8",
-  "expect.js": "~0.3.1",
-  "kuma-base": "1.x",
-  "react": "0.14.x",
-  "react-addons-test-utils": "0.14.x",
-  "react-dom": "0.14.x",
-  "uxcore-kuma": "*",
-  "enzyme": "^2.7.0",
-  "uxcore-tools": "0.2.x"
- },
- "dependencies": {
-  "classnames": "^2.1.2",
-  "jquery": "^3.1.1",
-  "object-assign": "^4.0.0",
-  "uxcore-button": "^0.4.10",
-  "uxcore-dropdown": "^0.4.1",
-  "uxcore-select2": "^0.4.7"
- },
- "contributors": [],
- "license": "MIT"
+  "name": "uxcore-cascade-select",
+  "version": "0.3.4",
+  "description": "uxcore-cascade-select component for uxcore.",
+  "repository": "https://github.com/uxcore/uxcore-cascade-select.git",
+  "author": "changming",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "uxcore-tools run start",
+    "server": "uxcore-tools run server",
+    "lint": "uxcore-tools run lint",
+    "build": "uxcore-tools run build",
+    "test": "uxcore-tools run test",
+    "coverage": "uxcore-tools run coverage",
+    "pub": "uxcore-tools run pub",
+    "dep": "uxcore-tools run dep",
+    "tnpm-dep": "uxcore-tools run tnpm-dep",
+    "chrome": "uxcore-tools run chrome",
+    "browsers": "uxcore-tools run browsers",
+    "saucelabs": "uxcore-tools run saucelabs",
+    "update": "uxcore-tools run update"
+  },
+  "bugs": {
+    "url": "http://github.com/uxcore/uxcore-cascade-select/issues"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "uxcore-cascade-select",
+    "CascadeSelect",
+    "component"
+  ],
+  "devDependencies": {
+    "console-polyfill": "^0.2.2",
+    "es5-shim": "^4.5.8",
+    "expect.js": "~0.3.1",
+    "kuma-base": "1.x",
+    "react": "0.14.x",
+    "react-addons-test-utils": "0.14.x",
+    "react-dom": "0.14.x",
+    "uxcore-kuma": "*",
+    "enzyme": "^2.7.0",
+    "uxcore-tools": "0.2.x"
+  },
+  "dependencies": {
+    "classnames": "^2.1.2",
+    "jquery": "^3.1.1",
+    "object-assign": "^4.0.0",
+    "uxcore-button": "^0.4.10",
+    "uxcore-dropdown": "^0.4.1",
+    "uxcore-select2": "^0.4.7"
+  },
+  "contributors": [],
+  "license": "MIT"
 }
