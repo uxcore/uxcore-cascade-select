@@ -1,5 +1,9 @@
 # history
 
+## 0.3.4
+
+* `ADD`: columnWidth prop, remove dropDownWidth prop
+
 ## 0.3.3
 
 * `FIXED`: hover and focus color.

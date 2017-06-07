@@ -153,8 +153,11 @@ class CascadeSubmenu extends SuperComponent {
 
   render() {
     const wrapStyle = {};
-    if (this.props.dropDownWidth) {
-      wrapStyle.width = this.props.dropDownWidth;
+    if (this.props.columnWidth) {
+      wrapStyle.width = this.props.columnWidth * this.props.cascadeSize;
+      if (!this.props.miniMode) {
+        wrapStyle.width = this.props.columnWidth * (this.props.cascadeSize + 1);
+      }
     }
 
     return (
@@ -183,7 +186,8 @@ CascadeSubmenu.propTypes = {
   options: React.PropTypes.array,
   miniMode: React.PropTypes.bool,
   onOkButtonClick: React.PropTypes.func,
-  dropDownWidth: React.PropTypes.number,
+  columnWidth: React.PropTypes.number,
+  cascadeSize: React.PropTypes.number,
 };
 
 CascadeSubmenu.defaultProps = {
@@ -193,7 +197,6 @@ CascadeSubmenu.defaultProps = {
   options: [],
   miniMode: false,
   onOkButtonClick: () => { },
-  dropDownWidth: 0,
 };
 
 export default CascadeSubmenu;

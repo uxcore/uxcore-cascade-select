@@ -188,6 +188,10 @@ class CascadeSelect extends SuperComponent {
       placeholder = i18n[this.locale].placeholder;
     }
 
+    const displayText = displayValue.length ?
+      this.props.beforeRender(displayValue, selectedOptions) :
+      '';
+
     return (
       <div
         ref={this.saveRef('wrapper')}
@@ -202,6 +206,7 @@ class CascadeSelect extends SuperComponent {
         <div className={this.prefixCls('text')}>
           <div
             className={this.prefixCls('trigger')}
+            title={displayText}
           >
             {
               placeholder && !displayValue.length ?
@@ -210,11 +215,7 @@ class CascadeSelect extends SuperComponent {
                 </div> :
                 null
             }
-            {
-              displayValue.length ?
-                this.props.beforeRender(displayValue, selectedOptions) :
-                null
-            }
+            {displayText}
           </div>
         </div>
         <div
@@ -268,6 +269,10 @@ class CascadeSelect extends SuperComponent {
             placeholder={this.getSelectPlaceholder(i)}
             getPopupContainer={this.props.getPopupContainer}
             value={value[i]}
+            dropdownMatchSelectWidth={false}
+            dropdownStyle={{
+              width: this.props.columnWidth,
+            }}
             onChange={v => {
               let stateValue = this.state.value;
               let selectedOptions = this.state.selectedOptions;
@@ -308,6 +313,7 @@ class CascadeSelect extends SuperComponent {
       expandTrigger,
       cascadeSize,
       getPopupContainer,
+      columnWidth,
     } = this.props;
     const { value } = this.state;
     if (disabled) {
@@ -316,7 +322,7 @@ class CascadeSelect extends SuperComponent {
     let submenu = (
       <div
         className={this.prefixCls('submenu-empty')}
-        style={this.props.dropDownWidth ? { width: this.props.dropDownWidth } : null}
+        style={columnWidth ? { width: columnWidth * this.props.cascadeSize } : null}
       />
     );
     if (options.length && !disabled) {
@@ -345,7 +351,7 @@ class CascadeSelect extends SuperComponent {
               this.props.onChange(newValue, newSelectedOptions);
             }
           }}
-          dropDownWidth={this.props.dropDownWidth}
+          columnWidth={this.props.columnWidth}
         />
       );
     }
@@ -384,7 +390,7 @@ CascadeSelect.defaultProps = {
   },
   locale: 'zh-cn',
   miniMode: true,
-  dropDownWidth: 0,
+  columnWidth: 100,
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
 };
@@ -405,7 +411,7 @@ CascadeSelect.propTypes = {
   beforeRender: React.PropTypes.func,
   locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
   miniMode: React.PropTypes.bool,
-  dropDownWidth: React.PropTypes.number,
+  columnWidth: React.PropTypes.number,
   displayMode: React.PropTypes.oneOf(['dropdown', 'select']),
   getSelectPlaceholder: React.PropTypes.func,
 };

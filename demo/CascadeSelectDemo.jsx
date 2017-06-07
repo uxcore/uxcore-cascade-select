@@ -28,7 +28,7 @@ const options = [{
     label: '信息平台',
     children: [{
       value: 'fe',
-      label: '前端开发',
+      label: '前端开发名称加长加长加长加长',
     }],
   }],
 }, {
