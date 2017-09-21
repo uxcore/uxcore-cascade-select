@@ -122,9 +122,13 @@ class CascadeSubmenu extends SuperComponent {
   }
 
   renderBottomBar() {
+    const size = this.props.size;
+    let btnSize = size === 'large' ? 'medium' : 'small';
     return (
       <div className={this.prefixCls('submenu-bottom-bar')}>
-        <Button onClick={this.props.onOkButtonClick}>{i18n[this.props.locale].confirm}</Button>
+        <Button size={btnSize} onClick={this.props.onOkButtonClick}>
+          {i18n[this.props.locale].confirm}
+        </Button>
       </div>
     );
   }
@@ -161,7 +165,7 @@ class CascadeSubmenu extends SuperComponent {
     }
 
     return (
-      <div className={this.prefixCls('submenu')} style={wrapStyle}>
+      <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
         <div className={this.prefixCls('submenu-wrap')}>
           {this.renderSubmenus()}
 
@@ -188,6 +192,7 @@ CascadeSubmenu.propTypes = {
   onOkButtonClick: React.PropTypes.func,
   columnWidth: React.PropTypes.number,
   cascadeSize: React.PropTypes.number,
+  size: React.PropTypes.oneOf(['large', 'middle', 'small']),
 };
 
 CascadeSubmenu.defaultProps = {
@@ -197,6 +202,7 @@ CascadeSubmenu.defaultProps = {
   options: [],
   miniMode: false,
   onOkButtonClick: () => { },
+  size: 'large',
 };
 
 export default CascadeSubmenu;

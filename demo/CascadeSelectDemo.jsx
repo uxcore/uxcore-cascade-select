@@ -138,6 +138,7 @@ class Demo extends React.Component {
           onChange={(value, selected) => {
             {/*console.log('Default', value, selected);*/}
           }}
+          size="small"
         />
         <h2>Select 风格</h2>
         <CascadeSelect
@@ -155,6 +156,7 @@ class Demo extends React.Component {
           }}
           displayMode="select"
           cascadeSize={3}
+          size="small"
         />
         <h2>Clearable</h2>
         <CascadeSelect
@@ -167,6 +169,7 @@ class Demo extends React.Component {
           locale={'en_US'}
           miniMode={false}
           cascadeSize={3}
+          size="small"
         />
         <h2>禁用的</h2>
         <CascadeSelect
@@ -182,6 +185,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           onChange={(value, selected) => { }}
+          size="small"
         />
         <h2>鼠标悬浮的</h2>
         <CascadeSelect

@@ -45,10 +45,11 @@
   "dependencies": {
     "classnames": "^2.1.2",
     "jquery": "^3.1.1",
+    "kuma-base": "^1.7.1",
     "object-assign": "^4.0.0",
     "uxcore-button": "^0.4.10",
     "uxcore-dropdown": "^0.4.1",
-    "uxcore-select2": "^0.4.7"
+    "uxcore-select2": "^0.4.17"
   },
   "contributors": [],
   "license": "MIT"

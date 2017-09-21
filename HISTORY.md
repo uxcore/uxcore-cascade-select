@@ -1,5 +1,9 @@
 # history
 
+## 0.3.5
+
+* `Add`: size prop
+
 ## 0.3.4
 
 * `ADD`: columnWidth prop, remove dropDownWidth prop

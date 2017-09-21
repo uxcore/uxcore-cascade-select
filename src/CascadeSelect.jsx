@@ -1,6 +1,6 @@
 /**
 * CascadeSelect Component for uxcore
-* @author changming
+* @author changming.zy
 *
 * Copyright 2015-2017, Uxcore Team, Alinw.
 * All rights reserved.
@@ -201,6 +201,7 @@ class CascadeSelect extends SuperComponent {
           [this.prefixCls('disabled')]: disabled,
           [this.prefixCls('clearable')]: !disabled && clearable && displayValue.length > 0,
           [this.prefixCls('focus')]: showSubMenu,
+          [this.prefixCls(`size-${this.props.size}`)]: true,
         })}
       >
         <div className={this.prefixCls('text')}>
@@ -292,6 +293,7 @@ class CascadeSelect extends SuperComponent {
                 this.props.onChange(stateValue, selectedOptions);
               });
             }}
+            size={this.props.size}
           >
             {this.renderSelect2Options(i, this.props.options)}
           </Select2>
@@ -352,6 +354,7 @@ class CascadeSelect extends SuperComponent {
             }
           }}
           columnWidth={this.props.columnWidth}
+          size={this.props.size}
         />
       );
     }
@@ -393,6 +396,7 @@ CascadeSelect.defaultProps = {
   columnWidth: 100,
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
+  size: 'large',
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -414,6 +418,7 @@ CascadeSelect.propTypes = {
   columnWidth: React.PropTypes.number,
   displayMode: React.PropTypes.oneOf(['dropdown', 'select']),
   getSelectPlaceholder: React.PropTypes.func,
+  size: React.PropTypes.oneOf(['large', 'middle', 'small']),
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

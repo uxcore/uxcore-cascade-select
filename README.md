@@ -97,6 +97,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | columnWidth | number | false | 100 | dropdown中每一列的宽度
 | displayMode | string | false | `dropdown` | `select` 或者 `dropdown`
 | getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
+| size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small`
 
 ## Demos
 
