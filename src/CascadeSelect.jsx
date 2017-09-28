@@ -364,6 +364,7 @@ class CascadeSelect extends SuperComponent {
         trigger={['click']}
         onVisibleChange={this.onDropDownVisibleChange.bind(this)}
         getPopupContainer={getPopupContainer}
+        minOverlayWidthMatchTrigger={false}
       >
         {this.renderContent()}
       </Dropdown>
