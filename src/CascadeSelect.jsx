@@ -6,6 +6,7 @@
 * All rights reserved.
 */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
 import Select2 from 'uxcore-select2';
@@ -402,24 +403,24 @@ CascadeSelect.defaultProps = {
 
 // http://facebook.github.io/react/docs/reusable-components.html
 CascadeSelect.propTypes = {
-  prefixCls: React.PropTypes.string,
-  className: React.PropTypes.string,
-  options: React.PropTypes.array,
-  defaultValue: React.PropTypes.array,
-  value: React.PropTypes.array,
-  placeholder: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  disabled: React.PropTypes.bool,
-  clearable: React.PropTypes.bool,
-  changeOnSelect: React.PropTypes.bool,
-  expandTrigger: React.PropTypes.string,
-  beforeRender: React.PropTypes.func,
-  locale: React.PropTypes.oneOf(['zh-cn', 'en-us']),
-  miniMode: React.PropTypes.bool,
-  columnWidth: React.PropTypes.number,
-  displayMode: React.PropTypes.oneOf(['dropdown', 'select']),
-  getSelectPlaceholder: React.PropTypes.func,
-  size: React.PropTypes.oneOf(['large', 'middle', 'small']),
+  prefixCls: PropTypes.string,
+  className: PropTypes.string,
+  options: PropTypes.array,
+  defaultValue: PropTypes.array,
+  value: PropTypes.array,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  clearable: PropTypes.bool,
+  changeOnSelect: PropTypes.bool,
+  expandTrigger: PropTypes.string,
+  beforeRender: PropTypes.func,
+  locale: PropTypes.oneOf(['zh-cn', 'en-us', 'zh_CN', 'en_US']),
+  miniMode: PropTypes.bool,
+  columnWidth: PropTypes.number,
+  displayMode: PropTypes.oneOf(['dropdown', 'select']),
+  getSelectPlaceholder: PropTypes.func,
+  size: PropTypes.oneOf(['large', 'middle', 'small']),
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

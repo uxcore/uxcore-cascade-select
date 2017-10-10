@@ -5,14 +5,13 @@
 * Copyright 2015-2017, Uxcore Team, Alinw.
 * All rights reserved.
 */
-
-import { find } from './util';
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import Button from 'uxcore-button';
+import { find } from './util';
 import i18n from './i18n';
-
-const React = require('react');
-const classnames = require('classnames');
-const SuperComponent = require('./SuperComponent');
+import SuperComponent from './SuperComponent';
 
 const isNotEmpty = (arr) => {
   if (arr instanceof Array) {
@@ -184,15 +183,15 @@ class CascadeSubmenu extends SuperComponent {
 }
 
 CascadeSubmenu.propTypes = {
-  prefixCls: React.PropTypes.string,
-  onItemClick: React.PropTypes.func,
-  value: React.PropTypes.array,
-  options: React.PropTypes.array,
-  miniMode: React.PropTypes.bool,
-  onOkButtonClick: React.PropTypes.func,
-  columnWidth: React.PropTypes.number,
-  cascadeSize: React.PropTypes.number,
-  size: React.PropTypes.oneOf(['large', 'middle', 'small']),
+  prefixCls: PropTypes.string,
+  onItemClick: PropTypes.func,
+  value: PropTypes.array,
+  options: PropTypes.array,
+  miniMode: PropTypes.bool,
+  onOkButtonClick: PropTypes.func,
+  columnWidth: PropTypes.number,
+  cascadeSize: PropTypes.number,
+  size: PropTypes.oneOf(['large', 'middle', 'small']),
 };
 
 CascadeSubmenu.defaultProps = {
