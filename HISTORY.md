@@ -1,5 +1,9 @@
 # history
 
+## 0.4.0
+
+* `UPDATE`: react 15
+
 ## 0.3.5
 
 * `Add`: size prop
