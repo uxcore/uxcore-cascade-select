@@ -46,8 +46,6 @@
   },
   "dependencies": {
     "classnames": "^2.1.2",
-    "jquery": "^3.1.1",
-    "kuma-base": "^1.7.1",
     "object-assign": "^4.0.0",
     "prop-types": "15.x",
     "uxcore-button": "^0.4.10",

@@ -18,6 +18,9 @@ const options = [{
     children: [{
       value: 2815,
       label: '短信服务',
+    }, {
+      value: 2816,
+      label: '互联网电话',
     }],
   }],
 }, {
@@ -170,6 +173,7 @@ class Demo extends React.Component {
           miniMode={false}
           cascadeSize={3}
           size="small"
+          displayMode="dropdown"
         />
         <h2>禁用的</h2>
         <CascadeSelect
@@ -179,13 +183,14 @@ class Demo extends React.Component {
           disabled
           onChange={(value, selected) => {}}
         />
-        <h2>实时改变的</h2>
+        <h2>必须选到根节点</h2>
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
           clearable
-          onChange={(value, selected) => { }}
+          onChange={(value, selected) => { console.log(value, selected); }}
           size="small"
+          isMustSelectLeaf
         />
         <h2>鼠标悬浮的</h2>
         <CascadeSelect

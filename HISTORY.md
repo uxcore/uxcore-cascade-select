@@ -1,5 +1,9 @@
 # history
 
+## 0.4.1
+
+* `Add`: isMustSelectLeaf 是否必须选到根节点
+
 ## 0.4.0
 
 * `UPDATE`: react 15

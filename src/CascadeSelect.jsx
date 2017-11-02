@@ -31,6 +31,7 @@ class CascadeSelect extends SuperComponent {
       displayValue: value || defaultValue || [],
       value: value || defaultValue || [],
       selectedOptions,
+      showSubMenu: false,
     };
 
     // 兼容老版本的locale code
@@ -100,7 +101,8 @@ class CascadeSelect extends SuperComponent {
 
   onSubmenuItemClick(key, index, selectedOption, hasChildren) {
     const { value, selectedOptions } = this.state;
-    const { onChange, changeOnSelect } = this.props;
+    const { changeOnSelect } = this.props;
+    let { showSubMenu } = this.state;
     let hideSubmenu = false;
     const newValue = value.slice(0, index);
     newValue.push(key);
@@ -109,17 +111,15 @@ class CascadeSelect extends SuperComponent {
     if (!hasChildren) {
       if (this.props.miniMode) {
         hideSubmenu = true;
-        this.wrapper.click();
+        showSubMenu = false;
       }
     }
 
-    if (onChange) {
-      if (!this.props.miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
-        this.newValue = newValue;
-        this.newSelectedOptions = newSelectedOptions;
-      } else {
-        onChange(newValue, newSelectedOptions);
-      }
+    if (!this.props.miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
+      this.newValue = newValue;
+      this.newSelectedOptions = newSelectedOptions;
+    } else {
+      this.onValueChange(newValue, newSelectedOptions);
     }
 
     let displayValue = newValue;
@@ -132,18 +132,21 @@ class CascadeSelect extends SuperComponent {
         displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
+        showSubMenu,
       });
     } else if (hideSubmenu) {
       this.setState({
         displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
+        showSubMenu,
       });
     } else if (newValue.length >= this.props.cascadeSize) {
       this.setState({
         value: newValue,
         displayValue,
         selectedOptions: newSelectedOptions,
+        showSubMenu,
       });
     } else {
       displayValue = [];
@@ -151,21 +154,36 @@ class CascadeSelect extends SuperComponent {
         displayValue,
         value: newValue,
         selectedOptions: newSelectedOptions,
+        showSubMenu,
       });
+    }
+  }
+
+  onValueChange(value, selectedOptions) {
+    const { onChange, isMustSelectLeaf, cascadeSize } = this.props;
+    if (onChange) {
+      if (isMustSelectLeaf) {
+        if ((value && value.length >= cascadeSize) ||
+          (selectedOptions &&
+            !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children')
+          )
+        ) {
+          onChange(value, selectedOptions);
+        }
+      } else {
+        onChange(value, selectedOptions);
+      }
     }
   }
 
   clearContent(e) {
     e.stopPropagation();
-    const { onChange } = this.props;
     this.setState({
       displayValue: [],
       value: [],
       selectedOptions: [],
     });
-    if (onChange) {
-      onChange([], []);
-    }
+    this.onValueChange([], []);
   }
 
   onDropDownVisibleChange(visible) {
@@ -291,7 +309,7 @@ class CascadeSelect extends SuperComponent {
                 }
               }
               this.setState({ value: stateValue, selectedOptions }, () => {
-                this.props.onChange(stateValue, selectedOptions);
+                this.onValueChange(stateValue, selectedOptions);
               });
             }}
             size={this.props.size}
@@ -348,10 +366,11 @@ class CascadeSelect extends SuperComponent {
                 value: newValue,
                 displayValue: newValue,
                 selectedOptions: newSelectedOptions,
+              }, () => {
+                delete this.newValue;
+                delete this.newSelectedOptions;
+                this.onValueChange(newValue, newSelectedOptions);
               });
-              delete this.newValue;
-              delete this.newSelectedOptions;
-              this.props.onChange(newValue, newSelectedOptions);
             }
           }}
           columnWidth={this.props.columnWidth}
@@ -366,6 +385,7 @@ class CascadeSelect extends SuperComponent {
         onVisibleChange={this.onDropDownVisibleChange.bind(this)}
         getPopupContainer={getPopupContainer}
         minOverlayWidthMatchTrigger={false}
+        visible={this.state.showSubMenu}
       >
         {this.renderContent()}
       </Dropdown>
@@ -399,6 +419,7 @@ CascadeSelect.defaultProps = {
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
   size: 'large',
+  isMustSelectLeaf: false,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -421,6 +442,7 @@ CascadeSelect.propTypes = {
   displayMode: PropTypes.oneOf(['dropdown', 'select']),
   getSelectPlaceholder: PropTypes.func,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
+  isMustSelectLeaf: PropTypes.bool,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
