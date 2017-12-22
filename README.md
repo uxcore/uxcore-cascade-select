@@ -99,6 +99,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small`
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
+| onSelect | function | false | null | 异步加载层级，需要 return 一个对象，具体用法参考下方 demo
 
 ## Demos
 
@@ -137,4 +138,26 @@ const options = [{
 .kuma-dropdown-menu-submenu {
     width: 400px; // 你想要的 dropdown 宽度
 }
+```
+
+### props.onSelect
+
+```javascript
+<CascadeSelect
+  onSelect={(selectedItem) => {
+    return {
+      url: '将要去执行异步请求的 url',
+      success(response) => {
+        // 执行请求成功的回调，需要 return 的结构跟 options 一致
+        // 例如
+        return [
+          {
+            label: '说明',
+            value: 'id'
+          }
+        ];
+      }
+    }
+  }}
+/>
 ```
