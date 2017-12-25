@@ -1,5 +1,9 @@
 # history
 
+## 0.5.0
+
+* `Add`: onSelect prop
+
 ## 0.4.1
 
 * `Add`: isMustSelectLeaf 是否必须选到根节点
