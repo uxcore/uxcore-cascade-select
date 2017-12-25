@@ -41,34 +41,31 @@ const i18n = (key, locale = 'zh_CN') => {
 
 const deepCopy = o => JSON.parse(JSON.stringify(o));
 
-const getArrayLeafItemContains = (options, keyArr, p = [], c = [], level = 1) => {
-  let parents = deepCopy(p);
-  let cache = deepCopy(c);
-  for (let i = 0, l = options.length; i < l; i++) {
-    if (level === 1) {
-      cache = [];
-      parents = [];
-    }
-    if (`${keyArr[0]}_` === `${options[i].value}_`) {
-      const mySelf = deepCopy(options[i]);
-      delete mySelf.children;
-      if (parents && parents.length) {
-        cache = cache.concat(parents, [mySelf]);
-      } else {
-        cache.push(mySelf);
+const getArrayLeafItemContains = (options, keyArr) => {
+  let position;
+  let isFound = false;
+  const selectedOptions = [];
+  function recursion(opts, pos = '0') {
+    opts.forEach((opt, index) => {
+      if (isFound) return;
+      if (`${keyArr[0]}_` === `${opt.value}_`) {
+        position = `${pos}-${index}`;
+        isFound = true;
       }
-      return cache;
-    } else if (options[i].children && options[i].children.length) {
-      const mySelf = deepCopy(options[i]);
-      delete mySelf.children;
-      parents[level - 1] = mySelf;
-      const ret = getArrayLeafItemContains(options[i].children, keyArr, parents, cache, level + 1);
-      if (ret && ret.length) {
-        return ret;
+      if (opt.children) {
+        recursion(opt.children, `${pos}-${index}`);
       }
-    }
+    });
   }
-  return [];
+  recursion(options);
+  if (!position) return [];
+  let parents = options;
+  position.split('-').slice(1).forEach((pos) => {
+    selectedOptions.push(parents[pos]);
+    parents = parents[pos].children;
+  });
+
+  return selectedOptions;
 };
 
 const getOptions = (options, value = [], level = 0) => {

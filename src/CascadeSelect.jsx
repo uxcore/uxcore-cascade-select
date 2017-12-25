@@ -16,24 +16,14 @@ import SuperComponent from './SuperComponent';
 
 import { find, getArrayLeafItemContains, deepCopy, getOptions } from './util';
 
+const noop = function noop() {};
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
-    let { value } = props;
-    const { defaultValue } = props;
-    const selectedOptions = this.getSelectedOptions(props);
-
-    if (selectedOptions && selectedOptions.length) {
-      value = selectedOptions.map(item => item.value);
-    }
-
-    this.state = {
-      displayValue: value || defaultValue || [],
-      value: value || defaultValue || [],
-      selectedOptions,
-      showSubMenu: false,
-    };
-
+    const { options } = props;
+    this.options = options.slice();
+    this.loadedOptions = {};
+    this.setValue(props);
     // 兼容老版本的locale code
     const { locale } = props;
     if (locale === 'zh_CN') {
@@ -48,16 +38,147 @@ class CascadeSelect extends SuperComponent {
       function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { options, value } = nextProps;
+    if (value && deepCopy(value) !== deepCopy(this.props.value)) {
+      this.setValue(nextProps, false);
+    }
+    if (options !== this.props.options) {
+      this.options = options;
+      this.loadedOptions = {};
+    }
+  }
+
   saveRef(refName) {
     const me = this;
     return (c) => {
       me[refName] = c;
     };
   }
+  /**
+   * 获取options， 下面为请求第二层数据时的参数参考
+   * @param {*} values 当前的values值， 如['jiangsu']
+   * @param {*} key 请求的key值， 如'jiangsu'
+   * @param {*} level 请求的层数， 如 1
+   */
+  fetchOptions(values, key, level) {
+    let node = this.options;
+    if (this.loadedOptions[key]) {
+      return Promise.resolve('n');
+    }
+    const { onSelect, cascadeSize } = this.props;
+    if (onSelect && level < cascadeSize) {
+      return new Promise((resolve, reject) => {
+        onSelect(resolve, reject, key, level);
+      }).then((children) => {
+        this.loadedOptions[key] = true;
+        values.forEach((value, index) => {
+          if (index + 1 > level) {
+            return;
+          }
+          node = node.find(item => item.value === value);
+          if (node.children) {
+            node = node.children;
+          }
+        });
+        node.children = children;
+        const dummyState = {};
+        this.setState(dummyState);
+        return 'y';
+      });
+    }
+    return Promise.resolve('n');
+  }
+
+  setMultiState(selectedOptions, showSubMenu, init = true) {
+    let value;
+    const { defaultValue } = this.props;
+    if (selectedOptions && selectedOptions.length) {
+      value = selectedOptions.map(item => item.value);
+    }
+    if (init) {
+      this.state = {
+        displayValue: value || defaultValue || [],
+        value: value || defaultValue || [],
+        selectedOptions,
+        showSubMenu: false,
+      };
+    } else {
+      this.setState({
+        displayValue: value || [],
+        value: value || [],
+        selectedOptions,
+        showSubMenu,
+      });
+    }
+  }
+
+  setValue(props, init = true) {
+    const { onSelect } = props;
+    if (onSelect) {
+      if (init) {
+        this.state = {
+          displayValue: [],
+          value: [],
+          selectedOptions: [],
+          showSubMenu: false,
+        };
+      }
+      this.getAsyncSelectedOptions(props, (selectedOptions) => {
+        this.setMultiState(selectedOptions, false, false);
+      });
+    } else {
+      const selectedOptions = this.getSelectedOptions(props);
+      this.setMultiState(selectedOptions, false, init);
+    }
+  }
+
+  getAsyncSelectedOptions(props, callback = noop) {
+    let selectedOptions = [];
+    const { value, defaultValue, cascadeSize } = props;
+    const { options } = this;
+    const theValue = value || defaultValue;
+    let renderArr = null;
+    let prevSelected = null;
+    const recursive = (i = 0) => {
+      const len = theValue.length;
+      if (len === 0) return;
+      if (i === 0) {
+        renderArr = options;
+      } else {
+        renderArr = prevSelected && prevSelected.children;
+      }
+      if (!renderArr && i < cascadeSize) {
+        this.fetchOptions(theValue.slice(0, i), theValue[i - 1], i)
+          .then(() => {
+            renderArr = prevSelected && prevSelected.children;
+            internalExecute.call(this, i, len);
+          });
+      } else {
+        internalExecute.call(this, i, len);
+      }
+    };
+    function internalExecute(i, len) {
+      prevSelected = find(renderArr, item => item.value === theValue[i]);
+      if (renderArr && prevSelected) {
+        selectedOptions[i] = prevSelected;
+        if (i + 1 === len) {
+          callback.call(this, selectedOptions);
+        } else {
+          recursive(i + 1);
+        }
+      } else {
+        selectedOptions = [];
+        callback.call(this, selectedOptions);
+      }
+    }
+    recursive();
+  }
 
   getSelectedOptions(props) {
     let selectedOptions = [];
-    const { options, value, defaultValue } = props;
+    const { value, defaultValue } = props;
+    const { options } = this;
     const theValue = value || defaultValue;
     if (theValue && theValue.length > 1) {
       let renderArr = null;
@@ -82,40 +203,17 @@ class CascadeSelect extends SuperComponent {
     return selectedOptions;
   }
 
-  componentWillReceiveProps(nextProps) {
-    let { value } = nextProps;
-    if (value && deepCopy(value) !== deepCopy(this.props.value)) {
-      const selectedOptions = this.getSelectedOptions(nextProps);
-
-      if (selectedOptions && selectedOptions.length) {
-        value = selectedOptions.map(item => item.value);
-      }
-
-      this.setState({
-        displayValue: value,
-        value,
-        selectedOptions,
-      });
-    }
-  }
-
-  onSubmenuItemClick(key, index, selectedOption, hasChildren) {
+  onSubmenuItemClick = (key, index, selectedOption, hasChildren) => {
     const { value, selectedOptions } = this.state;
-    const { changeOnSelect } = this.props;
+    const { changeOnSelect, cascadeSize, miniMode, onSelect } = this.props;
     let { showSubMenu } = this.state;
     let hideSubmenu = false;
     const newValue = value.slice(0, index);
     newValue.push(key);
     const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
-    if (!hasChildren) {
-      if (this.props.miniMode) {
-        hideSubmenu = true;
-        showSubMenu = false;
-      }
-    }
 
-    if (!this.props.miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
+    if (!miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
       this.newValue = newValue;
       this.newSelectedOptions = newSelectedOptions;
     } else {
@@ -123,37 +221,38 @@ class CascadeSelect extends SuperComponent {
     }
 
     let displayValue = newValue;
-    if (!this.props.miniMode) {
+    if (!miniMode) {
       displayValue = [];
     }
 
-    if (changeOnSelect) {
+    this.setState({
+      value: newValue,
+      selectedOptions: newSelectedOptions,
+    });
+    if (onSelect && (!hasChildren && (index + 1) < cascadeSize)) {
+      if (!changeOnSelect) {
+        displayValue = [];
+      }
       this.setState({
         displayValue,
-        value: newValue,
-        selectedOptions: newSelectedOptions,
-        showSubMenu,
       });
-    } else if (hideSubmenu) {
-      this.setState({
-        displayValue,
-        value: newValue,
-        selectedOptions: newSelectedOptions,
-        showSubMenu,
-      });
-    } else if (newValue.length >= this.props.cascadeSize) {
-      this.setState({
-        value: newValue,
-        displayValue,
-        selectedOptions: newSelectedOptions,
-        showSubMenu,
-      });
+      this.fetchOptions(newValue, key, (index + 1))
+        .then((content) => {
+          console.log(content, 'call successfully');
+        });
     } else {
-      displayValue = [];
+      if (!hasChildren || (index + 1) >= cascadeSize) {
+        if (miniMode) {
+          hideSubmenu = true;
+          showSubMenu = false;
+        }
+      }
+      // 如果还没选完整,displayValue置空
+      if (!(changeOnSelect || hideSubmenu || (newValue.length >= cascadeSize))) {
+        displayValue = [];
+      }
       this.setState({
         displayValue,
-        value: newValue,
-        selectedOptions: newSelectedOptions,
         showSubMenu,
       });
     }
@@ -257,10 +356,8 @@ class CascadeSelect extends SuperComponent {
     );
   }
 
-  renderSelect2Options(index, options) {
-    const { value } = this.state;
-    if (options) {
-      const opt = getOptions(options, value, index);
+  renderSelect2Options(opt) {
+    if (this.options) {
       return opt.map((optionItem) => (
         <Select2.Option
           key={optionItem.value}
@@ -275,9 +372,11 @@ class CascadeSelect extends SuperComponent {
 
   renderSelect() {
     const { value } = this.state;
-    const { cascadeSize, options } = this.props;
+    const { options } = this;
+    const { cascadeSize } = this.props;
     const back = [];
     for (let i = 0; i < cascadeSize; i++) {
+      const opt = getOptions(options, value, i);
       back.push((
         <div
           key={i}
@@ -301,12 +400,12 @@ class CascadeSelect extends SuperComponent {
                 selectedOptions = options.filter(item => `${item.value}_` === `${v}_`);
               } else {
                 stateValue[i] = v;
-                const selectedParent = selectedOptions[selectedOptions.length - 1];
-                if (selectedParent.children) {
-                  selectedOptions.push(
-                    selectedParent.children.filter(item => `${item.value}_` === `${v}_`)[0]
-                  );
-                }
+                selectedOptions[i] = opt.filter(item => `${item.value}_` === `${v}_`)[0];
+                stateValue = stateValue.slice(0, i + 1);
+                selectedOptions = selectedOptions.slice(0, i + 1);
+              }
+              if (!(selectedOptions[i].children && selectedOptions[i].children.length)) {
+                this.fetchOptions(stateValue, v, i + 1);
               }
               this.setState({ value: stateValue, selectedOptions }, () => {
                 this.onValueChange(stateValue, selectedOptions);
@@ -314,7 +413,7 @@ class CascadeSelect extends SuperComponent {
             }}
             size={this.props.size}
           >
-            {this.renderSelect2Options(i, this.props.options)}
+            {this.renderSelect2Options(opt)}
           </Select2>
         </div>
       ));
@@ -328,7 +427,6 @@ class CascadeSelect extends SuperComponent {
     }
 
     const {
-      options,
       disabled,
       prefixCls,
       expandTrigger,
@@ -336,6 +434,7 @@ class CascadeSelect extends SuperComponent {
       getPopupContainer,
       columnWidth,
     } = this.props;
+    const { options } = this;
     const { value } = this.state;
     if (disabled) {
       return this.renderContent();
@@ -350,7 +449,7 @@ class CascadeSelect extends SuperComponent {
       submenu = (
         <CascadeSubmenu
           prefixCls={prefixCls}
-          onItemClick={this.onSubmenuItemClick.bind(this)}
+          onItemClick={this.onSubmenuItemClick}
           options={options}
           value={value}
           expandTrigger={expandTrigger}

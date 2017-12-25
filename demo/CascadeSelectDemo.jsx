@@ -93,6 +93,28 @@ const options = [{
   }],
 }];
 
+const asyncOptions = [
+  {
+    value: '0',
+    label: '0',
+  },
+  {
+    value: '1',
+    label: '1',
+  },
+];
+
+const optionsGenerator = (key, level) => {
+  const childrenOptions = [];
+  for (let i = 0; i <= level; i += 1) {
+    childrenOptions.push({
+      label: `label-${key}-${i}`,
+      value: `${key}-${i}`,
+    });
+  }
+  return childrenOptions;
+};
+
 class Demo extends React.Component {
 
   constructor(props) {
@@ -101,6 +123,7 @@ class Demo extends React.Component {
       xValue: ['jiangsu', 'nanjing', 'zhonghuamen'],
       value: [2815],
       firstValue: ['zhonghuamen'],
+      asyncValue: ['1', '1-1', '1-1-0'],
     };
   }
 
@@ -117,6 +140,16 @@ class Demo extends React.Component {
     if (value.length) {
       this.setState({
         firstValue: [value[value.length - 1]],
+      });
+    }
+  }
+
+  handleAsyncChange = (value, selected) => {
+    console.log('AsyncChange', value, selected);
+    // 异步时候设置value请设置完整,如['1', '1-1', '1-1-0'],
+    if (value.length) {
+      this.setState({
+        asyncValue: value,
       });
     }
   }
@@ -138,10 +171,43 @@ class Demo extends React.Component {
             return div;
           }}
           dropDownWidth={400}
-          onChange={(value, selected) => {
-            {/*console.log('Default', value, selected);*/}
-          }}
           size="small"
+        />
+        <h2>异步</h2>
+        <CascadeSelect
+          value={this.state.asyncValue}
+          options={asyncOptions}
+          expandTrigger="click"
+          isMustSelectLeaf
+          onChange={this.handleAsyncChange.bind(this)}
+          dropDownWidth={400}
+          size="small"
+          onSelect={(resolve, reject, key, level) => {
+            setTimeout(() => {
+              resolve(optionsGenerator(key, level));
+            }, 1000);
+          }}
+        />
+        <h2>异步Select 风格</h2>
+        <CascadeSelect
+          value={this.state.asyncValue}
+          options={asyncOptions}
+          getPopupContainer={() => {
+            const div = document.createElement('div');
+            div.className = 'uxcore';
+            document.body.appendChild(div);
+            return div;
+          }}
+          dropDownWidth={400}
+          onChange={this.handleAsyncChange.bind(this)}
+          displayMode="select"
+          cascadeSize={3}
+          size="small"
+          onSelect={(resolve, reject, key, level) => {
+            setTimeout(() => {
+              resolve(optionsGenerator(key, level));
+            }, 1000);
+          }}
         />
         <h2>Select 风格</h2>
         <CascadeSelect
@@ -155,7 +221,9 @@ class Demo extends React.Component {
           }}
           dropDownWidth={400}
           onChange={(value, selected) => {
-            console.log('Select 风格', value, selected);
+            this.setState({
+              firstValue: [value[value.length - 1]],
+            });
           }}
           displayMode="select"
           cascadeSize={3}
