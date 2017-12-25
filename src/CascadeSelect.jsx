@@ -23,7 +23,13 @@ class CascadeSelect extends SuperComponent {
     const { options } = props;
     this.options = options.slice();
     this.loadedOptions = {};
-    this.setValue(props);
+    this.state = {
+      displayValue: [],
+      value: [],
+      selectedOptions: [],
+      showSubMenu: false,
+      loading: {},
+    };
     // 兼容老版本的locale code
     const { locale } = props;
     if (locale === 'zh_CN') {
@@ -36,6 +42,10 @@ class CascadeSelect extends SuperComponent {
 
     this.getSelectPlaceholder = props.getSelectPlaceholder ||
       function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
+  }
+
+  componentDidMount() {
+    this.setValue(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,12 +73,15 @@ class CascadeSelect extends SuperComponent {
    */
   fetchOptions(values, key, level) {
     let node = this.options;
+    const { loading } = this.state;
     if (this.loadedOptions[key]) {
       return Promise.resolve('n');
     }
     const { onSelect, cascadeSize } = this.props;
     if (onSelect && level < cascadeSize) {
       return new Promise((resolve, reject) => {
+        loading[key] = true;
+        this.setState({ loading });
         onSelect(resolve, reject, key, level);
       }).then((children) => {
         this.loadedOptions[key] = true;
@@ -82,15 +95,15 @@ class CascadeSelect extends SuperComponent {
           }
         });
         node.children = children;
-        const dummyState = {};
-        this.setState(dummyState);
+        loading[key] = false;
+        this.setState({ loading });
         return 'y';
       });
     }
     return Promise.resolve('n');
   }
 
-  setMultiState(selectedOptions, showSubMenu, init = true) {
+  setMultiState(selectedOptions, init = true) {
     let value;
     const { defaultValue } = this.props;
     if (selectedOptions && selectedOptions.length) {
@@ -102,13 +115,13 @@ class CascadeSelect extends SuperComponent {
         value: value || defaultValue || [],
         selectedOptions,
         showSubMenu: false,
+        loading: {},
       };
     } else {
       this.setState({
         displayValue: value || [],
         value: value || [],
         selectedOptions,
-        showSubMenu,
       });
     }
   }
@@ -122,14 +135,15 @@ class CascadeSelect extends SuperComponent {
           value: [],
           selectedOptions: [],
           showSubMenu: false,
+          loading: {},
         };
       }
       this.getAsyncSelectedOptions(props, (selectedOptions) => {
-        this.setMultiState(selectedOptions, false, false);
+        this.setMultiState(selectedOptions, false);
       });
     } else {
       const selectedOptions = this.getSelectedOptions(props);
-      this.setMultiState(selectedOptions, false, init);
+      this.setMultiState(selectedOptions, init);
     }
   }
 
@@ -152,10 +166,10 @@ class CascadeSelect extends SuperComponent {
         this.fetchOptions(theValue.slice(0, i), theValue[i - 1], i)
           .then(() => {
             renderArr = prevSelected && prevSelected.children;
-            internalExecute.call(this, i, len);
+            internalExecute.call(this, i, len); // eslint-disable-line
           });
       } else {
-        internalExecute.call(this, i, len);
+        internalExecute.call(this, i, len); // eslint-disable-line
       }
     };
     function internalExecute(i, len) {
@@ -371,50 +385,61 @@ class CascadeSelect extends SuperComponent {
   }
 
   renderSelect() {
-    const { value } = this.state;
+    const { value, loading } = this.state;
     const { options } = this;
     const { cascadeSize } = this.props;
     const back = [];
+    const relLoading = {};
     for (let i = 0; i < cascadeSize; i++) {
       const opt = getOptions(options, value, i);
+      if (loading[value[i]]) {
+        relLoading[i + 1] = true;
+      }
       back.push((
         <div
           key={i}
           className={this.prefixCls('select-item-wrap')}
           style={{ width: `${(100 / cascadeSize).toFixed(1)}%` }}
         >
-          <Select2
-            showSearch={false}
-            placeholder={this.getSelectPlaceholder(i)}
-            getPopupContainer={this.props.getPopupContainer}
-            value={value[i]}
-            dropdownMatchSelectWidth={false}
-            dropdownStyle={{
-              width: this.props.columnWidth,
-            }}
-            onChange={v => {
-              let stateValue = this.state.value;
-              let selectedOptions = this.state.selectedOptions;
-              if (i === 0) {
-                stateValue = [v];
-                selectedOptions = options.filter(item => `${item.value}_` === `${v}_`);
-              } else {
-                stateValue[i] = v;
-                selectedOptions[i] = opt.filter(item => `${item.value}_` === `${v}_`)[0];
-                stateValue = stateValue.slice(0, i + 1);
-                selectedOptions = selectedOptions.slice(0, i + 1);
-              }
-              if (!(selectedOptions[i].children && selectedOptions[i].children.length)) {
-                this.fetchOptions(stateValue, v, i + 1);
-              }
-              this.setState({ value: stateValue, selectedOptions }, () => {
-                this.onValueChange(stateValue, selectedOptions);
-              });
-            }}
-            size={this.props.size}
-          >
-            {this.renderSelect2Options(opt)}
-          </Select2>
+          <div className={this.prefixCls('internal-select-item-wrap')}>
+            <Select2
+              showSearch={false}
+              placeholder={this.getSelectPlaceholder(i)}
+              getPopupContainer={this.props.getPopupContainer}
+              value={value[i]}
+              dropdownMatchSelectWidth={false}
+              dropdownStyle={{
+                width: this.props.columnWidth,
+              }}
+              onChange={v => {
+                let stateValue = this.state.value;
+                let selectedOptions = this.state.selectedOptions;
+                if (i === 0) {
+                  stateValue = [v];
+                  selectedOptions = options.filter(item => `${item.value}_` === `${v}_`);
+                } else {
+                  stateValue[i] = v;
+                  selectedOptions[i] = opt.filter(item => `${item.value}_` === `${v}_`)[0];
+                  stateValue = stateValue.slice(0, i + 1);
+                  selectedOptions = selectedOptions.slice(0, i + 1);
+                }
+                if (!(selectedOptions[i].children && selectedOptions[i].children.length)) {
+                  this.fetchOptions(stateValue, v, i + 1);
+                }
+                this.setState({ value: stateValue, selectedOptions }, () => {
+                  this.onValueChange(stateValue, selectedOptions);
+                });
+              }}
+              size={this.props.size}
+            >
+              {this.renderSelect2Options(opt)}
+            </Select2>
+            {
+              relLoading[i] ?
+                <span className={this.prefixCls('select-loading')} /> :
+                null
+            }
+          </div>
         </div>
       ));
     }
@@ -435,7 +460,7 @@ class CascadeSelect extends SuperComponent {
       columnWidth,
     } = this.props;
     const { options } = this;
-    const { value } = this.state;
+    const { value, loading } = this.state;
     if (disabled) {
       return this.renderContent();
     }
@@ -474,6 +499,7 @@ class CascadeSelect extends SuperComponent {
           }}
           columnWidth={this.props.columnWidth}
           size={this.props.size}
+          loading={loading}
         />
       );
     }
