@@ -184,6 +184,9 @@ class Demo extends React.Component {
           size="small"
           onSelect={(resolve, reject, key, level) => {
             setTimeout(() => {
+              if (key === '1-0') {
+                reject();
+              }
               resolve(optionsGenerator(key, level));
             }, 1000);
           }}
@@ -205,6 +208,9 @@ class Demo extends React.Component {
           size="small"
           onSelect={(resolve, reject, key, level) => {
             setTimeout(() => {
+              if (key === '1-0') {
+                reject();
+              }
               resolve(optionsGenerator(key, level));
             }, 1000);
           }}

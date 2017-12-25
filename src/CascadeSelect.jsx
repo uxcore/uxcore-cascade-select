@@ -51,7 +51,7 @@ class CascadeSelect extends SuperComponent {
   componentWillReceiveProps(nextProps) {
     const { options, value } = nextProps;
     if (value && deepCopy(value) !== deepCopy(this.props.value)) {
-      this.setValue(nextProps, false);
+      this.setValue(nextProps);
     }
     if (options !== this.props.options) {
       this.options = options;
@@ -98,52 +98,35 @@ class CascadeSelect extends SuperComponent {
         loading[key] = false;
         this.setState({ loading });
         return 'y';
+      }).catch(() => {
+        loading[key] = false;
+        this.setState({ loading });
       });
     }
     return Promise.resolve('n');
   }
 
-  setMultiState(selectedOptions, init = true) {
+  setMultiState(selectedOptions) {
     let value;
-    const { defaultValue } = this.props;
     if (selectedOptions && selectedOptions.length) {
       value = selectedOptions.map(item => item.value);
     }
-    if (init) {
-      this.state = {
-        displayValue: value || defaultValue || [],
-        value: value || defaultValue || [],
-        selectedOptions,
-        showSubMenu: false,
-        loading: {},
-      };
-    } else {
-      this.setState({
-        displayValue: value || [],
-        value: value || [],
-        selectedOptions,
-      });
-    }
+    this.setState({
+      displayValue: value || [],
+      value: value || [],
+      selectedOptions,
+    });
   }
 
-  setValue(props, init = true) {
+  setValue(props) {
     const { onSelect } = props;
     if (onSelect) {
-      if (init) {
-        this.state = {
-          displayValue: [],
-          value: [],
-          selectedOptions: [],
-          showSubMenu: false,
-          loading: {},
-        };
-      }
       this.getAsyncSelectedOptions(props, (selectedOptions) => {
-        this.setMultiState(selectedOptions, false);
+        this.setMultiState(selectedOptions);
       });
     } else {
       const selectedOptions = this.getSelectedOptions(props);
-      this.setMultiState(selectedOptions, init);
+      this.setMultiState(selectedOptions);
     }
   }
 
@@ -250,10 +233,7 @@ class CascadeSelect extends SuperComponent {
       this.setState({
         displayValue,
       });
-      this.fetchOptions(newValue, key, (index + 1))
-        .then((content) => {
-          console.log(content, 'call successfully');
-        });
+      this.fetchOptions(newValue, key, (index + 1));
     } else {
       if (!hasChildren || (index + 1) >= cascadeSize) {
         if (miniMode) {
