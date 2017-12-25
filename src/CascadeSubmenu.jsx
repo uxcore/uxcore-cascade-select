@@ -69,8 +69,14 @@ class CascadeSubmenu extends SuperComponent {
     });
   }
 
+  renderLoading() {
+    return (
+      <div className={`kuma-loading-s ${this.prefixCls('center-loading')}`} />
+    );
+  }
+
   renderSubmenus() {
-    const { value, options, expandTrigger, cascadeSize, miniMode } = this.props;
+    const { value, options, expandTrigger, cascadeSize, miniMode, loading } = this.props;
     const submenu = [];
 
     let width = `${(100 / cascadeSize).toFixed(1)}%`;
@@ -96,7 +102,7 @@ class CascadeSubmenu extends SuperComponent {
       const parent = find(prevSelected || options, item => item.value === key);
       const renderArr = parent && parent.children;
       prevSelected = renderArr;
-      if (renderArr) {
+      if (renderArr || loading[key]) {
         if (index + 1 >= cascadeSize - 1) {
           style = {
             width,
@@ -112,7 +118,10 @@ class CascadeSubmenu extends SuperComponent {
             })}
             style={style}
           >
-            {this.renderUlList(renderArr, value[index + 1], index + 1)}
+            {
+              loading[key] ? this.renderLoading() :
+              this.renderUlList(renderArr, value[index + 1], index + 1)
+            }
           </ul>
         );
       }
