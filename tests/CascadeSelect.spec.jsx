@@ -1,10 +1,13 @@
 import expect from 'expect.js';
 import React from 'react';
 import $ from 'jquery';
-import sinon from 'sinon';
-import { mount } from 'enzyme';
+import Enzyme from 'enzyme';
 import { render, findDOMNode, unmountComponentAtNode } from 'react-dom';
 import CascadeSelect from '../src';
+import Adapter from 'enzyme-adapter-react-15';
+
+const { mount } = Enzyme;
+Enzyme.configure({ adapter: new Adapter() });
 
 const options = [{
   value: 'alibaba',
@@ -99,23 +102,26 @@ describe('CascadeSelect', () => {
   it('should have a sub menu', () => {
     const wrapper = mount(<CascadeSelect options={options} />);
     wrapper.simulate('change');
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
     expect(dropdownWrapper.length > 0).to.be.ok();
   });
 
   it('should have the defaultValue', () => {
     instance = render(<CascadeSelect options={options} defaultValue={['alibaba', 'platform', 'fe']} />, div);
-    expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').find('span').text()).to.eql('阿里巴巴 / 信息平台 / 前端开发');
+    expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').attr('title')).to.eql('阿里巴巴 / 信息平台 / 前端开发');
   });
 
   it('onChange should be called successfully', () => {
-    const wrapper = mount(<CascadeSelect options={options} onChange={(value, selected) => {
-      expect(value.length === selected.length).to.be.ok();
-    }}
-    />
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        onChange={(value, selected) => {
+          expect(value.length === selected.length).to.be.ok();
+        }}
+      />
     );
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
-    dropdownWrapper.find('CascadeSubmenu').props().onItemClick();
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    mount(dropdownWrapper.props().overlay).props().onItemClick();
   });
 
   it('should be disabled', () => {
@@ -131,33 +137,39 @@ describe('CascadeSelect', () => {
 
   it('expandTrigger', () => {
     const wrapper = mount(<CascadeSelect options={options} expandTrigger="hover" />);
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
-    expect(dropdownWrapper.find('CascadeSubmenu').props().expandTrigger).to.eql('hover');
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    expect(mount(dropdownWrapper.props().overlay).props().expandTrigger).to.eql('hover');
   });
 
   it('onItemClick', () => {
     const wrapper = mount(<CascadeSelect options={options} />);
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
-    dropdownWrapper.find('li').at(0).simulate('click');
-    const option = dropdownWrapper.find('CascadeSubmenu').props().options[0];
-    dropdownWrapper.find('CascadeSubmenu').props().onItemClick(option, 2, false);
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    mount(dropdownWrapper.props().overlay)
+      .find('li')
+      .at(0)
+      .simulate('click');
+    const option = mount(dropdownWrapper.props().overlay).props().options[0];
+    mount(dropdownWrapper.props().overlay).props().onItemClick(option, 2, false);
     expect(wrapper.state('value').length > 0).to.be.ok();
   });
 
   it('onItemHover', () => {
     const wrapper = mount(<CascadeSelect options={options} expandTrigger="hover" />);
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
-    dropdownWrapper.find('li').at(0).simulate('mouseover');
-    const option = dropdownWrapper.find('CascadeSubmenu').props().options[0];
-    dropdownWrapper.find('CascadeSubmenu').props().onItemClick(option, 2, false);
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    mount(dropdownWrapper.props().overlay)
+      .find('li')
+      .at(0)
+      .simulate('mouseover');
+    const option = mount(dropdownWrapper.props().overlay).props().options[0];
+    mount(dropdownWrapper.props().overlay).props().onItemClick(option, 2, false);
     expect(wrapper.state('value').length > 0).to.be.ok();
   });
 
   it('render sunmenus value renderArr', (done) => {
     const wrapper = mount(<CascadeSelect options={options} defaultValue={['alibaba', 'platform', 'fe']} />);
-    const dropdownWrapper = mount(wrapper.find('Trigger').node.getComponent());
-    const value = dropdownWrapper.find('CascadeSubmenu').props().value;
-    expect(value.length).to.eql(dropdownWrapper.find('ul').nodes.length);
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    const value = mount(dropdownWrapper.props().overlay).props().value;
+    expect(value.length).to.eql(mount(dropdownWrapper.props().overlay).find('ul').length);
     done();
   });
 

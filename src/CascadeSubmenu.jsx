@@ -213,4 +213,6 @@ CascadeSubmenu.defaultProps = {
   size: 'large',
 };
 
+CascadeSubmenu.displayName = 'CascadeSubmenu';
+
 export default CascadeSubmenu;
