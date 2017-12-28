@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
 import Select2 from 'uxcore-select2';
+import Promise from 'lie';
 import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
@@ -89,7 +90,7 @@ class CascadeSelect extends SuperComponent {
           if (index + 1 > level) {
             return;
           }
-          node = node.find(item => item.value === value);
+          node = find(node, item => item.value === value);
           if (node.children) {
             node = node.children;
           }
