@@ -1,12 +1,15 @@
 import expect from 'expect.js';
 import React from 'react';
+import sinon from 'sinon';
 import $ from 'jquery';
 import Enzyme from 'enzyme';
 import { render, findDOMNode, unmountComponentAtNode } from 'react-dom';
 import CascadeSelect from '../src';
 import Adapter from 'enzyme-adapter-react-15';
+import { deepCopy } from '../src/util';
 
 const { mount } = Enzyme;
+
 Enzyme.configure({ adapter: new Adapter() });
 
 const options = [{
@@ -18,6 +21,9 @@ const options = [{
     children: [{
       value: 'fe',
       label: '前端开发',
+    }, {
+      value: 'test',
+      label: '测试',
     }],
   }],
 }, {
@@ -74,6 +80,30 @@ const options = [{
     }],
   }],
 }];
+
+const asyncOptions = [
+  {
+    value: '0',
+    label: '0',
+  },
+  {
+    value: '1',
+    label: '1',
+  },
+];
+
+const optionsGenerator = (key, level) => {
+  const childrenOptions = [];
+  for (let i = 0; i <= level; i += 1) {
+    childrenOptions.push({
+      label: `label-${key}-${i}`,
+      value: `${key}-${i}`,
+    });
+  }
+  return childrenOptions;
+};
+
+function noop () {}
 
 describe('CascadeSelect', () => {
   let instance;
@@ -165,7 +195,7 @@ describe('CascadeSelect', () => {
     expect(wrapper.state('value').length > 0).to.be.ok();
   });
 
-  it('render sunmenus value renderArr', (done) => {
+  it('render submenus value renderArr', (done) => {
     const wrapper = mount(<CascadeSelect options={options} defaultValue={['alibaba', 'platform', 'fe']} />);
     const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
     const value = mount(dropdownWrapper.props().overlay).props().value;
@@ -183,5 +213,80 @@ describe('CascadeSelect', () => {
     instance = render(<CascadeSelect options={options} value={['xicheng']} />, div);
     expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').text()).to.eql('日本 / 西城');
     done();
+  });
+
+  it('displayMode select onChange', () => {
+    const onChange = sinon.spy(noop);
+    const wrapper = mount(
+      <CascadeSelect
+        value={['alibaba', 'platform', 'fe']}
+        options={options}
+        onChange={onChange}
+        displayMode="select"
+        isMustSelectLeaf
+        getPopupContainer={(trigger) => trigger.parentNode}
+      />
+    );
+    const select = mount(wrapper.find('Select').at(2).getElement());
+    select.find('.kuma-select2').simulate('click');
+    mount(select.find('Trigger').props().popup).find('li').at(1)
+      .simulate('click');
+    expect(onChange.calledOnce).to.be.ok();
+  });
+
+  it('Async CascadeSelect', (done) => {
+    const wrapper = mount(
+      <CascadeSelect
+        options={deepCopy(asyncOptions)}
+        value={['1', '1-1', '1-1-0']}
+        onSelect={(resolve, reject, key, level) => {
+          setTimeout(() => {
+            resolve(optionsGenerator(key, level));
+          }, 100);
+        }}
+      />
+    );
+    setTimeout(() => {
+      expect($(wrapper.getDOMNode()).find('.kuma-cascader-trigger').attr('title')).to.be('1 / label-1-1 / label-1-1-0');
+      done();
+    }, 300);
+  });
+
+  it('Async CascadeSelect displayMode select', (done) => {
+    const wrapper = mount(
+      <CascadeSelect
+        options={deepCopy(asyncOptions)}
+        value={['1', '1-1', '1-1-0']}
+        onSelect={(resolve, reject, key, level) => {
+          setTimeout(() => {
+            resolve(optionsGenerator(key, level));
+          }, 100);
+        }}
+        displayMode="select"
+      />
+    );
+    setTimeout(() => {
+      expect($(wrapper.find('Select2').at(2).getDOMNode()).find('.kuma-select2-selection-selected-value')
+        .text()).to.be('label-1-1-0');
+      done();
+    }, 300);
+  });
+
+  it('no miniMode', () => {
+    const onChange = sinon.spy(noop);
+    const wrapper = mount(
+      <CascadeSelect
+        defaultValue={['alibaba', 'platform', 'fe']}
+        options={options}
+        onChange={onChange}
+        locale={'en_US'}
+        miniMode={false}
+      />
+    );
+    const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
+    const overlay = mount(dropdownWrapper.props().overlay);
+    overlay.find('li').at(0).simulate('click');
+    overlay.find('button').simulate('click');
+    expect(onChange.calledOnce).to.equal(true);
   });
 });
