@@ -25,20 +25,6 @@ const find = (() => {
   };
 })();
 
-const i18n = (key, locale = 'zh_CN') => {
-  const langs = {};
-
-  langs.zh_CN = {
-    placeholder: '请选择',
-  };
-
-  langs.en_US = {
-    placeholder: 'Please select',
-  };
-
-  return langs[locale][key] || '';
-};
-
 const deepCopy = o => JSON.parse(JSON.stringify(o));
 
 const getArrayLeafItemContains = (options, keyArr) => {
@@ -84,7 +70,6 @@ const getOptions = (options, value = [], level = 0) => {
 
 export default {
   find,
-  i18n,
   getArrayLeafItemContains,
   deepCopy,
   getOptions,
