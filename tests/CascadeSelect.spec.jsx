@@ -289,4 +289,89 @@ describe('CascadeSelect', () => {
     overlay.find('button').simulate('click');
     expect(onChange.calledOnce).to.equal(true);
   });
+
+  it('displayMode is search, dropdown will display search result.', () => {
+    const onChange = sinon.spy(noop);
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        onChange={onChange}
+        locale={'en_US'}
+        miniMode={false}
+        displayMode="search"
+        searchOption={{
+          doSearch(keyword, afterSearch) {
+            afterSearch([
+              {
+                label: 'test1',
+                value: 'ID_TEST1',
+              },
+              {
+                label: '前端开发',
+                value: 'fe',
+              },
+              {
+                label: 'test3 test3 test3 test3 test3 test3 test3 test3 test3 test3',
+                value: 'ID_TEST3',
+              },
+            ]);
+          },
+        }}
+      />
+    );
+    const dropdownWrapper = wrapper.find('Trigger');
+    const overlay = mount(dropdownWrapper.props().overlay);
+    const input = wrapper.find('input').getDOMNode();
+    input.value = 'test';
+    setTimeout(() => {
+      const li = overlay.find('li').at(1);
+      expect(li.text()).to.equal('前端开发');
+      // overlay.find('li').at(1).simulate('click');
+      // overlay.find('button').at(0).simulate('click');
+      // expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+    }, 200);
+  });
+
+  it('displayMode is search, click search result will get the real text.', () => {
+    const onChange = sinon.spy(noop);
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        onChange={onChange}
+        locale={'en_US'}
+        miniMode={false}
+        displayMode="search"
+        searchOption={{
+          doSearch(keyword, afterSearch) {
+            afterSearch([
+              {
+                label: 'test1',
+                value: 'ID_TEST1',
+              },
+              {
+                label: '前端开发',
+                value: 'fe',
+              },
+              {
+                label: 'test3 test3 test3 test3 test3 test3 test3 test3 test3 test3',
+                value: 'ID_TEST3',
+              },
+            ]);
+          },
+        }}
+      />
+    );
+    const dropdownWrapper = wrapper.find('Trigger');
+    const overlay = mount(dropdownWrapper.props().overlay);
+    const input = wrapper.find('input').getDOMNode();
+    input.value = 'test';
+    setTimeout(() => {
+      const li = overlay.find('li').at(1);
+      li.simulate('click');
+      setTimeout(() => {
+        overlay.find('button').at(0).simulate('click');
+        expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+      }, 200);
+    }, 200);
+  });
 });

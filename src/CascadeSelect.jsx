@@ -14,6 +14,7 @@ import Promise from 'lie';
 import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
+import Search from './Search';
 
 import { find, getArrayLeafItemContains, deepCopy, getOptions } from './util';
 
@@ -30,6 +31,8 @@ class CascadeSelect extends SuperComponent {
       selectedOptions: [],
       showSubMenu: false,
       loading: {},
+      searchResult: [],
+      inputValue: null,
     };
     // 兼容老版本的locale code
     const { locale } = props;
@@ -305,6 +308,40 @@ class CascadeSelect extends SuperComponent {
       this.props.beforeRender(displayValue, selectedOptions) :
       '';
 
+    let cpnt = (
+      <div
+        className={this.prefixCls('trigger')}
+        title={displayText}
+      >
+        {
+          placeholder && !displayValue.length ?
+            <div className={this.prefixCls('placeholder')}>
+              {placeholder}
+            </div> :
+            null
+        }
+        {displayText}
+      </div>
+    );
+
+    if (this.props.displayMode === 'search') {
+      cpnt = (
+        <Search
+          value={this.state.inputValue}
+          text={displayText}
+          disabled={disabled}
+          placeholder={placeholder}
+          searchOption={this.props.searchOption}
+          onValueChange={(inputValue) => {
+            this.setState({ inputValue });
+          }}
+          onSearchResultChange={(searchResult) => {
+            this.setState({ searchResult, showSubMenu: true });
+          }}
+        />
+      );
+    }
+
     return (
       <div
         ref={this.saveRef('wrapper')}
@@ -318,19 +355,7 @@ class CascadeSelect extends SuperComponent {
         })}
       >
         <div className={this.prefixCls('text')}>
-          <div
-            className={this.prefixCls('trigger')}
-            title={displayText}
-          >
-            {
-              placeholder && !displayValue.length ?
-                <div className={this.prefixCls('placeholder')}>
-                  {placeholder}
-                </div> :
-                null
-            }
-            {displayText}
-          </div>
+          {cpnt}
         </div>
         <div
           className={classnames({
@@ -427,6 +452,29 @@ class CascadeSelect extends SuperComponent {
     return <div className={this.prefixCls('select-wrap')}>{back}</div>;
   }
 
+  renderSearchResult() {
+    const { options } = this.props;
+    return Search.renderResult(this.state.searchResult, (item) => {
+      const selectedOptions = this.getSelectedOptions({
+        value: [item.value],
+        options,
+      });
+      let val = [];
+      if (selectedOptions && selectedOptions.length) {
+        val = selectedOptions.map(i => i.value);
+      }
+      this.setState({
+        inputValue: null,
+        searchResult: [],
+        displayValue: val,
+        value: val,
+        selectedOptions,
+      }, () => {
+        this.props.onChange(val, selectedOptions);
+      });
+    });
+  }
+
   render() {
     if (this.props.displayMode === 'select') {
       return this.renderSelect();
@@ -439,6 +487,7 @@ class CascadeSelect extends SuperComponent {
       cascadeSize,
       getPopupContainer,
       columnWidth,
+      displayMode,
     } = this.props;
     const { options } = this;
     const { value, loading } = this.state;
@@ -451,7 +500,9 @@ class CascadeSelect extends SuperComponent {
         style={columnWidth ? { width: columnWidth * this.props.cascadeSize } : null}
       />
     );
-    if (options.length && !disabled) {
+    if (displayMode === 'search' && this.state.searchResult.length > 0) {
+      submenu = this.renderSearchResult();
+    } else if (options.length && !disabled) {
       submenu = (
         <CascadeSubmenu
           prefixCls={prefixCls}
@@ -545,7 +596,7 @@ CascadeSelect.propTypes = {
   locale: PropTypes.oneOf(['zh-cn', 'en-us', 'zh_CN', 'en_US']),
   miniMode: PropTypes.bool,
   columnWidth: PropTypes.number,
-  displayMode: PropTypes.oneOf(['dropdown', 'select']),
+  displayMode: PropTypes.oneOf(['dropdown', 'select', 'search']),
   getSelectPlaceholder: PropTypes.func,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   isMustSelectLeaf: PropTypes.bool,

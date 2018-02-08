@@ -157,6 +157,33 @@ class Demo extends React.Component {
   render() {
     return (
       <div className="demo-wrap">
+        <h2>search</h2>
+        <CascadeSelect
+          value={this.state.xValue}
+          options={options}
+          clearable
+          displayMode="search"
+          onChange={(value, selected) => { }}
+          searchOption={{
+            doSearch(keyword, afterSearch) {
+              afterSearch([
+                {
+                  label: 'test1',
+                  value: 'ID_TEST1',
+                },
+                {
+                  label: '短信服务',
+                  value: 2815,
+                },
+                {
+                  label: 'test3 test3 test3 test3 test3 test3 test3 test3 test3 test3',
+                  value: 'ID_TEST3',
+                },
+              ]);
+            },
+          }}
+        />
+
         <h2>默认的</h2>
         <button onClick={this.loadFirstOptions.bind(this)}>点击加载options</button>
         <CascadeSelect
@@ -255,7 +282,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           disabled
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => { }}
         />
         <h2>必须选到根节点</h2>
         <CascadeSelect
@@ -272,7 +299,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           expandTrigger="hover"
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => { }}
         />
         <h2>改变value</h2>
         <CascadeSelect
@@ -280,7 +307,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           expandTrigger="hover"
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => { }}
         />
         <button
           onClick={() => this.setState({ xValue: ['fe'] })}
@@ -292,7 +319,7 @@ class Demo extends React.Component {
           options={options}
           clearable
           expandTrigger="hover"
-          onChange={(value, selected) => {}}
+          onChange={(value, selected) => { }}
         />
         <button
           onClick={() => this.setState({ xValue2: ['fe'] })}

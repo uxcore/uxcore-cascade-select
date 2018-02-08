@@ -1,5 +1,10 @@
 # history
 
+## 0.5.1
+
+* `Add`: searchOption prop
+* `Add`: 'search' option of displayMode
+
 ## 0.5.0
 
 * `Add`: onSelect prop
