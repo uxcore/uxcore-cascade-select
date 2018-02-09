@@ -24,7 +24,7 @@ const optionsGenerator = (key, level) => {
   return childrenOptions;
 };
 
-function noop () {}
+function noop() { }
 
 describe('CascadeSelect', () => {
   let instance;
@@ -58,8 +58,14 @@ describe('CascadeSelect', () => {
   });
 
   it('should have the defaultValue', () => {
-    instance = render(<CascadeSelect options={options} defaultValue={['alibaba', 'platform', 'fe']} />, div);
-    expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').attr('title')).to.eql('阿里巴巴 / 信息平台 / 前端开发');
+    instance = render(
+      <CascadeSelect
+        options={options}
+        defaultValue={['alibaba', 'platform', 'fe']}
+      />, div);
+    expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').attr('title'))
+      .to
+      .eql('阿里巴巴 / 信息平台 / 前端开发');
   });
 
   it('onChange should be called successfully', () => {
@@ -117,7 +123,12 @@ describe('CascadeSelect', () => {
   });
 
   it('render submenus value renderArr', (done) => {
-    const wrapper = mount(<CascadeSelect options={options} defaultValue={['alibaba', 'platform', 'fe']} />);
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        defaultValue={['alibaba', 'platform', 'fe']}
+      />
+    );
     const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
     const value = mount(dropdownWrapper.props().overlay).props().value;
     expect(value.length).to.eql(mount(dropdownWrapper.props().overlay).find('ul').length);
@@ -168,7 +179,9 @@ describe('CascadeSelect', () => {
       />
     );
     setTimeout(() => {
-      expect($(wrapper.getDOMNode()).find('.kuma-cascader-trigger').attr('title')).to.be('1 / label-1-1 / label-1-1-0');
+      expect($(wrapper.getDOMNode()).find('.kuma-cascader-trigger').attr('title'))
+        .to
+        .be('1 / label-1-1 / label-1-1-0');
       done();
     }, 300);
   });
@@ -187,8 +200,11 @@ describe('CascadeSelect', () => {
       />
     );
     setTimeout(() => {
-      expect($(wrapper.find('Select2').at(2).getDOMNode()).find('.kuma-select2-selection-selected-value')
-        .text()).to.be('label-1-1-0');
+      expect(
+        $(wrapper.find('Select2').at(2).getDOMNode())
+          .find('.kuma-select2-selection-selected-value').text())
+        .to
+        .be('label-1-1-0');
       done();
     }, 300);
   });
@@ -293,6 +309,20 @@ describe('CascadeSelect', () => {
         overlay.find('button').at(0).simulate('click');
         expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
       }, 200);
+    }, 200);
+  });
+
+  it('pass value before options', () => {
+    const wrapper = mount(
+      <CascadeSelect
+        value={['fe']}
+        locale={'en_US'}
+        miniMode={false}
+      />
+    );
+    wrapper.setProps({ options });
+    setTimeout(() => {
+      expect(wrapper.find('input').getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
     }, 200);
   });
 });

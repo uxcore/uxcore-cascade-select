@@ -4,6 +4,7 @@
 
 * `Add`: searchOption prop
 * `Add`: 'search' option of displayMode
+* `FIX`: value 先传递 options 后传递无法回填问题
 
 ## 0.5.0
 
