@@ -51,12 +51,13 @@ class CascadeSelect extends SuperComponent {
 
   componentWillReceiveProps(nextProps) {
     const { options, value } = nextProps;
-    if (value && deepCopy(value) !== deepCopy(this.props.value)) {
-      this.setValue(nextProps);
-    }
     if (options !== this.props.options) {
       this.options = options;
       this.loadedOptions = {};
+    }
+    if ((value && deepCopy(value) !== deepCopy(this.props.value)) ||
+      (options !== this.props.options)) {
+      this.setValue(nextProps);
     }
   }
 

@@ -123,7 +123,8 @@ class Demo extends React.Component {
       xValue: ['jiangsu', 'nanjing', 'zhonghuamen'],
       value: [2815],
       firstValue: ['zhonghuamen'],
-      asyncValue: ['1', '1-1', '1-1-0'],
+      asyncValue: ['nanjinglu'],
+      asyncOptions: [],
     };
   }
 
@@ -158,39 +159,32 @@ class Demo extends React.Component {
     return (
       <div className="demo-wrap">
         <h2>默认的</h2>
-        <button onClick={this.loadFirstOptions.bind(this)}>点击加载options</button>
         <CascadeSelect
-          value={this.state.firstValue}
-          options={this.state.firstOptions}
-          expandTrigger="hover"
-          onChange={this.handleChange.bind(this)}
-          getPopupContainer={() => {
-            const div = document.createElement('div');
-            div.className = 'uxcore';
-            document.body.appendChild(div);
-            return div;
+          options={options}
+          onChange={(...args) => {
+            console.log(...args);
           }}
-          dropDownWidth={400}
-          size="small"
         />
-        <h2>异步</h2>
+
+        <h2>异步 <small>value先有，options 异步加载，常用于数据回填</small></h2>
+        <button
+          onClick={() => {
+            this.setState({
+              asyncOptions: options,
+            });
+          }}
+        >加载options</button>
         <CascadeSelect
           value={this.state.asyncValue}
-          options={asyncOptions}
+          options={this.state.asyncOptions}
           expandTrigger="click"
           isMustSelectLeaf
           onChange={this.handleAsyncChange.bind(this)}
-          dropDownWidth={400}
+          columnWidth={150}
           size="small"
-          onSelect={(resolve, reject, key, level) => {
-            setTimeout(() => {
-              if (key === '1-0') {
-                reject();
-              }
-              resolve(optionsGenerator(key, level));
-            }, 1000);
-          }}
         />
+
+
         <h2>异步Select 风格</h2>
         <CascadeSelect
           value={this.state.asyncValue}
