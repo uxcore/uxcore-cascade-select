@@ -1,5 +1,9 @@
 # history
 
+## 0.5.3
+
+* `FIX`: search模式下选中input中内容且一次性清除后，二次选择无结果显示
+
 ## 0.5.2
 
 * `FIX`: search模式下IE11环境中input多次onchange
