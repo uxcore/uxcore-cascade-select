@@ -1,5 +1,9 @@
 # history
 
+## 0.5.2
+
+* `FIX`: search模式下IE11环境中input多次onchange
+
 ## 0.5.1
 
 * `Add`: searchOption prop
