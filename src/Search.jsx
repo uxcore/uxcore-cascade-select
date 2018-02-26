@@ -19,7 +19,12 @@ const Search = ({
     }
     onChange={(e) => {
       const keywords = e.target.value;
-      onValueChange(keywords);
+      // 修复IE11下bug
+      if (value === null && text === '' && keywords === '') {
+        onValueChange(null);
+      } else {
+        onValueChange(keywords);
+      }
       if (searchOption) {
         searchOption.doSearch(keywords, (searchResult) => {
           onSearchResultChange(searchResult);
