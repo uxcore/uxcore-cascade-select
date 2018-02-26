@@ -280,6 +280,7 @@ class CascadeSelect extends SuperComponent {
       displayValue: [],
       value: [],
       selectedOptions: [],
+      inputValue: null,
     });
     this.onValueChange([], []);
   }
@@ -523,6 +524,7 @@ class CascadeSelect extends SuperComponent {
                 value: newValue,
                 displayValue: newValue,
                 selectedOptions: newSelectedOptions,
+                inputValue: null,
               }, () => {
                 delete this.newValue;
                 delete this.newSelectedOptions;
