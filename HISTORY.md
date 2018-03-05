@@ -1,18 +1,22 @@
 # history
 
+## 0.5.4
+
+* `FIX`: the component's height has 2 px more in the small or middle size mode.
+
 ## 0.5.3
 
-* `FIX`: search模式下选中input中内容且一次性清除后，二次选择无结果显示
+* `FIX`: the selection has no display result after clear the first selection.
 
 ## 0.5.2
 
-* `FIX`: search模式下IE11环境中input多次onchange
+* `FIX`: input has duplicated onChange event in IE11 browser under search mode.
 
 ## 0.5.1
 
 * `Add`: searchOption prop
 * `Add`: 'search' option of displayMode
-* `FIX`: value 先传递 options 后传递无法回填问题
+* `FIX`: give value before options could not display the result
 
 ## 0.5.0
 
@@ -20,7 +24,7 @@
 
 ## 0.4.1
 
-* `Add`: isMustSelectLeaf 是否必须选到根节点
+* `Add`: isMustSelectLeaf: whether or not to select the leaf option
 
 ## 0.4.0
 

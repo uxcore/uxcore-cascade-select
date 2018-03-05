@@ -208,7 +208,7 @@ class Demo extends React.Component {
           isMustSelectLeaf
           onChange={this.handleAsyncChange.bind(this)}
           columnWidth={150}
-          size="small"
+          size="middle"
         />
 
 
