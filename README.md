@@ -94,8 +94,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
 | locale | string | false | `'zh-cn'` | `'en-us'`
 | miniMode | boolean | false | true | 是否是简洁显示风格
-| columnWidth | number | false | null | dropdown中每一列的宽度, 优先级高于allColumnWidth
-| allColumnWidth | number | false | null | dropdown的整体宽度, 默认与输入框宽度相同, 优先级低于columnWidth属性
+| columnWidth | number | false | null | dropdown中每一列的宽度, 如为空，整体宽度等于input输入框的宽度
 | displayMode | string | false | `dropdown` | `select` 或者 `dropdown` 或者 `search`
 | getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small`

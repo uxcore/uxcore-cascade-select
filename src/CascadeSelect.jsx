@@ -478,15 +478,12 @@ class CascadeSelect extends SuperComponent {
   }
 
   getDomWidth(dom) {
-    if (this.props.allColumnWidth) {
-      return this.props.allColumnWidth;
-    }
     if (dom && dom.currentStyle) {
       return parseFloat(dom.currentStyle.width);
     } else if (dom) {
       return parseFloat(getComputedStyle(dom).width);
     } else {
-      return {};
+      return 0;
     }
   }
 
@@ -589,7 +586,6 @@ CascadeSelect.defaultProps = {
   locale: 'zh-cn',
   miniMode: true,
   columnWidth: null,
-  allColumnWidth: null,
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
   size: 'large',
@@ -617,7 +613,6 @@ CascadeSelect.propTypes = {
   getSelectPlaceholder: PropTypes.func,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   isMustSelectLeaf: PropTypes.bool,
-  allColumnWidth: PropTypes.number,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
