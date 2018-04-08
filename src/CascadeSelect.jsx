@@ -477,6 +477,19 @@ class CascadeSelect extends SuperComponent {
     });
   }
 
+  getDomWidth(dom) {
+    if (this.props.allColumnWidth) {
+      return this.props.allColumnWidth;
+    }
+    if (dom && dom.currentStyle) {
+      return parseFloat(dom.currentStyle.width);
+    } else if (dom) {
+      return parseFloat(getComputedStyle(dom).width);
+    } else {
+      return {};
+    }
+  }
+
   render() {
     if (this.props.displayMode === 'select') {
       return this.renderSelect();
@@ -532,7 +545,7 @@ class CascadeSelect extends SuperComponent {
               });
             }
           }}
-          columnWidth={this.props.columnWidth}
+          columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
           size={this.props.size}
           loading={loading}
         />
@@ -575,7 +588,8 @@ CascadeSelect.defaultProps = {
   },
   locale: 'zh-cn',
   miniMode: true,
-  columnWidth: 100,
+  columnWidth: null,
+  allColumnWidth: null,
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
   size: 'large',
@@ -603,6 +617,7 @@ CascadeSelect.propTypes = {
   getSelectPlaceholder: PropTypes.func,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   isMustSelectLeaf: PropTypes.bool,
+  allColumnWidth: PropTypes.number,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
