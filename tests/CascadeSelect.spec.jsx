@@ -75,6 +75,7 @@ describe('CascadeSelect', () => {
         onChange={(value, selected) => {
           expect(value.length === selected.length).to.be.ok();
         }}
+        columnWidth={100}
       />
     );
     const dropdownWrapper = mount(wrapper.find('Trigger').getElement());
