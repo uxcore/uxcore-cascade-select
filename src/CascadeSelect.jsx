@@ -477,6 +477,14 @@ class CascadeSelect extends SuperComponent {
     });
   }
 
+  getDomWidth(dom) {
+    if (dom) {
+      return parseFloat(getComputedStyle(dom).width);
+    } else {
+      return 0;
+    }
+  }
+
   render() {
     if (this.props.displayMode === 'select') {
       return this.renderSelect();
@@ -532,7 +540,7 @@ class CascadeSelect extends SuperComponent {
               });
             }
           }}
-          columnWidth={this.props.columnWidth}
+          columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
           size={this.props.size}
           loading={loading}
         />
@@ -575,7 +583,7 @@ CascadeSelect.defaultProps = {
   },
   locale: 'zh-cn',
   miniMode: true,
-  columnWidth: 100,
+  columnWidth: null,
   displayMode: 'dropdown',
   getSelectPlaceholder: null,
   size: 'large',

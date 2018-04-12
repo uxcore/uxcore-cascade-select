@@ -78,12 +78,15 @@ class CascadeSubmenu extends SuperComponent {
   renderSubmenus() {
     const { value, options, expandTrigger, cascadeSize, miniMode, loading } = this.props;
     const submenu = [];
-
-    let width = `${(100 / cascadeSize).toFixed(1)}%`;
-    if (!miniMode) {
-      width = `${(100 / (cascadeSize + 1)).toFixed(1)}%`;
+    // ul个数比选中的value值多1个
+    let ulSize = value && value.length ? value.length + 1 : 1;
+    if (value && value.length >= cascadeSize) {
+      ulSize = cascadeSize;
     }
-
+    let width = `${(100 / ulSize).toFixed(1)}%`;
+    if (!miniMode) {
+      width = `${((100 - 100/(cascadeSize + 1)) / ulSize).toFixed(1)}%`;
+    }
     let style = { width };
     submenu.push(
       <ul
@@ -96,7 +99,6 @@ class CascadeSubmenu extends SuperComponent {
         {this.renderUlList(options, value[0], 0)}
       </ul>
     );
-
     let prevSelected = null;
     value.forEach((key, index) => {
       const parent = find(prevSelected || options, item => item.value === key);
@@ -167,11 +169,10 @@ class CascadeSubmenu extends SuperComponent {
     const wrapStyle = {};
     if (this.props.columnWidth) {
       wrapStyle.width = this.props.columnWidth * this.props.cascadeSize;
-      if (!this.props.miniMode) {
-        wrapStyle.width = this.props.columnWidth * (this.props.cascadeSize + 1);
-      }
+      // if (!this.props.miniMode) {
+      //   wrapStyle.width = this.props.columnWidth * (this.props.cascadeSize + 1);
+      // }
     }
-
     return (
       <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
         <div className={this.prefixCls('submenu-wrap')}>
