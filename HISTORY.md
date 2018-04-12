@@ -1,5 +1,9 @@
 # history
 
+## 0.5.5
+
+* `UPDATE`: optimized visual display
+
 ## 0.5.4
 
 * `FIX`: the component's height has 2 px more in the small or middle size mode.
