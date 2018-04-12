@@ -165,6 +165,8 @@ class Demo extends React.Component {
           clearable
           displayMode="search"
           onChange={(value, selected) => { }}
+          columnWidth={150}
+          miniMode={false}
           searchOption={{
             doSearch(keyword, afterSearch) {
               afterSearch([

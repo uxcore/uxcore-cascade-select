@@ -78,40 +78,40 @@ class CascadeSubmenu extends SuperComponent {
   renderSubmenus() {
     const { value, options, expandTrigger, cascadeSize, miniMode, loading } = this.props;
     const submenu = [];
-    // ul个数比选中的value值多1个
-    let ulSize = value && value.length ? value.length + 1 : 1;
-    if (value && value.length >= cascadeSize) {
-      ulSize = cascadeSize;
-    }
-    let width = `${(100 / ulSize).toFixed(1)}%`;
+    let columnSize = cascadeSize;
     if (!miniMode) {
-      width = `${((100 - 100/(cascadeSize + 1)) / ulSize).toFixed(1)}%`;
+      columnSize = cascadeSize + 1;
     }
-    let style = { width };
+    let unitWidth = `${(100 / columnSize).toFixed(1)}%`;
+    const firstStyle = {};
+    if (value && value.length > 0) {
+      firstStyle.width = unitWidth;
+    } else {
+      firstStyle.width = '100%';
+    }
     submenu.push(
       <ul
         className={classnames({
           [this.prefixCls('hoverable')]: expandTrigger === 'hover',
         })}
         key="firstMenu"
-        style={style}
+        style={firstStyle}
       >
         {this.renderUlList(options, value[0], 0)}
       </ul>
     );
     let prevSelected = null;
     value.forEach((key, index) => {
+      const style = {};
+      if (value && value.length > index + 1) {
+        style.width = unitWidth;
+      } else {
+        style.width = `${((cascadeSize - value.length)/columnSize * 100).toFixed(1)}%`;
+      }
       const parent = find(prevSelected || options, item => item.value === key);
       const renderArr = parent && parent.children;
       prevSelected = renderArr;
       if (renderArr || loading[key]) {
-        if (index + 1 >= cascadeSize - 1) {
-          style = {
-            width,
-            border: 'none',
-          };
-        }
-
         submenu.push(
           <ul
             key={key}

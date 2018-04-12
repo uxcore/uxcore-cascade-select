@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96% </span>
+        <span class="strong">96.09% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>120/125</span>
+        <span class='fraction'>123/128</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">79.27% </span>
+        <span class="strong">78.75% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>65/82</span>
+        <span class='fraction'>63/80</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">88% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>22/25</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">98.97% </span>
+        <span class="strong">99% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>96/97</span>
+        <span class='fraction'>99/100</span>
       </div>
     </div>
   </div>
@@ -452,40 +452,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">13×</span>
-<span class="cline-any cline-yes">9×</span>
-<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -726,40 +726,40 @@ var CascadeSubmenu = function (_SuperComponent) {
         loading = _props.loading;
 &nbsp;
     var submenu = [];
-    // ul个数比选中的value值多1个
-    var ulSize = value &amp;&amp; value.length ? value.length + 1 : 1;
-    if (value &amp;&amp; value.length &gt;= cascadeSize) {
-      ulSize = cascadeSize;
-    }
-    var width = (100 / ulSize).toFixed(1) + '%';
+    var columnSize = cascadeSize;
     if (!miniMode) {
-      width = ((100 - 100 / (cascadeSize + 1)) / ulSize).toFixed(1) + '%';
+      columnSize = cascadeSize + 1;
     }
-    var style = { width: width };
+    var unitWidth = (100 / columnSize).toFixed(1) + '%';
+    var firstStyle = {};
+    if (value &amp;&amp; value.length &gt; 0) {
+      firstStyle.width = unitWidth;
+    } else {
+      firstStyle.width = '100%';
+    }
     submenu.push(_react2['default'].createElement(
       'ul',
       {
         className: (0, _classnames4['default'])(_defineProperty({}, this.prefixCls('hoverable'), expandTrigger === 'hover')),
         key: 'firstMenu',
-        style: style
+        style: firstStyle
       },
       this.renderUlList(options, value[0], 0)
     ));
     var prevSelected = null;
     value.forEach(function (key, index) {
+      var style = {};
+      if (value &amp;&amp; value.length &gt; index + 1) {
+        style.width = unitWidth;
+      } else {
+        style.width = ((cascadeSize - value.length) / columnSize * 100).toFixed(1) + '%';
+      }
       var parent = (0, _util.find)(prevSelected || options, function (item) {
         return item.value === key;
       });
       var renderArr = parent &amp;&amp; parent.children;
       prevSelected = renderArr;
       if (renderArr || loading[key]) {
-        if (index + 1 &gt;= cascadeSize - 1) {
-          style = {
-            width: width,
-            border: 'none'
-          };
-        }
-&nbsp;
         submenu.push(_react2['default'].createElement(
           'ul',
           {
@@ -871,7 +871,7 @@ module.exports = exports['default'];
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Apr 09 2018 18:48:32 GMT+0800 (CST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 12 2018 14:39:28 GMT+0800 (CST)
 </div>
 </div>
 <script src="../prettify.js"></script>
