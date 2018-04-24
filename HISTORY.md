@@ -1,5 +1,9 @@
 # history
 
+## 0.5.6
+
+* `FIXED`: could not clear display-value from outside.
+
 ## 0.5.5
 
 * `UPDATE`: optimized visual display
