@@ -144,7 +144,10 @@ class CascadeSelect extends SuperComponent {
     let prevSelected = null;
     const recursive = (i = 0) => {
       const len = theValue.length;
-      if (len === 0) return;
+      if (len === 0) { 
+        callback.call(this, selectedOptions);
+        return;
+      }
       if (i === 0) {
         renderArr = options;
       } else {
