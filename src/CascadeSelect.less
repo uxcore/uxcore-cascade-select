@@ -7,7 +7,7 @@
  */
 
 @_prefix-cls: kuma-cascader;
-@_prefix-cls-dropdown: kuma-dropdown-menu;
+// @_prefix-cls-dropdown: kuma-dropdown-menu;
 @_text-color: #333;
 @_gray-text: #76889A;
 @_border: @border-color;
@@ -71,7 +71,7 @@
         }
     }
     &-disabled {
-        background: @bg-disabled-color;
+        background: @bg-disabled-color!important;
         border-color: @border-disabled-color;
         color: @text-disabled-color;
         cursor: not-allowed;
@@ -128,116 +128,241 @@
     }
 }
 
-.@{_prefix-cls-dropdown} {
-    &-submenu-bottom-bar {
-        padding: 10px 0;
-        text-align: center;
-        border-top: 1px solid #d9d9d9;
-    }
-    &-submenu-all-selection {
-        float: right;
-        height: 100%;
-        overflow: hidden;
-        background-color: @_background;
-        z-index: 1;
-        position: relative;
-    }
-    &-submenu-all-selection-title {
-        margin: 5px 0 5px 10px;
-        color: #999;
-    }
-    &-submenu-all-body {
-        margin: 10px;
-        i {
-            font-size: 12px;
+// 徐志飞修改样式 解决 kuma-dropdown-menu-submenu 全局污染问题
+
+.@{_prefix-cls}-submenu-wrapper {
+    .@{_prefix-cls} {
+        &-submenu-bottom-bar {
+            padding: 10px 0;
+            text-align: center;
+            border-top: 1px solid #d9d9d9;
+        }
+        &-submenu-all-selection {
+            float: right;
+            height: 100%;
+            overflow: hidden;
+            background-color: @_background;
+            z-index: 1;
+            position: relative;
+        }
+        &-submenu-all-selection-title {
+            margin: 5px 0 5px 10px;
             color: #999;
         }
-        & > div {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            height: 24px;
-            line-height: 24px;
+        &-submenu-all-body {
+            margin: 10px;
+            i {
+                font-size: 12px;
+                color: #999;
+            }
+            & > div {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                height: 24px;
+                line-height: 24px;
+            }
         }
-    }
-}
-
-.@{_prefix-cls-dropdown} {
-    &-submenu {
-        margin: 0;
-        background-color: @_background;
-        border: 1px solid #d9d9d9;
-        border-radius: @input-border-radius;
-        box-shadow: @box-shadow-1;
-        overflow: hidden;
-        &-border {
+        &-submenu {
             margin: 0;
-            border-top: 1px solid @_border-light;
-        }
-    }
-    &-submenu-wrap {
-        height: 120px;
-        overflow: hidden;
-        &>ul {
-            line-height: @trigger-height-large; // width: 33.3%;
-            height: 100%;
-            overflow: auto;
-            float: left;
-            border-right: 1px solid @_border-light;
-            &:last-child {
-                border-right: none;
-            }
-        }
-        li {
-            padding: 0 20px 0 10px;
-            white-space: nowrap;
+            background-color: @_background;
+            border: 1px solid #d9d9d9;
+            border-radius: @input-border-radius;
+            box-shadow: @box-shadow-1;
             overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-            .transition();
-            &:hover,
-            &.active {
-                background-color: @_hover-color;
+            &-border {
+                margin: 0;
+                border-top: 1px solid @_border-light;
             }
-            &.active {
-                font-weight: bolder;
+        }
+
+        &-submenu-wrap {
+            height: 120px;
+            overflow: hidden;
+            &>ul {
+                line-height: @trigger-height-large; // width: 33.3%;
+                height: 100%;
+                overflow: auto;
+                float: left;
+                border-right: 1px solid @_border-light;
+                &:last-child {
+                    border-right: none;
+                }
             }
-            &:active {
-                font-weight: bolder;
-                background-color: darken(@_hover-color, 3%);
+            li {
+                padding: 0 20px 0 10px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                cursor: pointer;
+                .transition();
+                &:hover,
+                &.active {
+                    background-color: @_hover-color;
+                }
+                &.active {
+                    font-weight: bolder;
+                }
+                &:active {
+                    font-weight: bolder;
+                    background-color: darken(@_hover-color, 3%);
+                }
             }
         }
     }
-}
 
-ul.@{_prefix-cls-dropdown}-hoverable {
-    li {
+    ul.@{_prefix-cls}-hoverable {
+        li {
+            position: relative;
+            &:after {
+                font-family: kuma!important;
+                font-size: 16px;
+                font-style: normal;
+                -webkit-font-smoothing: antialiased;
+                -webkit-text-stroke-width: .2px;
+                content: "\e643";
+                position: absolute;
+                right: 2px;
+                top: 0;
+                color: #666;
+            }
+        }
+    }
+    
+    .@{_prefix-cls}-center-loading {
+        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .@{_prefix-cls}-submenu-wrap > ul {
         position: relative;
-        &:after {
-            font-family: kuma!important;
-            font-size: 16px;
-            font-style: normal;
-            -webkit-font-smoothing: antialiased;
-            -webkit-text-stroke-width: .2px;
-            content: "\e643";
-            position: absolute;
-            right: 2px;
-            top: 0;
-            color: #666;
+    }
+
+    .@{_prefix-cls}-size-middle {
+        .@{_prefix-cls}-submenu-wrap > ul {
+            line-height: @trigger-height-middle;
         }
     }
+    .@{_prefix-cls}-size-small {
+        .@{_prefix-cls}-submenu-wrap > ul {
+            line-height: @trigger-height-small;
+        }
+    }
+
 }
 
-.@{_prefix-cls-dropdown}-center-loading {
-    margin: 0 auto;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-.@{_prefix-cls-dropdown}-submenu-wrap > ul {
-    position: relative;
-}
+// .@{_prefix-cls-dropdown} {
+//     &-submenu-bottom-bar {
+//         padding: 10px 0;
+//         text-align: center;
+//         border-top: 1px solid #d9d9d9;
+//     }
+//     &-submenu-all-selection {
+//         float: right;
+//         height: 100%;
+//         overflow: hidden;
+//         background-color: @_background;
+//         z-index: 1;
+//         position: relative;
+//     }
+//     &-submenu-all-selection-title {
+//         margin: 5px 0 5px 10px;
+//         color: #999;
+//     }
+//     &-submenu-all-body {
+//         margin: 10px;
+//         i {
+//             font-size: 12px;
+//             color: #999;
+//         }
+//         & > div {
+//             overflow: hidden;
+//             white-space: nowrap;
+//             text-overflow: ellipsis;
+//             height: 24px;
+//             line-height: 24px;
+//         }
+//     }
+// }
+
+// .@{_prefix-cls-dropdown} {
+//     &-submenu {
+//         margin: 0;
+//         background-color: @_background;
+//         border: 1px solid #d9d9d9;
+//         border-radius: @input-border-radius;
+//         box-shadow: @box-shadow-1;
+//         overflow: hidden;
+//         &-border {
+//             margin: 0;
+//             border-top: 1px solid @_border-light;
+//         }
+//     }
+//     &-submenu-wrap {
+//         height: 120px;
+//         overflow: hidden;
+//         &>ul {
+//             line-height: @trigger-height-large; // width: 33.3%;
+//             height: 100%;
+//             overflow: auto;
+//             float: left;
+//             border-right: 1px solid @_border-light;
+//             &:last-child {
+//                 border-right: none;
+//             }
+//         }
+//         li {
+//             padding: 0 20px 0 10px;
+//             white-space: nowrap;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//             cursor: pointer;
+//             .transition();
+//             &:hover,
+//             &.active {
+//                 background-color: @_hover-color;
+//             }
+//             &.active {
+//                 font-weight: bolder;
+//             }
+//             &:active {
+//                 font-weight: bolder;
+//                 background-color: darken(@_hover-color, 3%);
+//             }
+//         }
+//     }
+// }
+
+// ul.@{_prefix-cls-dropdown}-hoverable {
+//     li {
+//         position: relative;
+//         &:after {
+//             font-family: kuma!important;
+//             font-size: 16px;
+//             font-style: normal;
+//             -webkit-font-smoothing: antialiased;
+//             -webkit-text-stroke-width: .2px;
+//             content: "\e643";
+//             position: absolute;
+//             right: 2px;
+//             top: 0;
+//             color: #666;
+//         }
+//     }
+// }
+
+// .@{_prefix-cls-dropdown}-center-loading {
+//     margin: 0 auto;
+//     position: absolute;
+//     left: 50%;
+//     top: 50%;
+//     transform: translate(-50%, -50%);
+// }
+// .@{_prefix-cls-dropdown}-submenu-wrap > ul {
+//     position: relative;
+// }
 
 .@{_prefix-cls} {
     &-select-wrap {
@@ -280,13 +405,13 @@ ul.@{_prefix-cls-dropdown}-hoverable {
         line-height: @trigger-height-small - 2;
     }
 }
-.@{_prefix-cls-dropdown}-size-middle {
-    .@{_prefix-cls-dropdown}-submenu-wrap > ul {
-        line-height: @trigger-height-middle;
-    }
-}
-.@{_prefix-cls-dropdown}-size-small {
-    .@{_prefix-cls-dropdown}-submenu-wrap > ul {
-        line-height: @trigger-height-small;
-    }
-}
+// .@{_prefix-cls-dropdown}-size-middle {
+//     .@{_prefix-cls-dropdown}-submenu-wrap > ul {
+//         line-height: @trigger-height-middle;
+//     }
+// }
+// .@{_prefix-cls-dropdown}-size-small {
+//     .@{_prefix-cls-dropdown}-submenu-wrap > ul {
+//         line-height: @trigger-height-small;
+//     }
+// }
