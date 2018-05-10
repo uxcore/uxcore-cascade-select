@@ -174,19 +174,21 @@ class CascadeSubmenu extends SuperComponent {
       // }
     }
     return (
-      <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
-        <div className={this.prefixCls('submenu-wrap')}>
-          {this.renderSubmenus()}
+      <div className={this.props.className}>
+        <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
+          <div className={this.prefixCls('submenu-wrap')}>
+            {this.renderSubmenus()}
 
+            {
+              this.props.miniMode ? null :
+                this.renderAllSelection()
+            }
+          </div>
           {
             this.props.miniMode ? null :
-              this.renderAllSelection()
+              this.renderBottomBar()
           }
         </div>
-        {
-          this.props.miniMode ? null :
-            this.renderBottomBar()
-        }
       </div>
     );
   }
@@ -202,6 +204,7 @@ CascadeSubmenu.propTypes = {
   columnWidth: PropTypes.number,
   cascadeSize: PropTypes.number,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
+  className: PropTypes.string,
 };
 
 CascadeSubmenu.defaultProps = {
@@ -212,6 +215,7 @@ CascadeSubmenu.defaultProps = {
   miniMode: false,
   onOkButtonClick: () => { },
   size: 'large',
+  className: '',
 };
 
 CascadeSubmenu.displayName = 'CascadeSubmenu';

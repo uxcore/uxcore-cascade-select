@@ -546,6 +546,7 @@ class CascadeSelect extends SuperComponent {
           columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
           size={this.props.size}
           loading={loading}
+          className={this.prefixCls('submenu-warpper')}
         />
       );
     }
