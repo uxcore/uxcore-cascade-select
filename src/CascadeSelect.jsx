@@ -18,7 +18,7 @@ import Search from './Search';
 
 import { find, getArrayLeafItemContains, deepCopy, getOptions } from './util';
 
-const noop = function noop() {};
+const noop = function noop() { };
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
@@ -144,7 +144,7 @@ class CascadeSelect extends SuperComponent {
     let prevSelected = null;
     const recursive = (i = 0) => {
       const len = theValue.length;
-      if (len === 0) { 
+      if (len === 0) {
         callback.call(this, selectedOptions);
         return;
       }
@@ -517,36 +517,38 @@ class CascadeSelect extends SuperComponent {
       submenu = this.renderSearchResult();
     } else if (options.length && !disabled) {
       submenu = (
-        <CascadeSubmenu
-          prefixCls={prefixCls}
-          onItemClick={this.onSubmenuItemClick}
-          options={options}
-          value={value}
-          expandTrigger={expandTrigger}
-          cascadeSize={cascadeSize}
-          locale={this.locale}
-          miniMode={this.props.miniMode}
-          onOkButtonClick={() => {
-            this.wrapper.click();
-            const newValue = this.newValue;
-            const newSelectedOptions = this.newSelectedOptions;
-            if (newValue && newSelectedOptions) {
-              this.setState({
-                value: newValue,
-                displayValue: newValue,
-                selectedOptions: newSelectedOptions,
-                inputValue: null,
-              }, () => {
-                delete this.newValue;
-                delete this.newSelectedOptions;
-                this.onValueChange(newValue, newSelectedOptions);
-              });
-            }
-          }}
-          columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
-          size={this.props.size}
-          loading={loading}
-        />
+        <div className={this.prefixCls('submenu-wrapper')}>
+          <CascadeSubmenu
+            prefixCls={prefixCls}
+            onItemClick={this.onSubmenuItemClick}
+            options={options}
+            value={value}
+            expandTrigger={expandTrigger}
+            cascadeSize={cascadeSize}
+            locale={this.locale}
+            miniMode={this.props.miniMode}
+            onOkButtonClick={() => {
+              this.wrapper.click();
+              const newValue = this.newValue;
+              const newSelectedOptions = this.newSelectedOptions;
+              if (newValue && newSelectedOptions) {
+                this.setState({
+                  value: newValue,
+                  displayValue: newValue,
+                  selectedOptions: newSelectedOptions,
+                  inputValue: null,
+                }, () => {
+                  delete this.newValue;
+                  delete this.newSelectedOptions;
+                  this.onValueChange(newValue, newSelectedOptions);
+                });
+              }
+            }}
+            columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
+            size={this.props.size}
+            loading={loading}
+          />
+        </div>
       );
     }
     return (
