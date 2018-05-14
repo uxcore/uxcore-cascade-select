@@ -1,5 +1,13 @@
 # history
 
+## 0.6.0
+
+* `FIXED`: modified disabled style priority.
+
+## 0.5.8
+
+* `FIXED`: revert to 0.5.6
+
 ## 0.5.7
 
 * `FIXED`: modified disabled style priority.
