@@ -1,5 +1,9 @@
 # history
 
+## 0.5.7
+
+* `FIXED`: modified disabled style priority.
+
 ## 0.5.6
 
 * `FIXED`: could not clear display-value from outside.
