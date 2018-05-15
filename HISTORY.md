@@ -7,6 +7,7 @@
 ## 0.6.0
 
 * `FIXED`: modified disabled style priority.
+* `CHANGED`: updated dropdown dom structure and style.
 
 ## 0.5.8
 
