@@ -1,5 +1,9 @@
 # history
 
+## 0.6.2
+
+* `FIXED`: get selectedOptions error
+
 ## 0.6.1
 
 * `FIXED`: fixed selectedOptions[0].hasOwnProperty error
