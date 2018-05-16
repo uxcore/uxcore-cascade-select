@@ -205,7 +205,7 @@ class CascadeSelect extends SuperComponent {
     } else if (theValue && theValue.length === 1) {
       selectedOptions = getArrayLeafItemContains(options, theValue);
     }
-    return `selectedOptions`;
+    return selectedOptions;
   }
 
   onSubmenuItemClick = (key, index, selectedOption, hasChildren) => {
