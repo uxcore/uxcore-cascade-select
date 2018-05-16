@@ -1,5 +1,9 @@
 # history
 
+## 0.6.3
+
+* `FIXED`: Could not occur onChange by clicking clear button when props.isMustSelectLeaf is true.
+
 ## 0.6.2
 
 * `FIXED`: get selectedOptions error

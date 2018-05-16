@@ -164,7 +164,9 @@ class Demo extends React.Component {
           options={options}
           clearable
           displayMode="search"
-          onChange={(value, selected) => { }}
+          onChange={(value, selected) => {
+            console.log(value);
+          }}
           columnWidth={150}
           miniMode={false}
           searchOption={{
@@ -185,6 +187,7 @@ class Demo extends React.Component {
               ]);
             },
           }}
+          isMustSelectLeaf
         />
 
         <h2>默认的</h2>

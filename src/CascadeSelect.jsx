@@ -264,9 +264,12 @@ class CascadeSelect extends SuperComponent {
     const { onChange, isMustSelectLeaf, cascadeSize } = this.props;
     if (onChange) {
       if (isMustSelectLeaf) {
-        if ((value && value.length >= cascadeSize) ||
-          (selectedOptions && selectedOptions[selectedOptions.length - 1] &&
-            !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children')
+        if ((value && (value.length >= cascadeSize || value.length === 0)) ||
+          (selectedOptions &&
+            (
+              (selectedOptions[selectedOptions.length - 1] && !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children')) ||
+              selectedOptions.length === 0
+            )
           )
         ) {
           onChange(value, selectedOptions);
