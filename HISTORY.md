@@ -1,5 +1,9 @@
 # history
 
+## 0.6.4
+
+* `FIXED`: placeholder color follow Select2 placeholder color.
+
 ## 0.6.3
 
 * `FIXED`: Could not occur onChange by clicking clear button when props.isMustSelectLeaf is true.
