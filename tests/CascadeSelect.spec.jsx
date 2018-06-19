@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import $ from 'jquery';
 import Enzyme from 'enzyme';
 import { render, findDOMNode, unmountComponentAtNode } from 'react-dom';
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 import CascadeSelect from '../src';
 import { deepCopy } from '../src/util';
 import { options, asyncOptions } from './options';

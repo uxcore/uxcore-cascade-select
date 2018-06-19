@@ -51,18 +51,33 @@ class CascadeSelect extends SuperComponent {
   componentDidMount() {
     this.setValue(this.props);
   }
-
-  componentWillReceiveProps(nextProps) {
-    const { options, value } = nextProps;
+  componentDidUpdate(nextProps) {
+    const { value, options } = nextProps;
+    if (
+      (value && deepCopy(value) !== deepCopy(this.props.value)) ||
+      options !== this.props.options
+    ) {
+      this.setValue(nextProps);
+    }
+  }
+  getDerivedStateFromProps(nextProps) {
+    const { options } = nextProps;
     if (options !== this.props.options) {
       this.options = options;
       this.loadedOptions = {};
     }
-    if ((value && deepCopy(value) !== deepCopy(this.props.value)) ||
-      (options !== this.props.options)) {
-      this.setValue(nextProps);
-    }
   }
+  // componentWillReceiveProps(nextProps) {
+  //   const { options, value } = nextProps;
+  //   if (options !== this.props.options) {
+  //     this.options = options;
+  //     this.loadedOptions = {};
+  //   }
+  //   if ((value && deepCopy(value) !== deepCopy(this.props.value)) ||
+  //     (options !== this.props.options)) {
+  //     this.setValue(nextProps);
+  //   }
+  // }
 
   saveRef(refName) {
     const me = this;
