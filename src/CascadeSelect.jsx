@@ -16,24 +16,21 @@ import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 import Search from './Search';
 
-import { find, getArrayLeafItemContains, deepCopy, getOptions } from './util';
+import { find, getArrayLeafItemContains, deepCopy, getOptions, stringify } from './util';
 
 const noop = function noop() {};
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
-    // const { options } = props;
-    // this.options = options.slice();
-    // this.loadedOptions = {};
     this.state = {
       displayValue: [],
-      // value: [],
       selectedOptions: [],
       showSubMenu: false,
       loading: {},
       searchResult: [],
       inputValue: null,
       options: props.options.slice(),
+      preOptions: props.options.slice(),
       value: props.value || [],
       preValue: props.value || [],
       loadedOptions: {},
@@ -56,73 +53,29 @@ class CascadeSelect extends SuperComponent {
     this.setValue(this.props);
   }
 
-  // componentDidUpdate(preProps) {
-  //   const { options, value } = preProps;
-  //   const { onSelect } = this.props;
-  //   if (
-  //     onSelect &&
-  //     ((value && deepCopy(value) !== deepCopy(this.props.value)) ||
-  //     (options !== this.props.options))
-  //   ) {
-  //     this.getAsyncSelectedOptions(this.props, (selectedOptions) => {
-  //       this.setMultiState(selectedOptions);
-  //     });
-  //   }
-  // }
-
-  // static shouldComponentUpdate(nextProps, nextState) {
-  //   const { onSelect } = this.nextProps;
-  //   const { options, value} = this.nextState
-  // }
+  componentDidUpdate(preProps) {
+    const { options, value } = preProps;
+    const { onSelect } = this.props;
+    let judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(this.props.value));
+    let judgeOptions = stringify(options) !== stringify(this.props.options);
+    if (
+      onSelect && judgeValue || judgeOptions
+    ) {
+      this.setValue(this.props);
+    }
+  }
 
   static getDerivedStateFromProps(nextProps, preState) {
     const { options } = nextProps;
     let newState = null;
-    if (options !== preState.options) {
-      // this.options = options;
-      // this.state.loadedOptions = {};
+    if (stringify(options) !== stringify(preState.options)) {
       newState = {
         options,
         loadedOptions: {},
       };
-    }
-
-    if (((nextProps.value && deepCopy(nextProps.value) !== deepCopy(preState.value)) ||
-      (options !== preState.options)) && !nextProps.onSelect) {
-      const selectedOptions = CascadeSelect.getSelectedOptions(nextProps, preState);
-      let newValue;
-      if (selectedOptions && selectedOptions.length) {
-        newValue = selectedOptions.map(item => item.value);
-      }
-      if (newState === null) {
-        newState = {};
-      }
-      newState = {
-        displayValue: newValue || [],
-        value: newValue || [],
-        selectedOptions,
-        ...newState,
-      };
-    } else {
-      if (newState === null) {
-        newState = {};
-      }
-      newState = { ...newState, ...preState };
-    }
+    };
     return newState;
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { options, value } = nextProps;
-  //   if (options !== this.props.options) {
-  //     this.options = options;
-  //     this.loadedOptions = {};
-  //   }
-  //   if ((value && deepCopy(value) !== deepCopy(this.props.value)) ||
-  //     (options !== this.props.options)) {
-  //     this.setValue(nextProps);
-  //   }
-  // }
 
   saveRef(refName) {
     const me = this;
@@ -241,7 +194,6 @@ class CascadeSelect extends SuperComponent {
   }
 
   static getSelectedOptions(props, state) {
-    console.log("getSelectedOptions", props)
     let selectedOptions = [];
     const { value, defaultValue } = props;
     const { options } = state;
@@ -266,8 +218,6 @@ class CascadeSelect extends SuperComponent {
     } else if (theValue && theValue.length === 1) {
       selectedOptions = getArrayLeafItemContains(options, theValue);
     }
-    // debugger
-    console.log("selectedOptions", selectedOptions)
     return selectedOptions;
   }
 
@@ -276,9 +226,9 @@ class CascadeSelect extends SuperComponent {
     const { changeOnSelect, cascadeSize, miniMode, onSelect } = this.props;
     let { showSubMenu } = this.state;
     let hideSubmenu = false;
-    const newValue = value.slice(0, index);
+    let newValue = value.slice(0, index);
     newValue.push(key);
-    const newSelectedOptions = selectedOptions.slice(0, index);
+    let newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
 
     if (!miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
@@ -313,7 +263,6 @@ class CascadeSelect extends SuperComponent {
       }
       // 如果还没选完整,displayValue置空
       if (!(changeOnSelect || hideSubmenu || (newValue.length >= cascadeSize))) {
-        console.log("没选完整")
         displayValue = [];
       }
       this.setState({
@@ -321,7 +270,6 @@ class CascadeSelect extends SuperComponent {
         showSubMenu,
       });
     }
-    // debugger
   }
 
   onValueChange(value, selectedOptions) {
@@ -463,7 +411,6 @@ class CascadeSelect extends SuperComponent {
   }
 
   renderSelect() {
-    console.log('renderSelect', this.state.options);
     const { value, loading, options } = this.state;
     const { cascadeSize } = this.props;
     const back = [];
@@ -570,7 +517,6 @@ class CascadeSelect extends SuperComponent {
       displayMode,
     } = this.props;
     const { value, loading, options } = this.state;
-    debugger
     if (disabled) {
       return this.renderContent();
     }
