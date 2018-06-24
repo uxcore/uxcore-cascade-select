@@ -58,7 +58,6 @@ const getOptions = (options, value = [], level = 0) => {
   if (level === 0 && options) {
     return options;
   }
-  console.log("getOptions", options, value)
   if (value.length) {
     for (let i = 0, l = options.length; i < l; i++) {
       if (`${options[i].value}_` === `${value[0]}_` && options[i].children) {

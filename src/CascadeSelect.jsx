@@ -15,6 +15,7 @@ import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 import Search from './Search';
+import {polyfill} from 'react-lifecycles-compat';
 
 import { find, getArrayLeafItemContains, deepCopy, getOptions, stringify } from './util';
 
@@ -49,22 +50,6 @@ class CascadeSelect extends SuperComponent {
       function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
   }
 
-  componentDidMount() {
-    this.setValue(this.props);
-  }
-
-  componentDidUpdate(preProps) {
-    const { options, value } = preProps;
-    const { onSelect } = this.props;
-    let judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(this.props.value));
-    let judgeOptions = stringify(options) !== stringify(this.props.options);
-    if (
-      onSelect && judgeValue || judgeOptions
-    ) {
-      this.setValue(this.props);
-    }
-  }
-
   static getDerivedStateFromProps(nextProps, preState) {
     const { options } = nextProps;
     let newState = null;
@@ -73,9 +58,54 @@ class CascadeSelect extends SuperComponent {
         options,
         loadedOptions: {},
       };
-    };
+    }
     return newState;
   }
+
+  static getSelectedOptions(props, state) {
+    let selectedOptions = [];
+    const { value, defaultValue } = props;
+    const { options } = state;
+    const theValue = value || defaultValue;
+    if (theValue && theValue.length > 1) {
+      let renderArr = null;
+      let prevSelected = null;
+      for (let i = 0, l = theValue.length; i < l; i++) {
+        if (i === 0) {
+          renderArr = options;
+        } else {
+          renderArr = prevSelected && prevSelected.children;
+        }
+        prevSelected = find(renderArr, item => item.value === theValue[i]);
+        if (renderArr && prevSelected) {
+          selectedOptions[i] = prevSelected;
+        } else {
+          selectedOptions = [];
+          break;
+        }
+      }
+    } else if (theValue && theValue.length === 1) {
+      selectedOptions = getArrayLeafItemContains(options, theValue);
+    }
+    return selectedOptions;
+  }
+  
+  componentDidMount() {
+    this.setValue(this.props);
+  }
+
+  componentDidUpdate(preProps) {
+    const { options, value } = preProps;
+    const { onSelect } = this.props;
+    const judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(this.props.value));
+    const judgeOptions = stringify(options) !== stringify(this.props.options);
+    if (
+      onSelect && judgeValue || judgeOptions
+    ) {
+      this.setValue(this.props);
+    }
+  }
+
 
   saveRef(refName) {
     const me = this;
@@ -193,42 +223,14 @@ class CascadeSelect extends SuperComponent {
     recursive();
   }
 
-  static getSelectedOptions(props, state) {
-    let selectedOptions = [];
-    const { value, defaultValue } = props;
-    const { options } = state;
-    const theValue = value || defaultValue;
-    if (theValue && theValue.length > 1) {
-      let renderArr = null;
-      let prevSelected = null;
-      for (let i = 0, l = theValue.length; i < l; i++) {
-        if (i === 0) {
-          renderArr = options;
-        } else {
-          renderArr = prevSelected && prevSelected.children;
-        }
-        prevSelected = find(renderArr, item => item.value === theValue[i]);
-        if (renderArr && prevSelected) {
-          selectedOptions[i] = prevSelected;
-        } else {
-          selectedOptions = [];
-          break;
-        }
-      }
-    } else if (theValue && theValue.length === 1) {
-      selectedOptions = getArrayLeafItemContains(options, theValue);
-    }
-    return selectedOptions;
-  }
-
   onSubmenuItemClick = (key, index, selectedOption, hasChildren) => {
     const { value, selectedOptions } = this.state;
     const { changeOnSelect, cascadeSize, miniMode, onSelect } = this.props;
     let { showSubMenu } = this.state;
     let hideSubmenu = false;
-    let newValue = value.slice(0, index);
+    const newValue = value.slice(0, index);
     newValue.push(key);
-    let newSelectedOptions = selectedOptions.slice(0, index);
+    const newSelectedOptions = selectedOptions.slice(0, index);
     newSelectedOptions.push(selectedOption);
 
     if (!miniMode) { // 如果展示风格为复杂风格，则点击OK才进行onChange回调
@@ -631,5 +633,6 @@ CascadeSelect.propTypes = {
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
+polyfill(CascadeSelect);
 
 module.exports = CascadeSelect;
