@@ -15,7 +15,7 @@ import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 import Search from './Search';
-import {polyfill} from 'react-lifecycles-compat';
+import { polyfill } from 'react-lifecycles-compat';
 
 import { find, getArrayLeafItemContains, deepCopy, getOptions, stringify } from './util';
 
@@ -51,16 +51,32 @@ class CascadeSelect extends SuperComponent {
   }
 
   static getDerivedStateFromProps(nextProps, preState) {
-    const { options } = nextProps;
+    const { options, value, onSelect } = nextProps;
     let newState = null;
+    const judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(preState.value));
+    const judgeOptions = stringify(options) !== stringify(preState.options);
     if (stringify(options) !== stringify(preState.options)) {
       newState = {
         options,
         loadedOptions: {},
       };
     }
+    if (
+      (judgeValue || judgeOptions)
+    ) {
+      if (!onSelect) {
+        const selectedOptions = CascadeSelect.getSelectedOptions(nextProps, preState);
+        const state = CascadeSelect.returnMultiState(selectedOptions) || {};
+        if (newState) {
+          state.options = newState.options;
+          state.loadedOptions = newState.loadedOptions;
+          newState = state;
+        }
+      }
+    }
     return newState;
   }
+
 
   static getSelectedOptions(props, state) {
     let selectedOptions = [];
@@ -89,7 +105,7 @@ class CascadeSelect extends SuperComponent {
     }
     return selectedOptions;
   }
-  
+
   componentDidMount() {
     this.setValue(this.props);
   }
@@ -100,9 +116,11 @@ class CascadeSelect extends SuperComponent {
     const judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(this.props.value));
     const judgeOptions = stringify(options) !== stringify(this.props.options);
     if (
-      onSelect && judgeValue || judgeOptions
+      onSelect && (judgeValue || judgeOptions)
     ) {
-      this.setValue(this.props);
+      this.getAsyncSelectedOptions(this.props, (selectedOptions) => {
+        this.setMultiState(selectedOptions);
+      });
     }
   }
 
@@ -164,6 +182,18 @@ class CascadeSelect extends SuperComponent {
       value: value || [],
       selectedOptions,
     });
+  }
+
+  static returnMultiState(selectedOptions) {
+    let value;
+    if (selectedOptions && selectedOptions.length) {
+      value = selectedOptions.map(item => item.value);
+    }
+    return {
+      displayValue: value || [],
+      value: value || [],
+      selectedOptions,
+    };
   }
 
   setValue(props) {
