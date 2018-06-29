@@ -1,4 +1,6 @@
 # history
+## 0.6.5
+* `UPDATE`: upgrade react16
 
 ## 0.6.4
 

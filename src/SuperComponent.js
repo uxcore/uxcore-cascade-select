@@ -1,4 +1,6 @@
-const React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
+
 
 class SuperComponent extends React.Component {
   prefixCls(name) {
@@ -8,7 +10,7 @@ class SuperComponent extends React.Component {
 }
 
 SuperComponent.propTypes = {
-  prefixCls: React.PropTypes.string,
+  prefixCls: PropTypes.string,
 };
 
 export default SuperComponent;

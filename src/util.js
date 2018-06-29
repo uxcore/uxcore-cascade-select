@@ -60,17 +60,20 @@ const getOptions = (options, value = [], level = 0) => {
   }
   if (value.length) {
     for (let i = 0, l = options.length; i < l; i++) {
-      if (`${options[i].value}_` === `${value[0]}_`) {
+      if (`${options[i].value}_` === `${value[0]}_` && options[i].children) {
         return getOptions(options[i].children, value.slice(1), level - 1);
       }
     }
-  }
+  } 
   return [];
 };
+
+const stringify = (val) => JSON.stringify(val);
 
 export default {
   find,
   getArrayLeafItemContains,
   deepCopy,
   getOptions,
+  stringify,
 };
