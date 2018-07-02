@@ -1,8 +1,13 @@
 # history
 
+## 0.7.1
+
+* `CHANGED` update `uxcore-dropdown` to `^0.5.0`
+* `CHANGED` update `uxcore-select2` to `^0.5.0`
+
 ## 0.7.0
 
-* `UPDATE`: upgrade react16
+* `CHANGED`: upgrade react16
 
 ## 0.6.4
 
@@ -39,7 +44,7 @@
 
 ## 0.5.5
 
-* `UPDATE`: optimized visual display
+* `CHANGED`: optimized visual display
 
 ## 0.5.4
 
@@ -69,7 +74,7 @@
 
 ## 0.4.0
 
-* `UPDATE`: react 15
+* `CHANGED`: react 15
 
 ## 0.3.5
 
