@@ -529,9 +529,8 @@ class CascadeSelect extends SuperComponent {
   getDomWidth(dom) {
     if (dom) {
       return parseFloat(getComputedStyle(dom).width);
-    } else {
-      return 0;
     }
+    return 0;
   }
 
   render() {

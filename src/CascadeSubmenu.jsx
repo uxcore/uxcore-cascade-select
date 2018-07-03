@@ -51,8 +51,23 @@ class CascadeSubmenu extends SuperComponent {
       if (item.value === key) {
         if (groupIndex === 0) {
           this.displayData = [item.label];
+          if (item.description) {
+            this.descArr = [item.description];
+          } else if (this.descArr) {
+            this.descArr = [];
+          }
         } else {
           this.displayData[groupIndex] = item.label;
+          if (item.description) {
+            if (!this.descArr) {
+              this.descArr = [];
+            }
+            this.descArr[groupIndex] = item.description;
+          } else {
+            if (this.descArr) {
+              this.descArr[groupIndex] = null;
+            }
+          }
         }
       }
 
@@ -82,7 +97,7 @@ class CascadeSubmenu extends SuperComponent {
     if (!miniMode) {
       columnSize = cascadeSize + 1;
     }
-    let unitWidth = `${(100 / columnSize).toFixed(1)}%`;
+    const unitWidth = `${(100 / columnSize).toFixed(1)}%`;
     const firstStyle = {};
     if (value && value.length > 0) {
       firstStyle.width = unitWidth;
@@ -106,7 +121,7 @@ class CascadeSubmenu extends SuperComponent {
       if (value && value.length > index + 1) {
         style.width = unitWidth;
       } else {
-        style.width = `${((cascadeSize - value.length)/columnSize * 100).toFixed(1)}%`;
+        style.width = `${((cascadeSize - value.length) / columnSize * 100).toFixed(1)}%`;
       }
       const parent = find(prevSelected || options, item => item.value === key);
       const renderArr = parent && parent.children;
@@ -141,6 +156,20 @@ class CascadeSubmenu extends SuperComponent {
         </Button>
       </div>
     );
+  }
+
+  renderItemDescription() {
+    // options[].description 存在则渲染
+    if (this.descArr && this.props.value && this.props.value.length) {
+      const label = this.displayData[this.displayData.length - 1];
+      const desc = this.descArr[this.descArr.length - 1];
+      return (
+        <div className={this.prefixCls('item-description-wrap')}>
+          {label}: {desc || i18n[this.props.locale].noDesc}
+        </div>
+      );
+    }
+    return null;
   }
 
   renderAllSelection() {
@@ -178,12 +207,15 @@ class CascadeSubmenu extends SuperComponent {
         <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
           <div className={this.prefixCls('submenu-wrap')}>
             {this.renderSubmenus()}
-
             {
               this.props.miniMode ? null :
                 this.renderAllSelection()
             }
           </div>
+          {
+            this.props.miniMode ? null :
+              this.renderItemDescription()
+          }
           {
             this.props.miniMode ? null :
               this.renderBottomBar()

@@ -1,5 +1,9 @@
 # history
 
+## 0.7.2
+
+* `Add` add description display feature
+
 ## 0.7.1
 
 * `CHANGED` update `uxcore-dropdown` to `^0.5.0`

@@ -1,12 +1,14 @@
 export const options = [{
   value: 'alibaba',
   label: '阿里巴巴',
+  description: '阿里巴巴中国有限公司',
   children: [{
     value: 'platform',
     label: '信息平台',
     children: [{
       value: 'fe',
       label: '前端开发',
+      description: '一种技术',
     }, {
       value: 'test',
       label: '测试',

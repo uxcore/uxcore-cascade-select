@@ -326,4 +326,19 @@ describe('CascadeSelect', () => {
       expect(wrapper.find('input').getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
     }, 200);
   });
+
+  it('should display item description', () => {
+    const wrapper = mount(
+      <CascadeSelect
+        defaultValue={['fe']}
+        options={options}
+        miniMode={false}
+        cascadeSize={3}
+      />
+    );
+    const dropdownWrapper = wrapper.find('Trigger');
+    const overlay = mount(dropdownWrapper.props().overlay);
+    expect($(overlay.getDOMNode())
+      .find('.kuma-cascader-item-description-wrap').html()).to.equal('前端开发: 一种技术');
+  });
 });

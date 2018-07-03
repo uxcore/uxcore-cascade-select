@@ -26,6 +26,7 @@ const options = [{
 }, {
   value: 'alibaba',
   label: '阿里巴巴',
+  description: '阿里巴巴中国有限公司',
   children: [{
     value: 'platform',
     label: '信息平台',
@@ -157,7 +158,7 @@ class Demo extends React.Component {
 
   render() {
     return (
-      <div className="demo-wrap">
+      <div className="demo-wrap" style={{ width: "300px" }}>
         <h2>search</h2>
         <CascadeSelect
           value={this.state.xValue}
@@ -263,7 +264,7 @@ class Demo extends React.Component {
         />
         <h2>Clearable</h2>
         <CascadeSelect
-          defaultValue={['alibaba', 'platform', 'fe']}
+          defaultValue={['fe']}
           options={options}
           clearable
           onChange={(value, selected) => {
@@ -272,8 +273,14 @@ class Demo extends React.Component {
           locale={'en_US'}
           miniMode={false}
           cascadeSize={3}
-          size="small"
-          displayMode="dropdown"
+          columnWidth={150}
+        />
+        <CascadeSelect
+          defaultValue={['fe']}
+          options={options}
+          miniMode={false}
+          cascadeSize={3}
+          displayMode="search"
         />
         <h2>禁用的</h2>
         <CascadeSelect
