@@ -29,3 +29,4 @@ build
 assets/**/*.css
 .vscodecoverage
 package-lock.json
+coverage
