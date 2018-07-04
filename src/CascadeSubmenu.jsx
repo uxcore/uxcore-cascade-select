@@ -163,11 +163,13 @@ class CascadeSubmenu extends SuperComponent {
     if (this.descArr && this.props.value && this.props.value.length) {
       const label = this.displayData[this.displayData.length - 1];
       const desc = this.descArr[this.descArr.length - 1];
-      return (
-        <div className={this.prefixCls('item-description-wrap')}>
-          {label}: {desc || i18n[this.props.locale].noDesc}
-        </div>
-      );
+      if (desc) {
+        return (
+          <div className={this.prefixCls('item-description-wrap')}>
+            {label}: {desc || i18n[this.props.locale].noDesc}
+          </div>
+        );
+      }
     }
     return null;
   }
