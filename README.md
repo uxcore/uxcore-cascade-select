@@ -101,7 +101,9 @@ render(<CascadeSelect />, document.getElementById('root'))
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small` 
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
 | onSelect | function | false | null | 异步加载层级，需要 return 一个数组，具体用法参考下方 demo
-| searchOption | function | false | null | 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
+| searchOption | function | false | null | `(已废弃)` 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
+| showSearch | function | false | false | 是否开启搜索模式
+| onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options
 
 ## Demos
 
@@ -179,4 +181,20 @@ const options = [{
     Fetch('/search?keyword=' + keyword).then(result => afterSearch(result))
   }
 }
+```
+
+### props.onSearch
+
+```javascript
+<CascadeSelect
+  options={this.state.options}
+  showSearch={true}
+  onSearch={(keyword) => {
+    // keyword 为搜索的关键词
+    Fetch('/search?keyword=' + keyword).then(result => {
+      // options 必须遵循 props.options 规范
+      this.setState({ options: result });
+    })
+  }}
+/>
 ```

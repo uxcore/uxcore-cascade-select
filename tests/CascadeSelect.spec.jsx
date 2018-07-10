@@ -26,6 +26,30 @@ const optionsGenerator = (key, level) => {
 
 function noop() { }
 
+class ShowSearchWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      options,
+    };
+  }
+
+  render() {
+    return (
+      <CascadeSelect
+        options={this.state.options}
+        showSearch
+        miniMode={false}
+        onSearch={(keywords) => {
+          setTimeout(() => {
+            this.setState({ options: asyncOptions });
+          }, 200);
+        }}
+      />
+    );
+  }
+}
+
 describe('CascadeSelect', () => {
   let instance;
   let div;
@@ -228,7 +252,7 @@ describe('CascadeSelect', () => {
     expect(onChange.calledOnce).to.equal(true);
   });
 
-  it('displayMode is search, dropdown will display search result.', () => {
+  it('displayMode is search, dropdown will display search result.', (done) => {
     const onChange = sinon.spy(noop);
     const wrapper = mount(
       <CascadeSelect
@@ -237,6 +261,7 @@ describe('CascadeSelect', () => {
         locale={'en_US'}
         miniMode={false}
         displayMode="search"
+        isMustSelectLeaf
         searchOption={{
           doSearch(keyword, afterSearch) {
             afterSearch([
@@ -257,20 +282,18 @@ describe('CascadeSelect', () => {
         }}
       />
     );
-    const dropdownWrapper = wrapper.find('Trigger');
-    const overlay = mount(dropdownWrapper.props().overlay);
-    const input = wrapper.find('input').getDOMNode();
-    input.value = 'test';
+    const input = wrapper.find('input');
+    input.simulate('focus');
+    input.simulate('change', { target: { value: 'My new value' } });
     setTimeout(() => {
-      const li = overlay.find('li').at(1);
-      expect(li.text()).to.equal('前端开发');
-      // overlay.find('li').at(1).simulate('click');
-      // overlay.find('button').at(0).simulate('click');
-      // expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
-    }, 200);
+      expect(wrapper.find('li').at(1).text()).to.equal('前端开发');
+      wrapper.find('li').at(1).simulate('click');
+      expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+      done();
+    }, 400);
   });
 
-  it('displayMode is search, click search result will get the real text.', () => {
+  it('displayMode is search, click search result will get the real text.', (done) => {
     const onChange = sinon.spy(noop);
     const wrapper = mount(
       <CascadeSelect
@@ -299,21 +322,18 @@ describe('CascadeSelect', () => {
         }}
       />
     );
-    const dropdownWrapper = wrapper.find('Trigger');
-    const overlay = mount(dropdownWrapper.props().overlay);
-    const input = wrapper.find('input').getDOMNode();
-    input.value = 'test';
+    wrapper.find('input').simulate('change', { target: { value: 'My new value' } });
     setTimeout(() => {
-      const li = overlay.find('li').at(1);
+      const li = wrapper.find('li').at(1);
       li.simulate('click');
       setTimeout(() => {
-        overlay.find('button').at(0).simulate('click');
-        expect(input.getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+        expect(wrapper.find('input').getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+        done();
       }, 200);
     }, 200);
   });
 
-  it('pass value before options', () => {
+  it('pass value before options', (done) => {
     const wrapper = mount(
       <CascadeSelect
         value={['fe']}
@@ -323,7 +343,22 @@ describe('CascadeSelect', () => {
     );
     wrapper.setProps({ options });
     setTimeout(() => {
-      expect(wrapper.find('input').getDOMNode().value).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+      expect(
+        wrapper.find('.kuma-cascader-trigger').text()
+      ).to.equal('阿里巴巴 / 信息平台 / 前端开发');
+      done();
+    }, 200);
+  });
+
+  it('should display the options of searching result ', (done) => {
+    const wrapper = mount(
+      <ShowSearchWrapper />
+    );
+    wrapper.find('input').simulate('change', { target: { value: 'My new value' } });
+    setTimeout(() => {
+      wrapper.update();
+      expect(wrapper.find('li').at(0).text()).to.equal('0');
+      done();
     }, 200);
   });
 

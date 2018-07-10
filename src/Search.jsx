@@ -9,6 +9,8 @@ const Search = ({
   value,
   onValueChange,
   onSearchResultChange,
+  onInputFocus,
+  onInputBlur,
 }) => (
   <input
     type="text"
@@ -32,6 +34,8 @@ const Search = ({
         });
       }
     }}
+    onFocus={onInputFocus}
+    onBlur={onInputBlur}
   />
 );
 
@@ -43,6 +47,8 @@ Search.propTypes = {
   searchOption: PropTypes.object,
   onSearchResultChange: PropTypes.func,
   onValueChange: PropTypes.func,
+  onInputFocus: PropTypes.func,
+  onInputBlur: PropTypes.func,
 };
 
 Search.renderResult = (result, onSelect) => (

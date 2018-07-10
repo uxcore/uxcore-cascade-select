@@ -118,6 +118,29 @@ const optionsGenerator = (key, level) => {
   return childrenOptions;
 };
 
+class ShowSearchWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      options,
+    };
+  }
+
+  render() {
+    return (
+      <CascadeSelect
+        options={this.state.options}
+        showSearch
+        onSearch={(keywords) => {
+          setTimeout(() => {
+            this.setState({ options: asyncOptions });
+          }, 200);
+        }}
+      />
+    );
+  }
+}
+
 class Demo extends React.Component {
 
   constructor(props) {
@@ -128,6 +151,8 @@ class Demo extends React.Component {
       firstValue: ['zhonghuamen'],
       asyncValue: ['nanjinglu'],
       asyncOptions: [],
+      options,
+      xxOptions: undefined,
     };
   }
 
@@ -161,18 +186,25 @@ class Demo extends React.Component {
   render() {
     return (
       <div className="demo-wrap" style={{ width: "300px" }}>
-        <h2>search</h2>
+        <h2>no default options</h2>
         <CascadeSelect
-          value={this.state.xValue}
-          options={options}
-          clearable
-          displayMode="search"
-          onChange={(value, selected) => {
-            console.log(value);
-          }}
-          columnWidth={150}
+          value={['fe']}
+          locale={'en_US'}
           miniMode={false}
-          dropdownClassName="my-custom"
+          options={this.state.xxOptions}
+        />
+        <button
+          onClick={() => {
+            this.setState({ xxOptions: options });
+          }}
+        >设置</button>
+
+        <h2>searchOptions</h2>
+        <CascadeSelect
+          options={options}
+          locale={'en_US'}
+          miniMode={false}
+          displayMode="search"
           searchOption={{
             doSearch(keyword, afterSearch) {
               afterSearch([
@@ -181,8 +213,8 @@ class Demo extends React.Component {
                   value: 'ID_TEST1',
                 },
                 {
-                  label: '短信服务',
-                  value: 2815,
+                  label: '前端开发',
+                  value: 'fe',
                 },
                 {
                   label: 'test3 test3 test3 test3 test3 test3 test3 test3 test3 test3',
@@ -191,7 +223,55 @@ class Demo extends React.Component {
               ]);
             },
           }}
+        />
+
+        <h2>showSearch</h2>
+
+        <ShowSearchWrapper />
+
+        <CascadeSelect
+          value={this.state.xValue}
+          options={this.state.options}
+          clearable
+          showSearch
+          onChange={(value, selected) => {
+            console.log(value);
+          }}
+          columnWidth={150}
+          miniMode={false}
+          dropdownClassName="my-custom"
           isMustSelectLeaf
+          onSearch={(keywords) => {
+            setTimeout(() => {
+              this.setState({
+                options: [
+                  {
+                    value: 'zhejiang',
+                    label: '浙江',
+                    children: [{
+                      value: 'hangzhou',
+                      label: '杭州',
+                      children: [{
+                        value: 'xihu',
+                        label: '西湖',
+                      }],
+                    }],
+                  }, {
+                    value: 'jiangsu',
+                    label: '江苏',
+                    children: [{
+                      value: 'nanjing',
+                      label: '南京',
+                      children: [{
+                        value: 'zhonghuamen',
+                        label: '中华门',
+                      }],
+                    }],
+                  },
+                ],
+              });
+            });
+          }}
         />
 
         <h2>默认的</h2>
@@ -334,9 +414,14 @@ class Demo extends React.Component {
         >
           设置底层叶子节点
         </button>
+
       </div>
     );
   }
 }
 
 module.exports = Demo;
+
+
+
+

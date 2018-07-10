@@ -65,7 +65,12 @@ class CascadeSelect extends SuperComponent {
       (judgeValue || judgeOptions)
     ) {
       if (!onSelect) {
-        const selectedOptions = CascadeSelect.getSelectedOptions(nextProps, preState);
+        let theOptions = preState.options;
+        if (newState) {
+          theOptions = newState.options;
+        }
+        const selectedOptions =
+          CascadeSelect.getSelectedOptions(nextProps, { options: theOptions });
         const state = CascadeSelect.returnMultiState(selectedOptions) || {};
         if (newState) {
           state.options = newState.options;
@@ -347,6 +352,8 @@ class CascadeSelect extends SuperComponent {
       className,
       disabled,
       clearable,
+      showSearch,
+      onSearch,
     } = this.props;
 
     const { selectedOptions, showSubMenu, displayValue } = this.state;
@@ -376,7 +383,7 @@ class CascadeSelect extends SuperComponent {
       </div>
     );
 
-    if (this.props.displayMode === 'search') {
+    if (this.props.displayMode === 'search' || this.props.showSearch) { // TODO: remove this.props.displayMode === 'search'
       cpnt = (
         <Search
           value={this.state.inputValue}
@@ -384,8 +391,13 @@ class CascadeSelect extends SuperComponent {
           disabled={disabled}
           placeholder={placeholder}
           searchOption={this.props.searchOption}
+          showSearch={showSearch}
+          onSearch={onSearch}
           onValueChange={(inputValue) => {
-            this.setState({ inputValue });
+            this.setState({ inputValue, showSubMenu: true });
+            if (this.props.onSearch) {
+              this.props.onSearch(inputValue);
+            }
           }}
           onSearchResultChange={(searchResult) => {
             this.setState({ searchResult, showSubMenu: true });
@@ -640,6 +652,8 @@ CascadeSelect.defaultProps = {
   size: 'large',
   isMustSelectLeaf: false,
   dropdownClassName: '',
+  showSearch: false,
+  onSearch: null,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -664,6 +678,8 @@ CascadeSelect.propTypes = {
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   isMustSelectLeaf: PropTypes.bool,
   dropdownClassName: PropTypes.string,
+  showSearch: PropTypes.bool,
+  onSearch: PropTypes.func,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

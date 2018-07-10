@@ -200,9 +200,6 @@ class CascadeSubmenu extends SuperComponent {
     const wrapStyle = {};
     if (this.props.columnWidth) {
       wrapStyle.width = this.props.columnWidth * this.props.cascadeSize;
-      // if (!this.props.miniMode) {
-      //   wrapStyle.width = this.props.columnWidth * (this.props.cascadeSize + 1);
-      // }
     }
     return (
       <div className={this.props.className}>

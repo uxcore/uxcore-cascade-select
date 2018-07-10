@@ -2,7 +2,8 @@
 
 ## 0.7.3
 
-* `Add` add dropdownClassName prop
+* `Add` add 'dropdownClassName' prop
+* `Add` add 'showSearch' and 'onSearch' prop
 
 ## 0.7.2
 
