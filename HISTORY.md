@@ -1,5 +1,9 @@
 # history
 
+## 0.7.3
+
+* `Add` add dropdownClassName prop
+
 ## 0.7.2
 
 * `Add` add description display feature

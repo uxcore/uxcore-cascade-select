@@ -99,7 +99,6 @@ render(<CascadeSelect />, document.getElementById('root'))
 | displayMode | string | false | `dropdown` | `select` 或者 `dropdown` 或者 `search`
 | getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small` 
-| showSearch | boolean | false | 是否展示每一列的过滤 input 框
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
 | onSelect | function | false | null | 异步加载层级，需要 return 一个数组，具体用法参考下方 demo
 | searchOption | function | false | null | 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
