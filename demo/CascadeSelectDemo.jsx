@@ -9,6 +9,8 @@
 const React = require('react');
 const CascadeSelect = require('../src');
 
+const options2 = [{ "value": "1", "code": "A50", "label": "[测试] 阿里巴巴(中国)有限公司", "children": [{ "value": "1-1", "code": "A50-1", "label": "[测试]信息平台事业部" }] }, { "value": "2", "code": "A51", "label": "[测试] 蚂蚁金服有限公司", "children": [{ "value": "2-1", "code": "A51-1", "label": "[测试]花呗事业部" }] }];  // eslint-disable-line
+
 const options = [{
   value: 100224,
   label: 'IS',
@@ -170,6 +172,7 @@ class Demo extends React.Component {
           }}
           columnWidth={150}
           miniMode={false}
+          dropdownClassName="my-custom"
           searchOption={{
             doSearch(keyword, afterSearch) {
               afterSearch([
@@ -193,10 +196,9 @@ class Demo extends React.Component {
 
         <h2>默认的</h2>
         <CascadeSelect
-          options={options}
-          onChange={(...args) => {
-            console.log(...args);
-          }}
+          options={options2}
+          cascadeSize={2}
+          isMustSelectLeaf={false}
         />
 
         <h2>异步 <small>value先有，options 异步加载，常用于数据回填</small></h2>

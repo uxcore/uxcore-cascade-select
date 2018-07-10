@@ -546,6 +546,7 @@ class CascadeSelect extends SuperComponent {
       getPopupContainer,
       columnWidth,
       displayMode,
+      dropdownClassName,
     } = this.props;
     const { value, loading, options } = this.state;
     if (disabled) {
@@ -587,10 +588,12 @@ class CascadeSelect extends SuperComponent {
               });
             }
           }}
-          columnWidth={this.props.columnWidth || this.getDomWidth(this.wrapper) / this.props.cascadeSize}
+          columnWidth={
+            this.props.columnWidth || (this.getDomWidth(this.wrapper) / this.props.cascadeSize)
+          }
           size={this.props.size}
           loading={loading}
-          className={this.prefixCls('submenu-warpper')}
+          className={`${this.prefixCls('submenu-warpper')} ${dropdownClassName}`}
         />
       );
     }
@@ -636,6 +639,7 @@ CascadeSelect.defaultProps = {
   getSelectPlaceholder: null,
   size: 'large',
   isMustSelectLeaf: false,
+  dropdownClassName: '',
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -659,6 +663,7 @@ CascadeSelect.propTypes = {
   getSelectPlaceholder: PropTypes.func,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   isMustSelectLeaf: PropTypes.bool,
+  dropdownClassName: PropTypes.string,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
