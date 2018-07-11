@@ -100,6 +100,18 @@ const asyncOptions = [
   {
     value: '0',
     label: '0',
+    children: [
+      {
+        value: '0-1',
+        label: '0-1',
+        children: [
+          {
+            value: '0-2',
+            label: '0-2',
+          },
+        ],
+      },
+    ],
   },
   {
     value: '1',

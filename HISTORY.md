@@ -1,9 +1,13 @@
 # history
 
+## 0.7.4
+
+* `FIX` The selected text could not be displayed in the input when showSearch is true.
+
 ## 0.7.3
 
-* `Add` add 'dropdownClassName' prop
-* `Add` add 'showSearch' and 'onSearch' prop
+* `ADD` add 'dropdownClassName' prop
+* `ADD` add 'showSearch' and 'onSearch' prop
 
 ## 0.7.2
 

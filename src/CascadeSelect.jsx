@@ -282,6 +282,7 @@ class CascadeSelect extends SuperComponent {
     this.setState({
       value: newValue,
       selectedOptions: newSelectedOptions,
+      inputValue: null,
     });
     if (onSelect && (!hasChildren && (index + 1) < cascadeSize)) {
       if (!changeOnSelect) {
