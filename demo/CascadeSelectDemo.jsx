@@ -202,15 +202,15 @@ class Demo extends React.Component {
         <CascadeSelect
           value={['fe']}
           locale={'en_US'}
-          miniMode={false}
           options={this.state.xxOptions}
+          changeOnSelect
         />
         <button
           onClick={() => {
             this.setState({ xxOptions: options });
           }}
         >设置</button>
-
+        
         <h2>searchOptions</h2>
         <CascadeSelect
           options={options}
@@ -426,14 +426,9 @@ class Demo extends React.Component {
         >
           设置底层叶子节点
         </button>
-
       </div>
     );
   }
 }
 
 module.exports = Demo;
-
-
-
-

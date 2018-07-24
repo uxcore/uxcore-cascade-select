@@ -1,5 +1,9 @@
 # history
 
+## 0.7.5
+
+* `ADD` Display value when options not found.
+
 ## 0.7.4
 
 * `FIX` The selected text could not be displayed in the input when showSearch is true.

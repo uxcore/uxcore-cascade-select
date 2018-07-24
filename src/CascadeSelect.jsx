@@ -178,9 +178,13 @@ class CascadeSelect extends SuperComponent {
   }
 
   setMultiState(selectedOptions) {
+    const { value: propValue } = this.props;
     let value;
     if (selectedOptions && selectedOptions.length) {
       value = selectedOptions.map(item => item.value);
+    }
+    if (propValue && propValue.length && selectedOptions.length === 0) {
+      value = propValue;
     }
     this.setState({
       displayValue: value || [],
@@ -374,17 +378,17 @@ class CascadeSelect extends SuperComponent {
         title={displayText}
       >
         {
-          placeholder && !displayValue.length ?
+          placeholder && !displayText ?
             <div className={this.prefixCls('placeholder')}>
               {placeholder}
             </div> :
-            null
+            displayText
         }
-        {displayText}
       </div>
     );
 
-    if (this.props.displayMode === 'search' || this.props.showSearch) { // TODO: remove this.props.displayMode === 'search'
+    // TODO: remove this.props.displayMode === 'search'
+    if (this.props.displayMode === 'search' || this.props.showSearch) { 
       cpnt = (
         <Search
           value={this.state.inputValue}
