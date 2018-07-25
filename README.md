@@ -81,7 +81,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | prefixCls | string | false | `'kuma-cascader'` | 默认的类名前缀 |
 | className | string | false | `''` | 自定义类名 |
 | options | array | false | `[]` | 选项数据源，格式可见下方Demo |
-| value | array | false | `null` | 可由外部控制的值 |
+| value | array | false | `[]` | 可由外部控制的值 |
 | defaultValue | array | false | `[]` | 初始默认值 |
 | dropdownClassName | string | `''` | dropdown 容器的自定义样式 | 
 | placeholder | string | false | `'Please Select'` or `'请选择'` | placeholder |

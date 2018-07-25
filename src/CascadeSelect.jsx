@@ -32,7 +32,7 @@ class CascadeSelect extends SuperComponent {
       inputValue: null,
       options: props.options.slice(),
       preOptions: props.options.slice(),
-      value: props.value || [],
+      value: props.value || props.defaultValue || [],
       preValue: props.value || [],
       loadedOptions: {},
     };
@@ -51,41 +51,47 @@ class CascadeSelect extends SuperComponent {
   }
 
   static getDerivedStateFromProps(nextProps, preState) {
-    const { options, value, onSelect } = nextProps;
-    let newState = null;
-    const judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(preState.value));
-    const judgeOptions = stringify(options) !== stringify(preState.options);
-    if (stringify(options) !== stringify(preState.options)) {
-      newState = {
-        options,
-        loadedOptions: {},
-      };
+    const { onSelect } = nextProps;
+    let { options, value } = nextProps;
+    if (!options) {
+      options = [];
     }
-    if (
-      (judgeValue || judgeOptions)
-    ) {
+    if (!value) {
+      value = [];
+    }
+    let newState = {};
+    const judgeValue = stringify(value) !== stringify(preState.preValue);
+    const judgeOptions = stringify(options) !== stringify(preState.preOptions);
+    if (judgeOptions) {
+      newState.options = options;
+      newState.preOptions = options;
+      newState.loadedOptions = {};
+    }
+    if (judgeValue) {
+      newState.value = value;
+      newState.preValue = value;
+    }
+    if (judgeValue || judgeOptions) {
       if (!onSelect) {
         let theOptions = preState.options;
-        if (newState) {
+        if (newState && newState.options) {
           theOptions = newState.options;
         }
         const selectedOptions =
           CascadeSelect.getSelectedOptions(nextProps, { options: theOptions });
         const state = CascadeSelect.returnMultiState(selectedOptions) || {};
-        if (newState) {
+        if (newState && newState.options) {
           state.options = newState.options;
           state.loadedOptions = newState.loadedOptions;
-          newState = state;
         }
-        if (newState === null && judgeValue) {
-          newState = {
-            displayValue: value,
-            value,
-          };
+        if (newState && newState.value) {
+          state.value = newState.value;
+          state.displayValue = newState.value;
         }
+        newState = state;
       }
     }
-    return newState;
+    return Object.keys(newState).length ? newState : null;
   }
 
 
@@ -135,7 +141,6 @@ class CascadeSelect extends SuperComponent {
     }
   }
 
-
   saveRef(refName) {
     const me = this;
     return (c) => {
@@ -184,13 +189,9 @@ class CascadeSelect extends SuperComponent {
   }
 
   setMultiState(selectedOptions) {
-    const { value: propValue } = this.props;
     let value;
     if (selectedOptions && selectedOptions.length) {
       value = selectedOptions.map(item => item.value);
-    }
-    if (propValue && propValue.length && selectedOptions.length === 0) {
-      value = propValue;
     }
     this.setState({
       displayValue: value || [],
@@ -373,8 +374,7 @@ class CascadeSelect extends SuperComponent {
     if (!placeholder) {
       placeholder = i18n[this.locale].placeholder;
     }
-
-    const displayText = displayValue && displayValue.length ?
+    const displayText = displayValue.length ?
       this.props.beforeRender(displayValue, selectedOptions) :
       '';
  
@@ -384,7 +384,7 @@ class CascadeSelect extends SuperComponent {
         title={displayText}
       >
         {
-          placeholder && !displayText ?
+          placeholder && !displayValue.length ?
             <div className={this.prefixCls('placeholder')}>
               {placeholder}
             </div> :
@@ -393,8 +393,7 @@ class CascadeSelect extends SuperComponent {
       </div>
     );
 
-    // TODO: remove this.props.displayMode === 'search'
-    if (this.props.displayMode === 'search' || this.props.showSearch) { 
+    if (this.props.displayMode === 'search' || this.props.showSearch) { // TODO: remove this.props.displayMode === 'search'
       cpnt = (
         <Search
           value={this.state.inputValue}
@@ -641,7 +640,7 @@ CascadeSelect.defaultProps = {
   className: '',
   placeholder: '',
   options: [],
-  defaultValue: [],
+  defaultValue: null,
   value: null,
   onChange: () => { },
   disabled: false,

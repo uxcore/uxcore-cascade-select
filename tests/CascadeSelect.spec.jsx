@@ -82,12 +82,13 @@ describe('CascadeSelect', () => {
   });
 
   it('should have the defaultValue', () => {
-    instance = render(
+    const wrapper = mount(
       <CascadeSelect
-        options={options}
         defaultValue={['alibaba', 'platform', 'fe']}
-      />, div);
-    expect($(findDOMNode(instance)).find('.kuma-cascader-trigger').attr('title'))
+        options={options}
+      />
+    );
+    expect(wrapper.find('.kuma-cascader-trigger').text())
       .to
       .eql('阿里巴巴 / 信息平台 / 前端开发');
   });

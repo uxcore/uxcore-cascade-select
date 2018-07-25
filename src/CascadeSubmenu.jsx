@@ -97,10 +97,10 @@ class CascadeSubmenu extends SuperComponent {
     if (!miniMode) {
       columnSize = cascadeSize + 1;
     }
-    const unitWidth = `${(100 / columnSize).toFixed(1)}%`;
+    const unitWidth = (1 / columnSize).toFixed(4);
     const firstStyle = {};
     if (value && value.length > 0) {
-      firstStyle.width = unitWidth;
+      firstStyle.width = `${unitWidth * 100}%`;
     } else {
       firstStyle.width = '100%';
     }
@@ -119,9 +119,10 @@ class CascadeSubmenu extends SuperComponent {
     value.forEach((key, index) => {
       const style = {};
       if (value && value.length > index + 1) {
-        style.width = unitWidth;
+        style.width = `${unitWidth * 100}%`;
       } else {
-        style.width = `${((cascadeSize - value.length) / columnSize * 100).toFixed(1)}%`;
+        style.width = `${(1 - unitWidth * value.length) * 100}%`;
+        // style.width = `${((cascadeSize - value.length) / columnSize * 100).toFixed(1)}%`;
       }
       const parent = find(prevSelected || options, item => item.value === key);
       const renderArr = parent && parent.children;
