@@ -77,6 +77,12 @@ class CascadeSelect extends SuperComponent {
           state.loadedOptions = newState.loadedOptions;
           newState = state;
         }
+        if (newState === null && judgeValue) {
+          newState = {
+            displayValue: value,
+            value,
+          };
+        }
       }
     }
     return newState;
@@ -368,10 +374,10 @@ class CascadeSelect extends SuperComponent {
       placeholder = i18n[this.locale].placeholder;
     }
 
-    const displayText = displayValue.length ?
+    const displayText = displayValue && displayValue.length ?
       this.props.beforeRender(displayValue, selectedOptions) :
       '';
-
+ 
     let cpnt = (
       <div
         className={this.prefixCls('trigger')}
