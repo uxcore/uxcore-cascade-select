@@ -1,5 +1,9 @@
 # history
 
+## 0.7.6
+
+* `FIX` Display props.value when options is empty at runtime.
+
 ## 0.7.5
 
 * `ADD` Display value when options not found.
