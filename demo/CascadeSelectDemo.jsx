@@ -410,12 +410,16 @@ class Demo extends React.Component {
         />
         <h2>必须选到根节点</h2>
         <CascadeSelect
-          defaultValue={['alibaba', 'platform', 'fe']}
+          defaultValue={this.state.mustLeafValue}
           options={options}
           clearable
-          onChange={(value, selected) => { console.log(value, selected); }}
+          onChange={(value, selected) => {
+            this.setState({ mustLeafValue: value });
+            // console.log(value, selected);
+          }}
           size="small"
           isMustSelectLeaf
+          miniMode={false}
         />
         <h2>鼠标悬浮的</h2>
         <CascadeSelect

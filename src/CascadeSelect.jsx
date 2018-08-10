@@ -597,6 +597,11 @@ class CascadeSelect extends SuperComponent {
             this.wrapper.click();
             const newValue = this.newValue;
             const newSelectedOptions = this.newSelectedOptions;
+            if (this.props.isMustSelectLeaf) {
+              if (newValue && newValue.length < this.props.cascadeSize) {
+                return;
+              }
+            }
             if (newValue && newSelectedOptions) {
               this.setState({
                 value: newValue,
