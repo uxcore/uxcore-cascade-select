@@ -1,5 +1,9 @@
 # history
 
+## 0.7.8
+
+* `FIX`: onOk click should not occurred when isMustLeaf is true
+
 ## 0.7.7
 
 * `FIX`: Fix column width.
