@@ -2,7 +2,7 @@
 
 ## 0.8.0
 
-* `ADD`: add new feature, optionFilterProps and optionFilterCount when showSearch=true
+* `ADD`: New feature, new props optionFilterProps and optionFilterCount for filter by keywords
 
 ## 0.7.8
 
