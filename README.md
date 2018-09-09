@@ -102,7 +102,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
 | onSelect | function | false | null | 异步加载层级，需要 return 一个数组，具体用法参考下方 demo
 | searchOption | function | false | null | `(已废弃)` 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
-| showSearch | function | false | false | 是否开启搜索模式
+| showSearch | boolean | false | false | 是否开启搜索模式
 | onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options
 
 ## Demos
