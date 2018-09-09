@@ -11,15 +11,31 @@ import classnames from 'classnames';
 import Dropdown from 'uxcore-dropdown';
 import Select2 from 'uxcore-select2';
 import Promise from 'lie';
+import { polyfill } from 'react-lifecycles-compat';
+import Menu from 'uxcore-menu';
 import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 import Search from './Search';
-import { polyfill } from 'react-lifecycles-compat';
 
-import { find, getArrayLeafItemContains, deepCopy, getOptions, stringify } from './util';
+import {
+  find,
+  getArrayLeafItemContains,
+  deepCopy,
+  getOptions,
+  stringify,
+  searchArrayOfOptions,
+} from './util';
 
-const noop = function noop() {};
+const noop = function noop() { };
+
+function getDomWidth(dom) {
+  if (dom) {
+    return parseFloat(getComputedStyle(dom).width);
+  }
+  return 0;
+}
+
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
@@ -271,7 +287,9 @@ class CascadeSelect extends SuperComponent {
 
   onSubmenuItemClick = (key, index, selectedOption, hasChildren) => {
     const { value, selectedOptions } = this.state;
-    const { changeOnSelect, cascadeSize, miniMode, onSelect } = this.props;
+    const {
+      changeOnSelect, cascadeSize, miniMode, onSelect,
+    } = this.props;
     let { showSubMenu } = this.state;
     let hideSubmenu = false;
     const newValue = value.slice(0, index);
@@ -370,14 +388,14 @@ class CascadeSelect extends SuperComponent {
 
     const { selectedOptions, showSubMenu, displayValue } = this.state;
 
-    let placeholder = this.props.placeholder;
+    let { placeholder } = this.props;
     if (!placeholder) {
       placeholder = i18n[this.locale].placeholder;
     }
     const displayText = displayValue.length ?
       this.props.beforeRender(displayValue, selectedOptions) :
       '';
- 
+
     let cpnt = (
       <div
         className={this.prefixCls('trigger')}
@@ -452,7 +470,7 @@ class CascadeSelect extends SuperComponent {
 
   renderSelect2Options(opt) {
     if (this.state.options) {
-      return opt.map((optionItem) => (
+      return opt.map(optionItem => (
         <Select2.Option
           key={optionItem.value}
           value={`${optionItem.value}`}
@@ -490,7 +508,7 @@ class CascadeSelect extends SuperComponent {
               dropdownStyle={{
                 width: this.props.columnWidth,
               }}
-              onChange={v => {
+              onChange={(v) => {
                 let stateValue = this.state.value;
                 let selectedOptions = this.state.selectedOptions;
                 if (i === 0) {
@@ -548,11 +566,40 @@ class CascadeSelect extends SuperComponent {
     });
   }
 
-  getDomWidth(dom) {
-    if (dom) {
-      return parseFloat(getComputedStyle(dom).width);
-    }
-    return 0;
+  /** 渲染快速搜索结果 https://github.com/uxcore/uxcore-cascade-select/issues/26 */
+  renderFastResult() {
+    const { options, inputValue } = this.state;
+    const { optionFilterProps, optionFilterCount } = this.props;
+    const data = searchArrayOfOptions({
+      options,
+      keywords: inputValue,
+      filterProps: optionFilterProps,
+      filterCount: optionFilterCount,
+    });
+    return (
+      <Menu className={this.prefixCls('menu')}>
+        {data.map(d => (
+          <Menu.Item
+            key={d.id}
+            onClick={() => {
+              this.setState({
+                inputValue: null,
+              });
+              const selectedOptions =
+                CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
+              this.setMultiState(selectedOptions);
+              this.onValueChange(d.value, selectedOptions);
+            }}
+          >
+            <span
+              dangerouslySetInnerHTML={{ // eslint-disable-line
+                __html: d.label.replace(inputValue, str => `<span class="brand-danger">${str}</span>`),
+              }}
+            />
+          </Menu.Item>
+        ))}
+      </Menu>
+    );
   }
 
   render() {
@@ -569,8 +616,9 @@ class CascadeSelect extends SuperComponent {
       columnWidth,
       displayMode,
       dropdownClassName,
+      onSearch,
     } = this.props;
-    const { value, loading, options } = this.state;
+    const { value, loading, options, inputValue } = this.state;
     if (disabled) {
       return this.renderContent();
     }
@@ -580,8 +628,12 @@ class CascadeSelect extends SuperComponent {
         style={columnWidth ? { width: columnWidth * this.props.cascadeSize } : null}
       />
     );
+    let minOverlayWidthMatchTrigger = false;
     if (displayMode === 'search' && this.state.searchResult.length > 0) {
       submenu = this.renderSearchResult();
+    } else if (options.length && !disabled && inputValue && !onSearch) {
+      submenu = this.renderFastResult();
+      minOverlayWidthMatchTrigger = true;
     } else if (options.length && !disabled) {
       submenu = (
         <CascadeSubmenu
@@ -616,7 +668,7 @@ class CascadeSelect extends SuperComponent {
             }
           }}
           columnWidth={
-            this.props.columnWidth || (this.getDomWidth(this.wrapper) / this.props.cascadeSize)
+            this.props.columnWidth || (getDomWidth(this.wrapper) / this.props.cascadeSize)
           }
           size={this.props.size}
           loading={loading}
@@ -630,14 +682,13 @@ class CascadeSelect extends SuperComponent {
         trigger={['click']}
         onVisibleChange={this.onDropDownVisibleChange.bind(this)}
         getPopupContainer={getPopupContainer}
-        minOverlayWidthMatchTrigger={false}
+        minOverlayWidthMatchTrigger={minOverlayWidthMatchTrigger}
         visible={this.state.showSubMenu}
       >
         {this.renderContent()}
       </Dropdown>
     );
   }
-
 }
 
 CascadeSelect.defaultProps = {
@@ -669,6 +720,8 @@ CascadeSelect.defaultProps = {
   dropdownClassName: '',
   showSearch: false,
   onSearch: null,
+  optionFilterProps: ['label'],
+  optionFilterCount: 20,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -695,6 +748,8 @@ CascadeSelect.propTypes = {
   dropdownClassName: PropTypes.string,
   showSearch: PropTypes.bool,
   onSearch: PropTypes.func,
+  optionFilterProps: PropTypes.arrayOf(PropTypes.string),
+  optionFilterCount: PropTypes.number,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';

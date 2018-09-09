@@ -40,16 +40,16 @@ const options = [{
     }],
   }],
 }, {
-  value: 'beijing',
+  value: 'riben',
   label: '日本',
   children: [{
-    value: 'xicheng',
-    label: '西城',
+    value: 'dongjing',
+    label: '东京',
     children: [
-      // {
-      //   value: 'zhonggc',
-      //   label: '中观村大街',
-      // },
+      {
+        value: 'guanxi',
+        label: '关西',
+      },
     ],
   }],
 }, {
@@ -61,10 +61,10 @@ const options = [{
     children: [{
       value: 'nanjinglu',
       label: '南京路',
-      children: [{
-        value: 'newbal',
-        label: '新百伦',
-      }],
+      // children: [{
+      //   value: 'newbal',
+      //   label: '新百伦',
+      // }],
     }],
   }, {
     value: 'hexi',
@@ -83,6 +83,19 @@ const options = [{
     children: [{
       value: 'xihu',
       label: '西湖',
+    }, {
+      value: 'yuhang',
+      label: '余杭',
+    }],
+  }, {
+    value: 'shaoxing',
+    label: '绍兴',
+    children: [{
+      value: 'luxun',
+      label: '鲁迅故里',
+    }, {
+      value: 'zhouenlai',
+      label: '周恩来纪念馆',
     }],
   }],
 }, {
@@ -94,6 +107,16 @@ const options = [{
     children: [{
       value: 'zhonghuamen',
       label: '中华门',
+    }],
+  }, {
+    value: 'xuzhou',
+    label: '徐州',
+    children: [{
+      value: 'peixian',
+      label: '沛县',
+    }, {
+      value: 'gulou',
+      label: '鼓楼',
     }],
   }],
 }];
@@ -208,6 +231,20 @@ class Demo extends React.Component {
   render() {
     return (
       <div className="demo-wrap" style={{ width: "300px" }}>
+        <h2>showSearch=true; onSearch=null</h2>
+        <CascadeSelect
+          locale={'en-us'}
+          options={options}
+          columnWidth={200}
+          cascadeSize={3}
+          showSearch
+          size="small"
+          optionFilterProps={['label', 'value']}
+          optionFilterCount={5}
+          miniMode={false}
+          onChange={(v, s) => {console.log(v, s)}}
+        />
+        
         <h2>No options & Not found value</h2>
         <CascadeSelect
           value={this.state.xxValue}

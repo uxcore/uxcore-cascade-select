@@ -53,6 +53,7 @@
     "react-lifecycles-compat": "^3.0.4",
     "uxcore-button": "^0.4.10",
     "uxcore-dropdown": "^0.5.0",
+    "uxcore-menu": "^4.0.2",
     "uxcore-select2": "^0.5.0"
   },
   "contributors": [],

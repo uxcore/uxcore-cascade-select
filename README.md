@@ -83,7 +83,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | options | array | false | `[]` | 选项数据源，格式可见下方Demo |
 | value | array | false | `[]` | 可由外部控制的值 |
 | defaultValue | array | false | `[]` | 初始默认值 |
-| dropdownClassName | string | `''` | dropdown 容器的自定义样式 | 
+| dropdownClassName | string | false | `''` | dropdown 容器的自定义样式
 | placeholder | string | false | `'Please Select'` or `'请选择'` | placeholder |
 | onChange | function | false | `function(value, selectedOptions)` | 选择完成后回调 |
 | disabled | boolean | false | `false` | 是否禁用 |
@@ -92,18 +92,20 @@ render(<CascadeSelect />, document.getElementById('root'))
 | expandTrigger | string | false | `'click'` | 次级菜单展开方式，支持 `click` 和 `hover` |
 | beforeRender | function | false | `(value, selectedOptions) => selectedOptions.map(o => o && o.label).join(' / ')` | 处理要显示的内容 |
 | cascadeSize | number | false | `3` | 级联的层级数 |
-| getPopupContainer | function():HTMLElement | false | - | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
+| getPopupContainer | function():HTMLElement | false | / | 返回一个 html 元素用作 Popup 面板的容器，默认是插在body 中的一个 div |
 | locale | string | false | `'zh-cn'` | `'en-us'`
 | miniMode | boolean | false | true | 是否是简洁显示风格
 | columnWidth | number | false | null | dropdown中每一列的宽度, 如为空，整体宽度等于input输入框的宽度
-| displayMode | string | false | `dropdown` | `select` 或者 `dropdown` 或者 `search`
+| displayMode | string | false | `dropdown` | `select` 或者 `dropdown` 或者 `search(已废弃)`
 | getSelectPlaceholder | func | false | `function(idx){ return '请选择' }` | select显示模式下的placeholder生成函数
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small` 
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
 | onSelect | function | false | null | 异步加载层级，需要 return 一个数组，具体用法参考下方 demo
 | searchOption | function | false | null | `(已废弃)` 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
 | showSearch | boolean | false | false | 是否开启搜索模式
-| onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options
+| onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options，onSearch 不能与 optionFilterProps 和 optionFilterCount 一起使用，onSearch 优先级更高
+| optionFilterProps | string[] | false | `['label']` | showSearch=true 时，optionFilterProp 为 options[i] 中的属性名称，此时搜索会进行过滤
+| optionFilterCount | number | false | 20 | 当使用过滤功能时 dropdown 里最多显示的条数
 
 ## Demos
 
@@ -154,6 +156,7 @@ const options = [{
    * @param key key为父级的value
    * @param level level为父级所在的层数，如上面的options的['zhengjiang']， level为1
    */ 
+  showSearch={true}
   onSelect={(resolve, reject, key, level) => {
     ajax({
       url: 'xxx/xx.json',
@@ -183,18 +186,13 @@ const options = [{
 }
 ```
 
-### props.onSearch
+### props.optionFilterProp
 
 ```javascript
 <CascadeSelect
   options={this.state.options}
   showSearch={true}
-  onSearch={(keyword) => {
-    // keyword 为搜索的关键词
-    Fetch('/search?keyword=' + keyword).then(result => {
-      // options 必须遵循 props.options 规范
-      this.setState({ options: result });
-    })
-  }}
+  optionFilterProps={['label']}
+  optionFilterCount={10}
 />
 ```

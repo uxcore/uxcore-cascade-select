@@ -64,7 +64,7 @@ Search.renderResult = (result, onSelect) => (
   >
     <ul className="kuma-select2-dropdown-menu">
       {
-        result.map((item) => (
+        result.map(item => (
           <li
             key={item.value}
             className="kuma-select2-dropdown-menu-item"

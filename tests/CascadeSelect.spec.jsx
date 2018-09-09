@@ -1,3 +1,4 @@
+/* eslint-disable */
 import expect from 'expect.js';
 import React from 'react';
 import sinon from 'sinon';
@@ -6,7 +7,7 @@ import Enzyme from 'enzyme';
 import { render, findDOMNode, unmountComponentAtNode } from 'react-dom';
 import Adapter from 'enzyme-adapter-react-16';
 import CascadeSelect from '../src';
-import { deepCopy } from '../src/util';
+import { deepCopy, stringify } from '../src/util';
 import { options, asyncOptions } from './options';
 
 const { mount } = Enzyme;
@@ -376,5 +377,39 @@ describe('CascadeSelect', () => {
     const overlay = mount(dropdownWrapper.props().overlay);
     expect($(overlay.getDOMNode())
       .find('.kuma-cascader-item-description-wrap').html()).to.equal('前端开发: 一种技术');
+  });
+
+  it('should display cascade-values in dropdown', (done) => {
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        cascadeSize={3}
+        showSearch
+        optionFilterProps={['label', 'value']}
+        optionFilterCount={5}
+      />
+    );
+    let Input = wrapper.find('input');
+    Input.simulate('change', { target: { value: '江' } });
+    let overlay = mount(wrapper.find('Trigger').props().overlay);
+    expect(
+      overlay.find('li').at(1).text()
+    ).to.equal('江苏 / 南京 / 中华门');
+    expect(
+      overlay.find('li').length
+    ).to.equal(2);
+
+    Input.simulate('change', { target: { value: 'a' } });
+    overlay = mount(wrapper.find('Trigger').props().overlay);
+    expect(
+      overlay.find('li').at(2).text()
+    ).to.equal('天津 / 和平区 / 南京路');
+
+    overlay.find('li').at(2).simulate('click');
+    wrapper.update();
+    expect(
+      stringify(wrapper.state('value'))
+    ).to.equal(stringify(['tianjin','heping','nanjinglu']))
+    done();
   });
 });

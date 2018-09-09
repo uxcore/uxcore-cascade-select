@@ -1,5 +1,9 @@
 # history
 
+## 0.8.0
+
+* `ADD`: add new feature, optionFilterProps and optionFilterCount when showSearch=true
+
 ## 0.7.8
 
 * `FIX`: onOk click should not occurred when isMustLeaf is true

@@ -9,7 +9,8 @@
   },
   "rules": {
     "import/no-extraneous-dependencies": "off",
-    "react/jsx-no-bind": "off"
+    "react/jsx-no-bind": "off",
+    "no-plusplus": "off"
   },
   "globals": {
     "it": true,

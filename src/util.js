@@ -64,11 +64,69 @@ const getOptions = (options, value = [], level = 0) => {
         return getOptions(options[i].children, value.slice(1), level - 1);
       }
     }
-  } 
+  }
   return [];
 };
 
-const stringify = (val) => JSON.stringify(val);
+const stringify = val => JSON.stringify(val);
+
+/** 将 options 结构转换成拍平数组，同时使用传入的关键词进行过滤 */
+const searchArrayOfOptions = (
+  {
+    options,
+    keywords,
+    filterProps,
+    filterCount,
+  },
+  parentName = [],
+  parentValue = [],
+  parentKeywords = [],
+  data = [],
+  level = 0,
+) => {
+  for (let i = 0, l = options.length; i < l; i++) {
+    if (data.length >= filterCount) {
+      break;
+    }
+
+    parentName = parentName.slice(0, level); // eslint-disable-line
+    parentValue = parentValue.slice(0, level); // eslint-disable-line
+    parentKeywords = parentKeywords.slice(0, level); // eslint-disable-line
+    const optionsItem = options[i];
+    parentName.push(optionsItem.label);
+    parentValue.push(optionsItem.value);
+    if (filterProps && filterProps.length > 0) {
+      const myKeywords = [];
+      filterProps.forEach((propName) => { // eslint-disable-line
+        if (optionsItem[propName]) {
+          myKeywords.push(optionsItem[propName]);
+        }
+      });
+      parentKeywords.push(myKeywords.join('_'));
+    }
+
+    if (optionsItem.children) {
+      searchArrayOfOptions({
+        options: optionsItem.children,
+        keywords,
+        filterProps,
+        filterCount,
+      }, parentName, parentValue, parentKeywords, data, level + 1);
+    } else {
+      const dataItem = {
+        id: parentValue.join('_'),
+        label: parentName.join(' / '),
+        value: parentValue,
+        keywords: parentKeywords.join('_'),
+      };
+      if (dataItem.keywords.indexOf(keywords) > -1) {
+        data.push(dataItem);
+      }
+    }
+  }
+
+  return data;
+};
 
 export default {
   find,
@@ -76,4 +134,5 @@ export default {
   deepCopy,
   getOptions,
   stringify,
+  searchArrayOfOptions,
 };
