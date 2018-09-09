@@ -1,6 +1,6 @@
 {
   "name": "uxcore-cascade-select",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "description": "Cascade select field",
   "repository": "https://github.com/uxcore/uxcore-cascade-select.git",
   "author": "changming",
