@@ -1,6 +1,6 @@
 # history
 
-## 0.8.0
+## 0.7.9
 
 * `ADD`: New feature, new props optionFilterProps and optionFilterCount for filter by keywords
 
