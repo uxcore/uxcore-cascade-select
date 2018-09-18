@@ -1,5 +1,9 @@
 # history
 
+## 0.7.11
+
+* `FIX` can not clear value from outside.
+
 ## 0.7.10
 
 * `CHANGED` support js style export
