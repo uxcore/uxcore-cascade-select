@@ -1,5 +1,9 @@
 # history
 
+## 0.7.10
+
+* `CHANGED` support js style export
+
 ## 0.7.9
 
 * `ADD`: New feature, new props optionFilterProps and optionFilterCount for filter by keywords

@@ -10,6 +10,7 @@
 
 const React = require('react');
 const CascadeSelect = require('../src');
+const districtOptions = require('./options');
 
 const options2 = [{ "value": "1", "code": "A50", "label": "[测试] 阿里巴巴(中国)有限公司", "children": [{ "value": "1-1", "code": "A50-1", "label": "[测试]信息平台事业部" }] }, { "value": "2", "code": "A51", "label": "[测试] 蚂蚁金服有限公司", "children": [{ "value": "2-1", "code": "A51-1", "label": "[测试]花呗事业部" }] }];  // eslint-disable-line
 
@@ -234,15 +235,15 @@ class Demo extends React.Component {
         <h2>showSearch=true; onSearch=null</h2>
         <CascadeSelect
           locale={'en-us'}
-          options={options}
-          columnWidth={200}
-          cascadeSize={3}
+          options={districtOptions.content}
+          // columnWidth={200}
+          cascadeSize={2}
           showSearch
-          size="small"
-          optionFilterProps={['label', 'value']}
-          optionFilterCount={5}
-          miniMode={false}
-          onChange={(v, s) => {console.log(v, s)}}
+          // size="small"
+          // optionFilterProps={['label', 'value']}
+          optionFilterCount={10}
+          // miniMode={false}
+          // onChange={(v, s) => {console.log(v, s)}}
         />
         
         <h2>No options & Not found value</h2>
@@ -265,6 +266,11 @@ class Demo extends React.Component {
             this.setState({ xxValue: ['notfound'] });
           }}
         >设置Value</button>
+        <button
+          onClick={() => {
+            this.setState({ xxValue: [] });
+          }}
+        >清空value</button>
 
         <h2>With default value</h2>
         <CascadeSelect
