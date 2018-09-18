@@ -250,10 +250,10 @@ class Demo extends React.Component {
         <CascadeSelect
           value={this.state.xxValue}
           locale={'en_US'}
-          options={this.state.xxOptions}
+          options={options}
           changeOnSelect
           columnWidth={100}
-          cascadeSize={5}
+          cascadeSize={3}
           onChange={(v) => { this.setState({ xxValue: v }) }}
         />
         <button

@@ -101,7 +101,7 @@ class CascadeSelect extends SuperComponent {
           state.loadedOptions = newState.loadedOptions;
         }
         if (newState && newState.value) {
-          // state.preValue = state.value;
+          state.preValue = state.value;
           state.value = newState.value;
           state.displayValue = newState.value;
         }
