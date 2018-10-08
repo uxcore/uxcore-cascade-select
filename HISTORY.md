@@ -1,8 +1,12 @@
 # history
 
+## 0.7.12
+
+* `CHANGED` style adjustment
+
 ## 0.7.11
 
-* `FIX` can not clear value from outside.
+* `FIXED` can not clear value from outside.
 
 ## 0.7.10
 
@@ -10,36 +14,36 @@
 
 ## 0.7.9
 
-* `ADD`: New feature, new props optionFilterProps and optionFilterCount for filter by keywords
+* `NEW`: New feature, new props optionFilterProps and optionFilterCount for filter by keywords
 
 ## 0.7.8
 
-* `FIX`: onOk click should not occurred when isMustLeaf is true
+* `FIXED`: onOk click should not occurred when isMustLeaf is true
 
 ## 0.7.7
 
-* `FIX`: Fix column width.
+* `FIXED`: Fix column width.
 
 ## 0.7.6
 
-* `FIX` Display props.value when options is empty at runtime.
+* `FIXED` Display props.value when options is empty at runtime.
 
 ## 0.7.5
 
-* `ADD` Display value when options not found.
+* `NEW` Display value when options not found.
 
 ## 0.7.4
 
-* `FIX` The selected text could not be displayed in the input when showSearch is true.
+* `FIXED` The selected text could not be displayed in the input when showSearch is true.
 
 ## 0.7.3
 
-* `ADD` add 'dropdownClassName' prop
-* `ADD` add 'showSearch' and 'onSearch' prop
+* `NEW` add 'dropdownClassName' prop
+* `NEW` add 'showSearch' and 'onSearch' prop
 
 ## 0.7.2
 
-* `Add` add description display feature
+* `NEW` add description display feature
 
 ## 0.7.1
 
@@ -89,29 +93,29 @@
 
 ## 0.5.4
 
-* `FIX`: the component's height has 2 px more in the small or middle size mode.
+* `FIXED`: the component's height has 2 px more in the small or middle size mode.
 
 ## 0.5.3
 
-* `FIX`: the selection has no display result after clear the first selection.
+* `FIXED`: the selection has no display result after clear the first selection.
 
 ## 0.5.2
 
-* `FIX`: input has duplicated onChange event in IE11 browser under search mode.
+* `FIXED`: input has duplicated onChange event in IE11 browser under search mode.
 
 ## 0.5.1
 
-* `Add`: searchOption prop
-* `Add`: 'search' option of displayMode
-* `FIX`: give value before options could not display the result
+* `NEW`: searchOption prop
+* `NEW`: 'search' option of displayMode
+* `FIXED`: give value before options could not display the result
 
 ## 0.5.0
 
-* `Add`: onSelect prop
+* `NEW`: onSelect prop
 
 ## 0.4.1
 
-* `Add`: isMustSelectLeaf: whether or not to select the leaf option
+* `NEW`: isMustSelectLeaf: whether or not to select the leaf option
 
 ## 0.4.0
 
@@ -119,11 +123,11 @@
 
 ## 0.3.5
 
-* `Add`: size prop
+* `NEW`: size prop
 
 ## 0.3.4
 
-* `ADD`: columnWidth prop, remove dropDownWidth prop
+* `NEW`: columnWidth prop, remove dropDownWidth prop
 
 ## 0.3.3
 
@@ -143,7 +147,7 @@
 
 ## 0.2.11
 
-* `ADD`: trigger onChange when on click `the ok button`.
+* `NEW`: trigger onChange when on click `the ok button`.
 
 ## 0.2.10
 

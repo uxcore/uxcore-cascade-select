@@ -62,8 +62,8 @@ class CascadeSelect extends SuperComponent {
       this.locale = locale;
     }
 
-    this.getSelectPlaceholder = props.getSelectPlaceholder ||
-      function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
+    this.getSelectPlaceholder = props.getSelectPlaceholder
+      || function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
   }
 
   static getDerivedStateFromProps(nextProps, preState) {
@@ -93,8 +93,7 @@ class CascadeSelect extends SuperComponent {
         if (newState && newState.options) {
           theOptions = newState.options;
         }
-        const selectedOptions =
-          CascadeSelect.getSelectedOptions(nextProps, { options: theOptions });
+        const selectedOptions = CascadeSelect.getSelectedOptions(nextProps, { options: theOptions });
         const state = CascadeSelect.returnMultiState(selectedOptions) || {};
         if (newState && newState.options) {
           state.options = newState.options;
@@ -164,6 +163,7 @@ class CascadeSelect extends SuperComponent {
       me[refName] = c;
     };
   }
+
   /**
    * 获取options， 下面为请求第二层数据时的参数参考
    * @param {*} values 当前的values值， 如['jiangsu']
@@ -344,11 +344,11 @@ class CascadeSelect extends SuperComponent {
     const { onChange, isMustSelectLeaf, cascadeSize } = this.props;
     if (onChange) {
       if (isMustSelectLeaf) {
-        if ((value && (value.length >= cascadeSize || value.length === 0)) ||
-          (selectedOptions &&
-            (
-              (selectedOptions[selectedOptions.length - 1] && !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children')) ||
-              selectedOptions.length === 0
+        if ((value && (value.length >= cascadeSize || value.length === 0))
+          || (selectedOptions
+            && (
+              (selectedOptions[selectedOptions.length - 1] && !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children'))
+              || selectedOptions.length === 0
             )
           )
         ) {
@@ -393,9 +393,9 @@ class CascadeSelect extends SuperComponent {
     if (!placeholder) {
       placeholder = i18n[this.locale].placeholder;
     }
-    const displayText = displayValue.length ?
-      this.props.beforeRender(displayValue, selectedOptions) :
-      '';
+    const displayText = displayValue.length
+      ? this.props.beforeRender(displayValue, selectedOptions)
+      : '';
 
     let cpnt = (
       <div
@@ -403,11 +403,13 @@ class CascadeSelect extends SuperComponent {
         title={displayText}
       >
         {
-          placeholder && !displayValue.length ?
-            <div className={this.prefixCls('placeholder')}>
-              {placeholder}
-            </div> :
-            displayText
+          placeholder && !displayValue.length
+            ? (
+              <div className={this.prefixCls('placeholder')}>
+                {placeholder}
+              </div>
+            )
+            : displayText
         }
       </div>
     );
@@ -533,15 +535,19 @@ class CascadeSelect extends SuperComponent {
               {this.renderSelect2Options(opt)}
             </Select2>
             {
-              relLoading[i] ?
-                <span className={this.prefixCls('select-loading')} /> :
-                null
+              relLoading[i]
+                ? <span className={this.prefixCls('select-loading')} />
+                : null
             }
           </div>
         </div>
       ));
     }
-    return <div className={this.prefixCls('select-wrap')}>{back}</div>;
+    return (
+      <div className={this.prefixCls('select-wrap')}>
+        {back}
+      </div>
+    );
   }
 
   renderSearchResult() {
@@ -586,8 +592,7 @@ class CascadeSelect extends SuperComponent {
               this.setState({
                 inputValue: null,
               });
-              const selectedOptions =
-                CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
+              const selectedOptions = CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
               this.setMultiState(selectedOptions);
               this.onValueChange(d.value, selectedOptions);
             }}
@@ -619,7 +624,9 @@ class CascadeSelect extends SuperComponent {
       dropdownClassName,
       onSearch,
     } = this.props;
-    const { value, loading, options, inputValue } = this.state;
+    const {
+      value, loading, options, inputValue,
+    } = this.state;
     if (disabled) {
       return this.renderContent();
     }

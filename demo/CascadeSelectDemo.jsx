@@ -8,6 +8,7 @@
  * All rights reserved.
  */
 
+import '../style';
 const React = require('react');
 const CascadeSelect = require('../src');
 const districtOptions = require('./options');

@@ -73,8 +73,7 @@ Search.renderResult = (result, onSelect) => (
               e.target.className += ' kuma-select2-dropdown-menu-item-active';
             }}
             onMouseLeave={(e) => {
-              e.target.className =
-                e.target.className.replace(' kuma-select2-dropdown-menu-item-active', '');
+              e.target.className = e.target.className.replace(' kuma-select2-dropdown-menu-item-active', '');
             }}
           >
             {item.label}
