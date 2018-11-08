@@ -46,13 +46,7 @@ const options = [{
   label: '日本',
   children: [{
     value: 'dongjing',
-    label: '东京',
-    children: [
-      {
-        value: 'guanxi',
-        label: '关西',
-      },
-    ],
+    label: '东京'
   }],
 }, {
   value: 'tianjin',
@@ -458,8 +452,8 @@ class Demo extends React.Component {
           options={options}
           clearable
           onChange={(value, selected) => {
+            console.log(value, selected);
             this.setState({ mustLeafValue: value });
-            // console.log(value, selected);
           }}
           size="small"
           isMustSelectLeaf

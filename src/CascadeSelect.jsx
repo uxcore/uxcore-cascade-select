@@ -658,7 +658,11 @@ class CascadeSelect extends SuperComponent {
             const newValue = this.newValue;
             const newSelectedOptions = this.newSelectedOptions;
             if (this.props.isMustSelectLeaf) {
-              if (newValue && newValue.length < this.props.cascadeSize) {
+              if ((newValue && newValue.length < this.props.cascadeSize)
+                && (newSelectedOptions
+                  && (newSelectedOptions[newSelectedOptions.length - 1] && newSelectedOptions[newSelectedOptions.length - 1].hasOwnProperty('children'))
+                )
+              ) {
                 return;
               }
             }
