@@ -685,6 +685,7 @@ class CascadeSelect extends SuperComponent {
           size={this.props.size}
           loading={loading}
           className={`${this.prefixCls('submenu-warpper')} ${dropdownClassName}`}
+          cascaderHeight={this.props.cascaderHeight}
         />
       );
     }
@@ -734,6 +735,7 @@ CascadeSelect.defaultProps = {
   onSearch: null,
   optionFilterProps: ['label'],
   optionFilterCount: 20,
+  cascaderHeight: 0,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -762,9 +764,30 @@ CascadeSelect.propTypes = {
   onSearch: PropTypes.func,
   optionFilterProps: PropTypes.arrayOf(PropTypes.string),
   optionFilterCount: PropTypes.number,
+  cascaderHeight: PropTypes.number,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
 polyfill(CascadeSelect);
+
+CascadeSelect.CascadeSubmenu = ({ ...props }) => (
+  <div className="kuma-cascader-submenu-warpper">
+    <CascadeSubmenu
+      prefixCls="kuma-dropdown-menu"
+      {...props}
+      onItemClick={(key, index) => {
+        let { value } = props;
+        if (!value) {
+          value = [];
+        } else {
+          value = value.slice(0, index);
+        }
+        value[index] = key;
+        props.onChange(value);
+      }}
+    />
+  </div>
+);
+CascadeSelect.CascadeSubmenu.displayName = 'CascadeSelectCascadeSubmenu';
 
 module.exports = CascadeSelect;

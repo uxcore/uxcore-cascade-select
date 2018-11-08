@@ -1,5 +1,11 @@
 # history
 
+## 0.7.13
+
+* `FIXED` Can not get the right value when there is not any children and isMustSelectLeaf=true.
+* `ADD` Separate the CascadeSubmenu Component.
+* `ADD` props.cascaderHeight
+
 ## 0.7.12
 
 * `CHANGED` style adjustment

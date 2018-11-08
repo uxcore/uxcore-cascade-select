@@ -194,6 +194,7 @@ class Demo extends React.Component {
       asyncOptions: [],
       options,
       xxOptions: undefined,
+      panelOnlyValue: [],
     };
   }
 
@@ -492,6 +493,18 @@ class Demo extends React.Component {
         >
           设置底层叶子节点
         </button>
+
+        <h2>单独使用面板</h2>
+        <CascadeSelect.CascadeSubmenu
+          options={options}
+          value={this.state.panelOnlyValue}
+          onChange={(value) => {
+            console.log(value);
+            this.setState({ panelOnlyValue: value });
+          }}
+          columnWidth={200}
+          cascaderHeight={300}
+        />
       </div>
     );
   }

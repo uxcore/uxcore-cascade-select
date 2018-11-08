@@ -106,6 +106,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options，onSearch 不能与 optionFilterProps 和 optionFilterCount 一起使用，onSearch 优先级更高
 | optionFilterProps | string[] | false | `['label']` | showSearch=true 时，optionFilterProp 为 options[i] 中的属性名称，此时搜索会进行过滤
 | optionFilterCount | number | false | 20 | 当使用过滤功能时 dropdown 里最多显示的条数
+| cascaderHeight | number | false | null | 级联选择区域的高度
 
 ## Demos
 
@@ -142,7 +143,7 @@ const options = [{
 ```less
 .kuma-cascader-submenu-empty,
 .kuma-dropdown-menu-submenu {
-    width: 400px; // 你想要的 dropdown 宽度
+  width: 400px; // 你想要的 dropdown 宽度
 }
 ```
 
@@ -196,3 +197,26 @@ const options = [{
   optionFilterCount={10}
 />
 ```
+
+## 只用面板
+
+只是用面板时 props.value 必须是受控模式
+
+```javascript
+<CascadeSelect.CascadeSubmenu
+  options={options}
+  value={this.state.value}
+  onChange={(value) => {
+    this.setState({ value });
+  }}
+/>
+```
+
+### CascadeSelect.CascadeSubmenu.props
+
+| Name | Type | Required | Default | Comments |
+| --- | --- | --- | --- | --- |
+| value | array | Yes | [] | 受控值
+| options | array | Yes | [] | 候选集，格式参考上方
+| onChange | function | Yes | null | value 改变的回调函数
+| columnWidth | number | No | null | 每一列的宽度

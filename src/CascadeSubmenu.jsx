@@ -38,7 +38,7 @@ class CascadeSubmenu extends SuperComponent {
 
   renderUlList(data, key, groupIndex) {
     const { expandTrigger } = this.props;
-    return data.map(item => {
+    return data.map((item) => {
       const otherProps = {};
       if (expandTrigger === 'click') {
         otherProps.onClick =
@@ -202,10 +202,14 @@ class CascadeSubmenu extends SuperComponent {
     if (this.props.columnWidth) {
       wrapStyle.width = this.props.columnWidth * this.props.cascadeSize;
     }
+    const submenuStyle = {};
+    if (this.props.cascaderHeight) {
+      submenuStyle.height = this.props.cascaderHeight;
+    }
     return (
       <div className={this.props.className}>
         <div className={this.prefixCls(`submenu size-${this.props.size}`)} style={wrapStyle}>
-          <div className={this.prefixCls('submenu-wrap')}>
+          <div className={this.prefixCls('submenu-wrap')} style={submenuStyle}>
             {this.renderSubmenus()}
             {
               this.props.miniMode ? null :
@@ -237,6 +241,10 @@ CascadeSubmenu.propTypes = {
   cascadeSize: PropTypes.number,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   className: PropTypes.string,
+  locale: PropTypes.oneOf(['zh-cn', 'en-us']),
+  expandTrigger: PropTypes.oneOf(['click', 'hover']),
+  loading: PropTypes.object,
+  cascaderHeight: PropTypes.number,
 };
 
 CascadeSubmenu.defaultProps = {
@@ -244,10 +252,15 @@ CascadeSubmenu.defaultProps = {
   onItemClick() { },
   value: [],
   options: [],
-  miniMode: false,
+  miniMode: true,
   onOkButtonClick: () => { },
   size: 'large',
   className: '',
+  locale: 'zh-cn',
+  expandTrigger: 'click',
+  loading: {},
+  cascadeSize: 3,
+  cascaderHeight: 0,
 };
 
 CascadeSubmenu.displayName = 'CascadeSubmenu';
