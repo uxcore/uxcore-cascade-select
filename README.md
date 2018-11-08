@@ -209,6 +209,9 @@ const options = [{
   onChange={(value) => {
     this.setState({ value });
   }}
+  renderCustomItem={(item) => {
+    return <span style={{ color: 'red' }}>{item.label}</span>
+  }}
 />
 ```
 
@@ -220,3 +223,5 @@ const options = [{
 | options | array | Yes | [] | 候选集，格式参考上方
 | onChange | function | Yes | null | value 改变的回调函数
 | columnWidth | number | No | null | 每一列的宽度
+| cascaderHeight | number | NO | null | 级联选择区域的高度
+| renderCustomItem | function | No | null | 自定义渲染选项

@@ -504,6 +504,10 @@ class Demo extends React.Component {
           }}
           columnWidth={200}
           cascaderHeight={300}
+          renderCustomItem={(item) => {
+            console.log(item);
+            return <span style={{ color: 'red' }}>{item.label}</span>
+          }}
         />
       </div>
     );

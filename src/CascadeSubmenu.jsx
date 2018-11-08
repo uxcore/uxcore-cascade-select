@@ -37,7 +37,7 @@ class CascadeSubmenu extends SuperComponent {
   }
 
   renderUlList(data, key, groupIndex) {
-    const { expandTrigger } = this.props;
+    const { expandTrigger, renderCustomItem } = this.props;
     return data.map((item) => {
       const otherProps = {};
       if (expandTrigger === 'click') {
@@ -63,10 +63,8 @@ class CascadeSubmenu extends SuperComponent {
               this.descArr = [];
             }
             this.descArr[groupIndex] = item.description;
-          } else {
-            if (this.descArr) {
-              this.descArr[groupIndex] = null;
-            }
+          } else if (this.descArr) {
+            this.descArr[groupIndex] = null;
           }
         }
       }
@@ -78,7 +76,9 @@ class CascadeSubmenu extends SuperComponent {
           className={classnames({ active: item.value === key })}
           {...otherProps}
         >
-          {item.label}
+          {
+            renderCustomItem ? renderCustomItem(item) : item.label
+          }
         </li>
       );
     });
@@ -138,7 +138,7 @@ class CascadeSubmenu extends SuperComponent {
           >
             {
               loading[key] ? this.renderLoading() :
-              this.renderUlList(renderArr, value[index + 1], index + 1)
+                this.renderUlList(renderArr, value[index + 1], index + 1)
             }
           </ul>
         );
@@ -245,6 +245,7 @@ CascadeSubmenu.propTypes = {
   expandTrigger: PropTypes.oneOf(['click', 'hover']),
   loading: PropTypes.object,
   cascaderHeight: PropTypes.number,
+  renderCustomItem: PropTypes.func,
 };
 
 CascadeSubmenu.defaultProps = {
@@ -261,6 +262,7 @@ CascadeSubmenu.defaultProps = {
   loading: {},
   cascadeSize: 3,
   cascaderHeight: 0,
+  renderCustomItem: null,
 };
 
 CascadeSubmenu.displayName = 'CascadeSubmenu';
