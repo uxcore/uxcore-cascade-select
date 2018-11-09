@@ -17,6 +17,7 @@ import i18n from './i18n';
 import CascadeSubmenu from './CascadeSubmenu';
 import SuperComponent from './SuperComponent';
 import Search from './Search';
+import Util from './util';
 
 import {
   find,
@@ -347,7 +348,7 @@ class CascadeSelect extends SuperComponent {
         if ((value && (value.length >= cascadeSize || value.length === 0))
           || (selectedOptions
             && (
-              (selectedOptions[selectedOptions.length - 1] && !selectedOptions[selectedOptions.length - 1].hasOwnProperty('children'))
+              (selectedOptions[selectedOptions.length - 1] && Util.isEmptyArray(selectedOptions[selectedOptions.length - 1].children))
               || selectedOptions.length === 0
             )
           )
@@ -660,7 +661,8 @@ class CascadeSelect extends SuperComponent {
             if (this.props.isMustSelectLeaf) {
               if ((newValue && newValue.length < this.props.cascadeSize)
                 && (newSelectedOptions
-                  && (newSelectedOptions[newSelectedOptions.length - 1] && newSelectedOptions[newSelectedOptions.length - 1].hasOwnProperty('children'))
+                && (newSelectedOptions[newSelectedOptions.length - 1] &&
+                  !Util.isEmptyArray(newSelectedOptions[newSelectedOptions.length - 1].children))
                 )
               ) {
                 return;

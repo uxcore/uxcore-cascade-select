@@ -128,6 +128,10 @@ const searchArrayOfOptions = (
   return data;
 };
 
+function isEmptyArray(o) {
+  return !o || o.length === 0;
+}
+
 export default {
   find,
   getArrayLeafItemContains,
@@ -135,4 +139,5 @@ export default {
   getOptions,
   stringify,
   searchArrayOfOptions,
+  isEmptyArray,
 };

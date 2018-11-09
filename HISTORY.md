@@ -1,5 +1,9 @@
 # history
 
+## 0.7.14
+
+* `FIXED` modified option[].children empty logic.
+
 ## 0.7.13
 
 * `FIXED` Can not get the right value when there is not any children and isMustSelectLeaf=true.
