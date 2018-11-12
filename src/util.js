@@ -119,7 +119,7 @@ const searchArrayOfOptions = (
         value: parentValue,
         keywords: parentKeywords.join('_'),
       };
-      if (dataItem.keywords.indexOf(keywords) > -1) {
+      if (dataItem.keywords.toUpperCase().indexOf(keywords.toUpperCase()) > -1) {
         data.push(dataItem);
       }
     }

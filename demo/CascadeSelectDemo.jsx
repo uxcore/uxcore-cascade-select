@@ -236,7 +236,7 @@ class Demo extends React.Component {
           cascadeSize={2}
           showSearch
           // size="small"
-          // optionFilterProps={['label', 'value']}
+          optionFilterProps={['label', 'value']}
           optionFilterCount={10}
           // miniMode={false}
           // onChange={(v, s) => {console.log(v, s)}}

@@ -8,7 +8,7 @@ module.exports = {
     {
       "children": [
         {
-          "value": "110100",
+          "value": "beijing",
           "label": "北京"
         },
         {
