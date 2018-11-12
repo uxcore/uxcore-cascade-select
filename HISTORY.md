@@ -1,5 +1,9 @@
 # history
 
+## 0.7.15
+
+* `UPDATE` optionFilter ignore camel-case.
+
 ## 0.7.14
 
 * `FIXED` modified option[].children empty logic.
