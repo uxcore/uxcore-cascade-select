@@ -1,5 +1,9 @@
 # history
 
+## 0.7.16
+
+* `FIX` fix autocomplete dropdown max height 
+
 ## 0.7.15
 
 * `UPDATE` optionFilter ignore camel-case.
