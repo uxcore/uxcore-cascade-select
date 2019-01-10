@@ -98,6 +98,7 @@ class CascadeSelect extends SuperComponent {
         const state = CascadeSelect.returnMultiState(selectedOptions) || {};
         if (newState && newState.options) {
           state.options = newState.options;
+          state.preOptions = newState.preOptions;
           state.loadedOptions = newState.loadedOptions;
         }
         if (newState && newState.value) {
