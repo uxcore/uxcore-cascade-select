@@ -1,5 +1,9 @@
 # history
 
+## 0.7.17
+
+* `FIX` state not change when component destroy
+
 ## 0.7.16
 
 * `FIX` fix autocomplete dropdown max height 
