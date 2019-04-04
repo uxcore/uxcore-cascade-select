@@ -1,5 +1,9 @@
 # history
 
+## 0.7.18
+
+* `FEAT` async load will be occurred after clicking a item of search result.
+
 ## 0.7.17
 
 * `FIX` state not change when component destroy

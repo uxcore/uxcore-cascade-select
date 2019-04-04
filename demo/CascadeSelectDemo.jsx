@@ -138,6 +138,16 @@ const asyncOptions = [
     value: '1',
     label: '1',
   },
+  {
+    value: '3',
+    label: '3',
+    children: [
+      {
+        value: '0-3',
+        label: '0-3'
+      }
+    ],
+  },
 ];
 
 const options6 =
@@ -238,10 +248,10 @@ class Demo extends React.Component {
           // size="small"
           optionFilterProps={['label', 'value']}
           optionFilterCount={10}
-          // miniMode={false}
-          // onChange={(v, s) => {console.log(v, s)}}
+        // miniMode={false}
+        // onChange={(v, s) => {console.log(v, s)}}
         />
-        
+
         <h2>No options & Not found value</h2>
         <CascadeSelect
           value={this.state.xxValue}
@@ -273,7 +283,7 @@ class Demo extends React.Component {
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
         />
-        
+
         <h2>searchOptions</h2>
         <CascadeSelect
           options={options}
@@ -377,6 +387,7 @@ class Demo extends React.Component {
 
         <h2>异步Select 风格</h2>
         <CascadeSelect
+          showSearch={true}
           value={this.state.asyncValue}
           options={asyncOptions}
           getPopupContainer={() => {
@@ -387,7 +398,7 @@ class Demo extends React.Component {
           }}
           dropDownWidth={400}
           onChange={this.handleAsyncChange.bind(this)}
-          displayMode="select"
+          displayMode="dropdown"
           cascadeSize={3}
           size="small"
           onSelect={(resolve, reject, key, level) => {

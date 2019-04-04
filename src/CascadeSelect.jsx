@@ -1,3 +1,8 @@
+/*
+ * File Created: 2019-04-04 20:08:56
+ * Author: changming.zy (changming.zy@alibaba-inc.com)
+ * Copyright 2019 Alibaba Group
+ */
 /**
 * CascadeSelect Component for uxcore
 * @author changming.zy
@@ -552,6 +557,7 @@ class CascadeSelect extends SuperComponent {
     );
   }
 
+  // @deprecated 废弃函数
   renderSearchResult() {
     const { options } = this.props;
     return Search.renderResult(this.state.searchResult, (item) => {
@@ -578,7 +584,15 @@ class CascadeSelect extends SuperComponent {
   /** 渲染快速搜索结果 https://github.com/uxcore/uxcore-cascade-select/issues/26 */
   renderFastResult() {
     const { options, inputValue } = this.state;
-    const { optionFilterProps, optionFilterCount } = this.props;
+    let { displayValue } = this.state;
+    const {
+      optionFilterProps,
+      optionFilterCount,
+      showSearch,
+      changeOnSelect,
+      onSelect,
+      cascadeSize,
+    } = this.props;
     const data = searchArrayOfOptions({
       options,
       keywords: inputValue,
@@ -597,6 +611,17 @@ class CascadeSelect extends SuperComponent {
               const selectedOptions = CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
               this.setMultiState(selectedOptions);
               this.onValueChange(d.value, selectedOptions);
+              if (showSearch) { // 如果存在异步加载，搜索选中之后自动调用异步加载
+                if (onSelect && d.value.length < cascadeSize) {
+                  if (!changeOnSelect) {
+                    displayValue = [];
+                  }
+                  this.setState({
+                    displayValue,
+                  });
+                  this.fetchOptions(d.value, d.value[d.value.length - 1], d.value.length);
+                }
+              }
             }}
           >
             <span
