@@ -24,14 +24,15 @@ import SuperComponent from './SuperComponent';
 import Search from './Search';
 import Util from './util';
 
-import {
+const {
   find,
   getArrayLeafItemContains,
   deepCopy,
   getOptions,
   stringify,
   searchArrayOfOptions,
-} from './util';
+  isEmptyArray,
+} = Util;
 
 const noop = function noop() { };
 
@@ -82,8 +83,15 @@ class CascadeSelect extends SuperComponent {
       value = [];
     }
     let newState = {};
-    const judgeValue = stringify(value) !== stringify(preState.preValue);
+    let judgeValue = stringify(value) !== stringify(preState.preValue);
     const judgeOptions = stringify(options) !== stringify(preState.preOptions);
+
+    if (preState.preValue && value && value.length
+      && preState.preValue.length > value.length && preState.preValue.includes(value[0])
+    ) {
+      judgeValue = false;
+    }
+
     if (judgeOptions) {
       newState.options = options;
       newState.preOptions = options;
@@ -107,11 +115,27 @@ class CascadeSelect extends SuperComponent {
           state.loadedOptions = newState.loadedOptions;
         }
         if (newState && newState.value) {
-          state.preValue = state.value;
-          state.value = newState.value;
-          state.displayValue = newState.value;
+          // 判断计算得出的 state.value 是否包含 newState.value 的值
+          // 如果 state.value 长度大于 newState.value 并且 newState.value 存在 state.value 中
+          // 则说明是用户自主设置得某不确定的节点，并且此节点有值，此时使用 state.value 渲染才是正确的
+          if (state.value.length > newState.value.length) {
+            if (state.value.includes(newState.value[0])) {
+              // do nothing
+            } else {
+              state.preValue = state.value;
+              state.value = newState.value;
+              state.displayValue = newState.value;
+            }
+          } else {
+            state.preValue = state.value;
+            state.value = newState.value;
+            state.displayValue = newState.value;
+          }
         }
         newState = state;
+        if (!newState.preValue) {
+          newState.preValue = newState.value;
+        }
       }
     }
     return Object.keys(newState).length ? newState : null;
@@ -354,7 +378,7 @@ class CascadeSelect extends SuperComponent {
         if ((value && (value.length >= cascadeSize || value.length === 0))
           || (selectedOptions
             && (
-              (selectedOptions[selectedOptions.length - 1] && Util.isEmptyArray(selectedOptions[selectedOptions.length - 1].children))
+              (selectedOptions[selectedOptions.length - 1] && isEmptyArray(selectedOptions[selectedOptions.length - 1].children))
               || selectedOptions.length === 0
             )
           )
@@ -688,7 +712,7 @@ class CascadeSelect extends SuperComponent {
               if ((newValue && newValue.length < this.props.cascadeSize)
                 && (newSelectedOptions
                 && (newSelectedOptions[newSelectedOptions.length - 1] &&
-                  !Util.isEmptyArray(newSelectedOptions[newSelectedOptions.length - 1].children))
+                  !isEmptyArray(newSelectedOptions[newSelectedOptions.length - 1].children))
                 )
               ) {
                 return;

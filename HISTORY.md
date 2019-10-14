@@ -1,5 +1,9 @@
 # history
 
+## 0.7.19
+
+* `FIX` 当 isMustSelectLeaf 为 true ，外部又设置过 ['leafCode'] 这种只有叶子节点的值时，会造成无法回填及二次选择。
+
 ## 0.7.18
 
 * `FEAT` async load will be occurred after clicking a item of search result.

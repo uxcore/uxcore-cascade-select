@@ -205,6 +205,8 @@ class Demo extends React.Component {
       options,
       xxOptions: undefined,
       panelOnlyValue: [],
+      // xValue2: ['alibaba', 'platform', 'fe'],
+      // xValue2: []
     };
   }
 
@@ -234,6 +236,30 @@ class Demo extends React.Component {
       });
     }
   }
+
+  // render() {
+  //   return (
+  //     <div>
+  //       <CascadeSelect
+  //         value={this.state.xValue2}
+  //         options={options}
+  //         clearable
+  //         onChange={(value, selected) => {
+  //           this.setState({ xValue2: value });
+  //         }}
+  //         isMustSelectLeaf
+  //         miniMode={false}
+  //         cascaderHeight={200}
+  //         // displayMode="select"
+  //       />
+  //       <button
+  //         onClick={() => this.setState({ xValue2: ['fe'] })}
+  //       >
+  //         设置底层叶子节点
+  //       </button>
+  //     </div>
+  //   )
+  // }
 
   render() {
     return (
@@ -492,12 +518,18 @@ class Demo extends React.Component {
         >
           设置一个不存在的值
         </button>
+        
         <CascadeSelect
           value={this.state.xValue2}
           options={options}
           clearable
-          expandTrigger="hover"
-          onChange={(value, selected) => { }}
+          onChange={(value, selected) => {
+            this.setState({ xValue2: value });
+          }}
+          isMustSelectLeaf
+          miniMode={false}
+          cascaderHeight={200}
+          // displayMode="select"
         />
         <button
           onClick={() => this.setState({ xValue2: ['fe'] })}
