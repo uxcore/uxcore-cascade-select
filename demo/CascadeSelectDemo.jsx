@@ -206,7 +206,8 @@ class Demo extends React.Component {
       xxOptions: undefined,
       panelOnlyValue: [],
       // xValue2: ['alibaba', 'platform', 'fe'],
-      // xValue2: []
+      // xValue2: [],
+      onlyStrValue: undefined,
     };
   }
 
@@ -308,6 +309,18 @@ class Demo extends React.Component {
         <CascadeSelect
           defaultValue={['alibaba', 'platform', 'fe']}
           options={options}
+        />
+
+        <h2>With default value (value 是纯字符串)</h2>
+        <CascadeSelect
+          defaultValue="fe"
+          value={this.state.onlyStrValue}
+          options={options}
+          onlyStringValue
+          onChange={(v) => {
+            this.setState({ onlyStrValue: v });
+          }}
+          miniMode={false}
         />
 
         <h2>searchOptions</h2>

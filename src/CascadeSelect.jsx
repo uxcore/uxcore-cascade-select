@@ -43,6 +43,27 @@ function getDomWidth(dom) {
   return 0;
 }
 
+// 前置处理非数组类型数据结构
+function beforeUsingHandlerOfOnlyStr(onlyStringValue, value) {
+  if (onlyStringValue) {
+    if (!Array.isArray(value) && value !== null && typeof value !== 'undefined') {
+      return [value];
+    }
+    return value;
+  }
+  return value;
+}
+
+// 后置处理非数组类型数据结构
+function beforeReturningHandlerOfOnlyStr(onlyStringValue, arrayValue) {
+  if (onlyStringValue) {
+    if (arrayValue.length > 0) {
+      return arrayValue[arrayValue.length - 1];
+    }
+  }
+  return arrayValue;
+}
+
 class CascadeSelect extends SuperComponent {
   constructor(props) {
     super(props);
@@ -55,8 +76,9 @@ class CascadeSelect extends SuperComponent {
       inputValue: null,
       options: props.options.slice(),
       preOptions: props.options.slice(),
-      value: props.value || props.defaultValue || [],
-      preValue: props.value || [],
+      value:
+        beforeUsingHandlerOfOnlyStr(props.onlyStringValue, props.value || props.defaultValue || []),
+      preValue: beforeUsingHandlerOfOnlyStr(props.onlyStringValue, props.value || []),
       loadedOptions: {},
     };
     // 兼容老版本的locale code
@@ -76,6 +98,9 @@ class CascadeSelect extends SuperComponent {
   static getDerivedStateFromProps(nextProps, preState) {
     const { onSelect } = nextProps;
     let { options, value } = nextProps;
+
+    value = beforeUsingHandlerOfOnlyStr(nextProps.onlyStringValue, value);
+
     if (!options) {
       options = [];
     }
@@ -144,7 +169,11 @@ class CascadeSelect extends SuperComponent {
 
   static getSelectedOptions(props, state) {
     let selectedOptions = [];
-    const { value, defaultValue } = props;
+    let { value, defaultValue } = props;
+
+    value = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, value);
+    defaultValue = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, defaultValue);
+
     const { options } = state;
     const theValue = value || defaultValue;
     if (theValue && theValue.length > 1) {
@@ -175,7 +204,11 @@ class CascadeSelect extends SuperComponent {
   }
 
   componentDidUpdate(preProps) {
-    const { options, value } = preProps;
+    const { options, onlyStringValue } = preProps;
+
+    let { value } = preProps;
+    value = beforeUsingHandlerOfOnlyStr(onlyStringValue, value);
+
     const { onSelect } = this.props;
     const judgeValue = stringify((value && deepCopy(value))) !== stringify(deepCopy(this.props.value));
     const judgeOptions = stringify(options) !== stringify(this.props.options);
@@ -274,7 +307,12 @@ class CascadeSelect extends SuperComponent {
 
   getAsyncSelectedOptions(props, callback = noop) {
     let selectedOptions = [];
-    const { value, defaultValue, cascadeSize } = props;
+    const { cascadeSize } = props;
+
+    let { value, defaultValue } = props;
+    value = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, value);
+    defaultValue = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, defaultValue);
+
     const { options } = this.state;
     const theValue = value || defaultValue;
     let renderArr = null;
@@ -383,10 +421,14 @@ class CascadeSelect extends SuperComponent {
             )
           )
         ) {
-          onChange(value, selectedOptions);
+          onChange(
+            beforeReturningHandlerOfOnlyStr(this.props.onlyStringValue, value), selectedOptions,
+          );
         }
       } else {
-        onChange(value, selectedOptions);
+        onChange(
+          beforeReturningHandlerOfOnlyStr(this.props.onlyStringValue, value), selectedOptions,
+        );
       }
     }
   }
@@ -491,13 +533,11 @@ class CascadeSelect extends SuperComponent {
         >
           <i className="kuma-icon kuma-icon-triangle-down" />
         </div>
-        {
-          <div
-            className={this.prefixCls('close-wrap')}
-          >
-            <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error" />
-          </div>
-        }
+        <div
+          className={this.prefixCls('close-wrap')}
+        >
+          <i onClick={this.clearContent.bind(this)} className="kuma-icon kuma-icon-error" />
+        </div>
       </div>
     );
   }
@@ -544,7 +584,7 @@ class CascadeSelect extends SuperComponent {
               }}
               onChange={(v) => {
                 let stateValue = this.state.value;
-                let selectedOptions = this.state.selectedOptions;
+                let { selectedOptions } = this.state;
                 if (i === 0) {
                   stateValue = [v];
                   selectedOptions = options.filter(item => `${item.value}_` === `${v}_`);
@@ -706,13 +746,13 @@ class CascadeSelect extends SuperComponent {
           miniMode={this.props.miniMode}
           onOkButtonClick={() => {
             this.wrapper.click();
-            const newValue = this.newValue;
-            const newSelectedOptions = this.newSelectedOptions;
+            const { newValue } = this;
+            const { newSelectedOptions } = this;
             if (this.props.isMustSelectLeaf) {
               if ((newValue && newValue.length < this.props.cascadeSize)
                 && (newSelectedOptions
-                && (newSelectedOptions[newSelectedOptions.length - 1] &&
-                  !isEmptyArray(newSelectedOptions[newSelectedOptions.length - 1].children))
+                && (newSelectedOptions[newSelectedOptions.length - 1]
+                  && !isEmptyArray(newSelectedOptions[newSelectedOptions.length - 1].children))
                 )
               ) {
                 return;
@@ -788,15 +828,16 @@ CascadeSelect.defaultProps = {
   optionFilterProps: ['label'],
   optionFilterCount: 20,
   cascaderHeight: 0,
+  onlyStringValue: false,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
 CascadeSelect.propTypes = {
   prefixCls: PropTypes.string,
   className: PropTypes.string,
-  options: PropTypes.array,
-  defaultValue: PropTypes.array,
-  value: PropTypes.array,
+  options: PropTypes.array, // eslint-disable-line
+  defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
@@ -816,6 +857,7 @@ CascadeSelect.propTypes = {
   onSearch: PropTypes.func,
   optionFilterProps: PropTypes.arrayOf(PropTypes.string),
   optionFilterCount: PropTypes.number,
+  onlyStringValue: PropTypes.bool,
   cascaderHeight: PropTypes.number,
 };
 

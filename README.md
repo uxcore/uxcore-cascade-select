@@ -101,6 +101,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | size | string | false | `large` | 尺寸，枚举值：`large`, `middle`, `small` 
 | isMustSelectLeaf | bool | false | `false` | 是否必须选择到叶子节点
 | onSelect | function | false | null | 异步加载层级，需要 return 一个数组，具体用法参考下方 demo
+| onlyStringValue | boolean | false | false | 选中数据之后的值，直接给字符串而不是级联结构
 | searchOption | function | false | null | `(已废弃)` 开启关键词搜索的配置，当 dispalyMode 为 search 时启用，具体配置方式[参考下方](props.searchOption)
 | showSearch | boolean | false | false | 是否开启搜索模式
 | onSearch | function | false | null | 开启关键词过滤模式，可以通过外部重新设置 options，onSearch 不能与 optionFilterProps 和 optionFilterCount 一起使用，onSearch 优先级更高

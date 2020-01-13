@@ -1,5 +1,9 @@
 # history
 
+## 0.7.20
+
+* `FEAT` 新增 onlyStringValue(boolean) prop，以解决只存取 code 的场景，不需要重复二次处理数据结果
+
 ## 0.7.19
 
 * `FIX` 当 isMustSelectLeaf 为 true ，外部又设置过 ['leafCode'] 这种只有叶子节点的值时，会造成无法回填及二次选择。

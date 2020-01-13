@@ -94,12 +94,13 @@ describe('CascadeSelect', () => {
       .eql('阿里巴巴 / 信息平台 / 前端开发');
   });
 
-  it('onChange should be called successfully', () => {
+  it('onChange should be called successfully', (done) => {
     const wrapper = mount(
       <CascadeSelect
         options={options}
         onChange={(value, selected) => {
           expect(value.length === selected.length).to.be.ok();
+          done();
         }}
         columnWidth={100}
       />
@@ -409,7 +410,30 @@ describe('CascadeSelect', () => {
     wrapper.update();
     expect(
       stringify(wrapper.state('value'))
-    ).to.equal(stringify(['tianjin','heping','nanjinglu']))
+    ).to.equal(stringify(['tianjin', 'heping', 'nanjinglu']))
+    done();
+  });
+
+  it('the initial value and returned value should be a string-typed', (done) => {
+    const wrapper = mount(
+      <CascadeSelect
+        options={options}
+        cascadeSize={3}
+        defaultValue="xihu"
+        onlyStringValue
+        // onChange={(value) => {
+        //   expect(value).to.eql('zhonghuamen');
+        //   done();
+        // }}
+      />
+    );
+    // const overlay = mount(wrapper.find('Trigger').props().overlay);
+    // overlay.find('ul').at(2).find('li').at()
+
+    // 渲染出来的结果将会是西湖
+    expect(wrapper.find('.kuma-cascader-trigger').text())
+      .to
+      .eql('浙江 / 杭州 / 西湖');
     done();
   });
 });
