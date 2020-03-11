@@ -60,6 +60,7 @@ function beforeReturningHandlerOfOnlyStr(onlyStringValue, arrayValue) {
     if (arrayValue.length > 0) {
       return arrayValue[arrayValue.length - 1];
     }
+    return undefined;
   }
   return arrayValue;
 }
