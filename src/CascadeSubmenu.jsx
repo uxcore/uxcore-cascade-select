@@ -73,6 +73,7 @@ class CascadeSubmenu extends SuperComponent {
         <li
           key={item.value}
           title={item.label}
+          style={{ display: item.hidden ? 'none': 'block' }}
           className={classnames({ active: item.value === key })}
           {...otherProps}
         >
