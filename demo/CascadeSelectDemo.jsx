@@ -153,6 +153,28 @@ const asyncOptions = [
 const options6 =
   [{ "label": "小蕨1", "value": "小蕨1", "children": [{ "label": "小蕨2", "value": "小蕨2", "children": [{ "label": "小蕨3", "value": "小蕨3", "children": [{ "label": "小蕨4", "value": "小蕨4", "children": [{ "label": "小蕨5", "value": "小蕨5", "children": [{ "label": "小蕨6", "value": "小蕨6", "children": [] }] }] }] }] }] }];
 
+const options7 = [{
+  "value": "1",
+  "code": "A50",
+  "label": "[测试] 阿里巴巴(中国)有限公司",
+  "children": [{
+    "value": "1-1",
+    "code":
+    "A50-1",
+    "label": "[测试]信息平台事业部",
+    "hidden": true
+  }]
+}, {
+  "value": "2",
+  "code": "A51",
+  "label": "[测试] 蚂蚁金服有限公司",
+  "children": [{
+    "value": "2-1",
+    "code": "A51-1",
+    "label": "[测试]花呗事业部",
+    "hidden": true
+  }]
+}];  // eslint-disable-line
 const optionsGenerator = (key, level) => {
   const childrenOptions = [];
   for (let i = 0; i <= level; i += 1) {
@@ -550,6 +572,18 @@ class Demo extends React.Component {
           设置底层叶子节点
         </button>
 
+        <h2>隐藏部分 Options</h2>
+        <CascadeSelect
+          value={this.state.xValue3}
+          options={options7}
+          clearable
+          onChange={(value, selected) => {
+            this.setState({ xValue3: value });
+          }}
+          cascadeSize={2}
+          showSearch
+          cascaderHeight={200}
+        />
         <h2>单独使用面板</h2>
         <CascadeSelect.CascadeSubmenu
           options={options}
