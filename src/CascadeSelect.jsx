@@ -672,6 +672,7 @@ class CascadeSelect extends SuperComponent {
             onClick={() => {
               this.setState({
                 inputValue: null,
+                showSubMenu: false,
               });
               const selectedOptions = CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
               this.setMultiState(selectedOptions);
