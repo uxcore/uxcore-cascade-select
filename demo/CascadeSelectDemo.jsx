@@ -446,7 +446,7 @@ class Demo extends React.Component {
         />
 
 
-        <h2>异步Select 风格</h2>
+        <h2>异步加载Options</h2>
         <CascadeSelect
           showSearch={true}
           value={this.state.asyncValue}
@@ -470,7 +470,11 @@ class Demo extends React.Component {
               resolve(optionsGenerator(key, level));
             }, 1000);
           }}
+          miniMode={false}
         />
+
+
+
         <h2>Select 风格</h2>
         <CascadeSelect
           value={this.state.firstValue}
