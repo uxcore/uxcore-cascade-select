@@ -249,18 +249,25 @@ class CascadeSelect extends SuperComponent {
         onSelect(resolve, reject, key, level);
       }).then((children) => {
         this.state.loadedOptions[key] = true;
-        values.forEach((value, index) => {
-          if (index + 1 > level) {
-            return;
-          }
-          node = find(node, item => item.value === value);
-          if (node.children) {
-            node = node.children;
-          }
-        });
-        node.children = children;
+        let showSubMenu = true;
+
+        if (Array.isArray(children) && children.length > 0) {
+          values.forEach((value, index) => {
+            if (index + 1 > level) {
+              return;
+            }
+            node = find(node, item => item.value === value);
+            if (node.children) {
+              node = node.children;
+            }
+          });
+          node.children = children;
+        } else { // 没有请求到子集，此时认为用户已经选中了叶子节点，选择结束
+          showSubMenu = false;
+        }
+
         loading[key] = false;
-        this.setState({ loading });
+        this.setState({ loading, showSubMenu });
         return 'y';
       }).catch(() => {
         loading[key] = false;

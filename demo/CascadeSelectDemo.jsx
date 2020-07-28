@@ -465,12 +465,11 @@ class Demo extends React.Component {
           onSelect={(resolve, reject, key, level) => {
             setTimeout(() => {
               if (key === '1-0') {
-                reject();
+                resolve();
               }
               resolve(optionsGenerator(key, level));
             }, 1000);
           }}
-          miniMode={false}
         />
 
 
