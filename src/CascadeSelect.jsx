@@ -164,6 +164,17 @@ class CascadeSelect extends SuperComponent {
         }
       }
     }
+
+    // value 没有在 options 中找到的时候进行容错处理
+    if (
+      newState.selectedOptions && newState.selectedOptions.length === 0 && 
+      newState.value && newState.value.length > 0
+    ) {
+      newState.value = preState.value;
+      newState.selectedOptions = preState.selectedOptions;
+      newState.preValue = preState.value;
+    }
+
     return Object.keys(newState).length ? newState : null;
   }
 

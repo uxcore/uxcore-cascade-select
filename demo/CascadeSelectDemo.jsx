@@ -546,13 +546,21 @@ class Demo extends React.Component {
         <h2>改变value</h2>
         <CascadeSelect
           value={this.state.xValue}
-          options={options}
+          options={this.state.options2}
           clearable
-          expandTrigger="hover"
-          onChange={(value, selected) => { }}
+          miniMode={false}
+          onChange={(xValue) => {
+            this.setState({ xValue });
+          }}
+          changeOnSelect={false}
         />
         <button
-          onClick={() => this.setState({ xValue: ['fe'] })}
+          onClick={() => {
+            this.setState({ xValue: ['fe2'] });
+            setTimeout(() => {
+              this.setState({ options2: this.state.options });
+            }, 2000)
+          }}
         >
           设置一个不存在的值
         </button>
