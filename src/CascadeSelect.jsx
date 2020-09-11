@@ -98,7 +98,7 @@ class CascadeSelect extends SuperComponent {
 
   static getDerivedStateFromProps(nextProps, preState) {
     const { onSelect } = nextProps;
-    let { options, value } = nextProps;
+    let { options, value, useFullPathValue } = nextProps;
 
     value = beforeUsingHandlerOfOnlyStr(nextProps.onlyStringValue, value);
 
@@ -112,7 +112,8 @@ class CascadeSelect extends SuperComponent {
     let judgeValue = stringify(value) !== stringify(preState.preValue);
     const judgeOptions = stringify(options) !== stringify(preState.preOptions);
 
-    if (preState.preValue && value && value.length
+    // 使用完整路径的 value 时，不走新值在旧值中被包含时视为无修改的逻辑
+    if (!useFullPathValue && preState.preValue && value && value.length
       && preState.preValue.length > value.length && preState.preValue.includes(value[0])
     ) {
       judgeValue = false;
@@ -134,6 +135,8 @@ class CascadeSelect extends SuperComponent {
           theOptions = newState.options;
         }
         const selectedOptions = CascadeSelect.getSelectedOptions(nextProps, { options: theOptions });
+        // 从匹配出的 selectedOptions 数组中得出组件根据 options 匹配后应显示出的值
+        // useFullPathValue: 使用完整路径值时，要么 state.value === newState.value，要么 state.value === []
         const state = CascadeSelect.returnMultiState(selectedOptions) || {};
         if (newState && newState.options) {
           state.options = newState.options;
@@ -181,14 +184,14 @@ class CascadeSelect extends SuperComponent {
 
   static getSelectedOptions(props, state) {
     let selectedOptions = [];
-    let { value, defaultValue } = props;
+    let { value, defaultValue, useFullPathValue } = props;
 
     value = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, value);
     defaultValue = beforeUsingHandlerOfOnlyStr(props.onlyStringValue, defaultValue);
 
     const { options } = state;
     const theValue = value || defaultValue;
-    if (theValue && theValue.length > 1) {
+    if (theValue && (useFullPathValue || theValue.length > 1)) {
       let renderArr = null;
       let prevSelected = null;
       for (let i = 0, l = theValue.length; i < l; i++) {
@@ -642,11 +645,12 @@ class CascadeSelect extends SuperComponent {
 
   // @deprecated 废弃函数
   renderSearchResult() {
-    const { options } = this.props;
+    const { options, useFullPathValue } = this.props;
     return Search.renderResult(this.state.searchResult, (item) => {
       const selectedOptions = CascadeSelect.getSelectedOptions({
         value: [item.value],
         options,
+        useFullPathValue,
       }, this.state);
       let val = [];
       if (selectedOptions && selectedOptions.length) {
@@ -675,6 +679,7 @@ class CascadeSelect extends SuperComponent {
       changeOnSelect,
       onSelect,
       cascadeSize,
+      useFullPathValue,
     } = this.props;
     const data = searchArrayOfOptions({
       options,
@@ -692,7 +697,7 @@ class CascadeSelect extends SuperComponent {
                 inputValue: null,
                 showSubMenu: false,
               });
-              const selectedOptions = CascadeSelect.getSelectedOptions({ value: d.value }, this.state);
+              const selectedOptions = CascadeSelect.getSelectedOptions({ value: d.value, useFullPathValue }, this.state);
               this.setMultiState(selectedOptions);
               this.onValueChange(d.value, selectedOptions);
               if (showSearch) { // 如果存在异步加载，搜索选中之后自动调用异步加载
@@ -849,6 +854,7 @@ CascadeSelect.defaultProps = {
   optionFilterCount: 20,
   cascaderHeight: 0,
   onlyStringValue: false,
+  useFullPathValue: false,
 };
 
 // http://facebook.github.io/react/docs/reusable-components.html
@@ -879,6 +885,7 @@ CascadeSelect.propTypes = {
   optionFilterCount: PropTypes.number,
   onlyStringValue: PropTypes.bool,
   cascaderHeight: PropTypes.number,
+  useFullPathValue: PropTypes.bool,
 };
 
 CascadeSelect.displayName = 'CascadeSelect';
