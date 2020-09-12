@@ -150,6 +150,55 @@ const asyncOptions = [
   },
 ];
 
+const sameKeyOptions = [
+  {
+    value: 'A',
+    label: '部门',
+    children: [{
+        value: 'A',
+        label: 'A部门',
+        children: [
+          {
+            value: 'A',
+            label: 'A成员',
+          },
+          {
+            value: 'B',
+            label: 'B成员',
+          },
+        ],
+      },
+      {
+        value: 'B',
+        label: 'B部门',
+        children: [
+          {
+            value: 'A',
+            label: 'A成员',
+          },
+          {
+            value: 'B',
+            label: 'B成员',
+          },
+        ],
+      }
+    ]
+  },
+  {
+    value: 'B',
+    label: '产品',
+    children: [{
+        value: 'A',
+        label: 'a产品'
+      },
+      {
+        value: 'B',
+        label: 'b产品'
+      }
+    ]
+  }
+];
+
 const options6 =
   [{ "label": "小蕨1", "value": "小蕨1", "children": [{ "label": "小蕨2", "value": "小蕨2", "children": [{ "label": "小蕨3", "value": "小蕨3", "children": [{ "label": "小蕨4", "value": "小蕨4", "children": [{ "label": "小蕨5", "value": "小蕨5", "children": [{ "label": "小蕨6", "value": "小蕨6", "children": [] }] }] }] }] }] }];
 
@@ -230,6 +279,7 @@ class Demo extends React.Component {
       // xValue2: ['alibaba', 'platform', 'fe'],
       // xValue2: [],
       onlyStrValue: undefined,
+      sValue: [],
     };
   }
 
@@ -425,6 +475,15 @@ class Demo extends React.Component {
           options={options2}
           cascadeSize={2}
           isMustSelectLeaf={false}
+        />
+
+        <h2>严格传入完整路径的值 <small>常用于父子级存在 value 值相同或重复时</small></h2>
+        <CascadeSelect
+          options={sameKeyOptions}
+          cascadeSize={3}
+          useFullPathValue
+          value={this.state.sValue}
+          onChange={(v) => { this.setState({ sValue: v }) }}
         />
 
         <h2>异步 <small>value先有，options 异步加载，常用于数据回填</small></h2>

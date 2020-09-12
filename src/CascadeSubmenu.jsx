@@ -131,7 +131,7 @@ class CascadeSubmenu extends SuperComponent {
       if (renderArr || loading[key]) {
         submenu.push(
           <ul
-            key={key}
+            key={`${key}-${index}`}
             className={classnames({
               [this.prefixCls('hoverable')]: expandTrigger === 'hover' && index < cascadeSize - 1,
             })}
