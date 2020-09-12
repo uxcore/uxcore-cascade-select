@@ -1,5 +1,9 @@
 # history
 
+## 0.8.0
+
+* `FEAT` 新增 useFullPathValue
+
 ## 0.7.20
 
 * `FEAT` 新增 onlyStringValue(boolean) prop，以解决只存取 code 的场景，不需要重复二次处理数据结果

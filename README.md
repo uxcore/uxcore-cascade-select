@@ -108,6 +108,7 @@ render(<CascadeSelect />, document.getElementById('root'))
 | optionFilterProps | string[] | false | `['label']` | showSearch=true 时，optionFilterProp 为 options[i] 中的属性名称，此时搜索会进行过滤
 | optionFilterCount | number | false | 20 | 当使用过滤功能时 dropdown 里最多显示的条数
 | cascaderHeight | number | false | null | 级联选择区域的高度
+| useFullPathValue | boolean | false | false | 使用全路径值匹配模式，该模式允许父子级，不同子级的 ID 一致 
 
 ## Demos
 
