@@ -4,7 +4,7 @@ const find = (() => {
   if (supportNativeFind) {
     return (ary, ...params) => ary.find(...params);
   }
-  return (ary, predicate) => {
+  return (ary, predicate, ...args) => {
     if (this === null) {
       throw new TypeError('find called on null or undefined');
     }
@@ -12,7 +12,7 @@ const find = (() => {
       throw new TypeError('predicate must be a function');
     }
     const length = ary.length >>> 0;
-    const ctx = arguments[2];
+    const ctx = args[0];
     let value;
 
     for (let i = 0; i < length; i++) {
