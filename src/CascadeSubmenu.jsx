@@ -154,7 +154,7 @@ class CascadeSubmenu extends SuperComponent {
     return (
       <div className={this.prefixCls('submenu-bottom-bar')}>
         <Button size={btnSize} onClick={this.props.onOkButtonClick}>
-          {i18n[this.props.locale].confirm}
+          {this.props.localePack.confirm}
         </Button>
       </div>
     );
@@ -168,7 +168,7 @@ class CascadeSubmenu extends SuperComponent {
       if (desc) {
         return (
           <div className={this.prefixCls('item-description-wrap')}>
-            {label}: {desc || i18n[this.props.locale].noDesc}
+            {label}: {desc || this.props.localePack.noDesc}
           </div>
         );
       }
@@ -181,7 +181,7 @@ class CascadeSubmenu extends SuperComponent {
     return (
       <div style={{ width }} className={this.prefixCls('submenu-all-selection')}>
         <div className={this.prefixCls('submenu-all-selection-title')}>
-          {i18n[this.props.locale].alreadyChoosed}
+          {this.props.localePack.alreadyChoosed}
         </div>
         <div className={this.prefixCls('submenu-all-body')}>
           {
@@ -242,7 +242,7 @@ CascadeSubmenu.propTypes = {
   cascadeSize: PropTypes.number,
   size: PropTypes.oneOf(['large', 'middle', 'small']),
   className: PropTypes.string,
-  locale: PropTypes.oneOf(['zh-cn', 'en-us']),
+  localePack: PropTypes.object,
   expandTrigger: PropTypes.oneOf(['click', 'hover']),
   loading: PropTypes.object,
   cascaderHeight: PropTypes.number,
@@ -258,7 +258,7 @@ CascadeSubmenu.defaultProps = {
   onOkButtonClick: () => { },
   size: 'large',
   className: '',
-  locale: 'zh-cn',
+  localePack: {},
   expandTrigger: 'click',
   loading: {},
   cascadeSize: 3,

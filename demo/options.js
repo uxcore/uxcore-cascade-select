@@ -77,7 +77,8 @@ module.exports = {
         }
       ],
       "label": "北京",
-      "value": "110000"
+      "value": "110000",
+      "description":"我是数据中的描述文案"
     },
     {
       "children": [
