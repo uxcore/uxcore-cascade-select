@@ -14,7 +14,6 @@ const CascadeSelect = require('../src');
 const districtOptions = require('./options');
 import UxcoreConfigProvider from 'uxcore-config-provider';
 
-
 const options2 = [{ "value": "1", "code": "A50", "label": "[测试] 阿里巴巴(中国)有限公司", "children": [{ "value": "1-1", "code": "A50-1", "label": "[测试]信息平台事业部" }] }, { "value": "2", "code": "A51", "label": "[测试] 蚂蚁金服有限公司", "children": [{ "value": "2-1", "code": "A51-1", "label": "[测试]花呗事业部" }] }];  // eslint-disable-line
 
 const options = [{
@@ -338,7 +337,7 @@ class Demo extends React.Component {
 
   render() {
     return (
-      <UxcoreConfigProvider localePack={
+    <UxcoreConfigProvider localePack={
         {
           CascadeSelect: {
             placeholder: '(QQ)请选择',
@@ -359,7 +358,7 @@ class Demo extends React.Component {
           // size="small"
           optionFilterProps={['label', 'value']}
           optionFilterCount={10}
-        miniMode={false}
+          miniMode={false}
         // onChange={(v, s) => {console.log(v, s)}}
         />
 
@@ -371,8 +370,7 @@ class Demo extends React.Component {
           changeOnSelect
           columnWidth={100}
           cascadeSize={3}
-                  miniMode={false}
-
+          miniMode={false}
           onChange={(v) => { this.setState({ xxValue: v }) }}
         />
         <button
@@ -684,7 +682,7 @@ class Demo extends React.Component {
           }}
         />
       </div>
-      </UxcoreConfigProvider>
+    </UxcoreConfigProvider>
     );
   }
 }

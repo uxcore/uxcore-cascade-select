@@ -91,13 +91,9 @@ class CascadeSelect extends SuperComponent {
     } else {
       this.locale = locale;
     }
-    const { context = {} } = this;
-    const { localePack = {} } = context;//localePack.组件名称为上下文传递的语言包内容，注意组件名称遵循大写驼峰格式，可以参考入口文件中的displayName
-    const mergedLang = { ...i18n[locale],...i18n[this.locale], ...localePack.CascadeSelect, ...this.props.localePack };
-    //merge语言包默认组件props优先级大于ConfigProvider传递语言包大于locale语言环境对应语言包大于默认语言包
 
-    this.getSelectPlaceholder = props.getSelectPlaceholder
-      || function getSelectPlaceholder() { return mergedLang.placeholder; };
+    // this.getSelectPlaceholder = props.getSelectPlaceholder
+    // || function getSelectPlaceholder() { return i18n[this.locale].placeholder; };
   }
 
   static getDerivedStateFromProps(nextProps, preState) {
@@ -488,10 +484,10 @@ class CascadeSelect extends SuperComponent {
 
     const { selectedOptions, showSubMenu, displayValue } = this.state;
 
-    let { placeholder ,locale} = this.props;
+    let { placeholder } = this.props;
     const { context = {} } = this;
     const { localePack = {} } = context;//localePack.组件名称为上下文传递的语言包内容，注意组件名称遵循大写驼峰格式，可以参考入口文件中的displayName
-    const mergedLang = { ...i18n[locale],...i18n[this.locale], ...localePack.CascadeSelect, ...this.props.localePack };
+    const mergedLang = {...i18n[this.locale], ...localePack.CascadeSelect, ...this.props.localePack };
     //merge语言包默认组件props优先级大于ConfigProvider传递语言包大于locale语言环境对应语言包大于默认语言包
     if (!placeholder) {
       placeholder = mergedLang.placeholder;
@@ -734,10 +730,11 @@ class CascadeSelect extends SuperComponent {
 
   render() {
     const { context = {} } = this;
-    const {locale}=this.props;
     const { localePack = {} } = context;//localePack.组件名称为上下文传递的语言包内容，注意组件名称遵循大写驼峰格式，可以参考入口文件中的displayName
-    const mergedLang = { ...i18n[locale],...i18n[this.locale], ...localePack.CascadeSelect, ...this.props.localePack };
+    const mergedLang = {...i18n[this.locale], ...localePack.CascadeSelect, ...this.props.localePack };
     //merge语言包默认组件props优先级大于ConfigProvider传递语言包大于locale语言环境对应语言包大于默认语言包
+    this.getSelectPlaceholder = this.props.getSelectPlaceholder
+      || function getSelectPlaceholder() { return mergedLang.placeholder; };
     if (this.props.displayMode === 'select') {
       return this.renderSelect();
     }
