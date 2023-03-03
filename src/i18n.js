@@ -1,4 +1,4 @@
-module.exports = {
+const LANG_PACK = {
   'zh-cn': {
     placeholder: '请选择',
     confirm: '确定',
@@ -12,3 +12,6 @@ module.exports = {
     noDesc: 'There is no description yet.',
   },
 };
+LANG_PACK['en_US'] = LANG_PACK['en-us'];
+LANG_PACK['zh_CN'] = LANG_PACK['zh-cn'];
+module.exports = LANG_PACK;
