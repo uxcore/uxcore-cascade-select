@@ -1,5 +1,9 @@
 # history
 
+## 0.9.3
+
+* `FEAT` 多语言改造
+
 ## 0.8.0
 
 * `FEAT` 新增 useFullPathValue
