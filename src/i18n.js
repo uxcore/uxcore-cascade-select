@@ -1,4 +1,4 @@
-const LANG_PACK ={
+const LANG_PACK = {
   'zh-cn': {
     placeholder: '请选择',
     confirm: '确定',
